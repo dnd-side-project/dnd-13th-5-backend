@@ -7,6 +7,8 @@ build/
 
 
 *.yml
+!docker-compose.yml
+
 .env*
 ### STS ###
 .apt_generated
