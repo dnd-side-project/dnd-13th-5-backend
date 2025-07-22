@@ -7,7 +7,7 @@ build/
 
 
 *.yml
-
+.env*
 ### STS ###
 .apt_generated
 .classpath
