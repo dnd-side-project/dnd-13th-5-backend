@@ -3,15 +3,20 @@ package com.dnd.sub.global.common.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.http.HttpStatus;
 
+
 public record ApiResponse<T>(
-        HttpStatus status,
+        int status,
         String code,
-        String Message,
+        String message,
         @JsonInclude(JsonInclude.Include.NON_NULL)
         T data
 ) {
-    public static <T> ApiResponse<T> ok(HttpStatus status, String code, String message, T data) {
-        return new ApiResponse<>(status, code, message, data);
+    public static <T> ApiResponse<T> ok(String code,  T data) {
+        return new ApiResponse<>(200, code, "정상적으로 처리 되었습니다.", data);
+    }
+
+    public static <T> ApiResponse<T> created(String code, T data) {
+        return new ApiResponse<>(201, code,"정상적으로 생성되었습니다.", data);
     }
 
 }
