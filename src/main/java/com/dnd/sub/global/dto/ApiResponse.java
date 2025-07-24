@@ -1,8 +1,7 @@
-package com.dnd.sub.global.common.dto;
+package com.dnd.sub.global.dto;
 
 import com.dnd.sub.global.exception.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.springframework.http.HttpStatus;
 
 
 public record ApiResponse<T>(

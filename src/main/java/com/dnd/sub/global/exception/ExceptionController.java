@@ -1,6 +1,6 @@
 package com.dnd.sub.global.exception;
 
-import com.dnd.sub.global.common.dto.ApiResponse;
+import com.dnd.sub.global.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
