@@ -1,0 +1,109 @@
+name: Backend CI/CD
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [dev]
+    paths:
+      - 'src/**'
+      - '.github/**'
+
+jobs:
+  image-build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    environment: dev
+    outputs:
+      image_build_result: ${{ steps.image-build-result.outputs.image_build_result }}
+    continue-on-error: true
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Set up jdk
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew\
+
+      - name: Build with gradle
+        run: ./gradlew bootJar -Pspring.profiles.active=dev --info
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          mask-password: 'true'
+
+      - name: Docker build & push
+        id: docker-build-and-push
+        run: |
+          docker build --platform linux/arm64 -f docker/Dockerfile --tag ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }} .
+          docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+
+      - name: Set image build result
+        if: always()
+        id: image-build-result
+        run: |
+          echo "image_build_result=fail" >> $GITHUB_OUTPUT
+          if [[ ${{ steps.docker-build-and-push.outcome }} == "success" ]]; then
+          echo "image_build_result=success" >> $GITHUB_OUTPUT
+          fi
+
+  deploy-dev:
+    needs: [ image-build ]
+    runs-on: dnd-13th-5team-ec2-dev-runner
+    environment: dev
+    continue-on-error: true
+    steps:
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Create .env file
+        run: |
+          cd ~/project
+          cat <<EOF > .env 
+          # springboot-app environment
+          SPRINGBOOT_APP_IMAGE_REPOSITORY=${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}
+          SPRINGBOOT_APP_IMAGE_TAG=${{ github.sha }}
+
+          # mysql environment
+          DB_NAME=${{ secrets.DB_NAME }}
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          DB_URL=${{ secrets.DB_URL }}
+
+          # AWS
+          AWS_REGION=${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}
+          EOF
+
+      - name: Start new server application
+        id: start-new-server-application
+        run: |
+          cd ~/project
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | sudo docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
+          sudo docker-compose stop springboot-app
+          sudo docker-compose rm -f springboot-app
+          sudo docker images --filter=reference="*/springboot-app-dev:*" -q | xargs -r sudo docker rmi -f
+          sudo docker-compose up -d springboot-app
+          sudo rm -rf .env

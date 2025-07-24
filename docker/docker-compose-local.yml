@@ -1,0 +1,15 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: dnd-13th-5team-local
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./data/mysql/dnd_local:/var/lib/mysql
+      - ./data/mysql/config/my.cnf:/etc/mysql/conf.d/my.cnf
+    environment:
+      MYSQL_DATABASE: dnd_13th_5team_local
+      MYSQL_ROOT_PASSWORD: root
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
