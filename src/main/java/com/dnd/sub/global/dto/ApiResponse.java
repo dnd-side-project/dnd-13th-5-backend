@@ -21,7 +21,7 @@ public record ApiResponse<T>(
     }
 
     public static <T> ApiResponse<T> fail(ErrorCode errorCode) {
-        return new ApiResponse<>(errorCode.getHttpStatus(), errorCode.getMessage(),errorCode.getMessage() ,null);
+        return new ApiResponse<>(errorCode.getHttpStatus(), errorCode.getCode(), errorCode.getMessage() ,null);
     }
 
 
