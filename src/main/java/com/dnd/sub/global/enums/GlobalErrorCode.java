@@ -1,4 +1,4 @@
-package com.dnd.sub.global.exception;
+package com.dnd.sub.global.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
