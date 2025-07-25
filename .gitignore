@@ -38,7 +38,7 @@ out/
 
 ### env ###
 docker/.env
-.env.*
+.env*
 
 ### docker data ###
 /docker/data/mysql/dnd_local
