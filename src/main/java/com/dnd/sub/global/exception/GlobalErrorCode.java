@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum ErrorCode {
+public enum GlobalErrorCode {
     NOT_FOUND("임시 코드", HttpStatus.NOT_FOUND, "값을 찾을 수 없습니다.");
 
 

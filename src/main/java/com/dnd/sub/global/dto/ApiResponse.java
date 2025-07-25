@@ -1,6 +1,6 @@
 package com.dnd.sub.global.dto;
 
-import com.dnd.sub.global.exception.ErrorCode;
+import com.dnd.sub.global.exception.GlobalErrorCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.http.HttpStatus;
 
@@ -20,7 +20,7 @@ public record ApiResponse<T>(
         return new ApiResponse<>(HttpStatus.CREATED, code,"정상적으로 생성되었습니다.", data);
     }
 
-    public static <T> ApiResponse<T> fail(ErrorCode errorCode) {
+    public static <T> ApiResponse<T> fail(GlobalErrorCode errorCode) {
         return new ApiResponse<>(errorCode.getHttpStatus(), errorCode.getCode(), errorCode.getMessage() ,null);
     }
 
