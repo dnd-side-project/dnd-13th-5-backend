@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum GlobalSuccessCode {
+public enum GlobalSuccessCode implements SuccessCode{
 
     OK(HttpStatus.OK, "exampleCode", "응답 성공"),
     CREATED(HttpStatus.CREATED, "exampleCode", "생성 성공");
