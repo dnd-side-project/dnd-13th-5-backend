@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Slf4j
 @RestControllerAdvice
-public class ExceptionController {
+public class GlobalExceptionController {
 
     @ExceptionHandler(GlobalException.class)
     protected ApiResponse<Void> handleGlobalException(GlobalException e){
