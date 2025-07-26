@@ -13,11 +13,11 @@ public record ApiResponse<T>(
         @JsonInclude(JsonInclude.Include.NON_NULL)
         T data
 ) {
-    public static <T> ApiResponse<T> ok(GlobalSuccessCode code, T data) {
-        return new ApiResponse<>(code.getStatus(), code.getCode(), code.getMessage(), data);
+    public static ApiResponse<Void> success(final GlobalSuccessCode code) {
+        return new ApiResponse<>(code.getStatus(), code.getCode(), code.getMessage(), null);
     }
 
-    public static <T> ApiResponse<T> created(GlobalSuccessCode code, T data) {
+    public static <T> ApiResponse<T> success(GlobalSuccessCode code, T data) {
         return new ApiResponse<>(code.getStatus(), code.getCode(), code.getMessage(), data);
     }
 
