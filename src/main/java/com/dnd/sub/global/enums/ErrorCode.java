@@ -3,7 +3,7 @@ package com.dnd.sub.global.enums;
 import org.springframework.http.HttpStatus;
 
 public interface ErrorCode {
-    HttpStatus getHttpStatus();
+    HttpStatus getStatus();
     String getCode();
     String getMessage();
 }

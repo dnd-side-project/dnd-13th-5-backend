@@ -11,6 +11,6 @@ public enum GlobalErrorCode implements ErrorCode {
 
 
     private final String code;
-    private final HttpStatus httpStatus;
+    private final HttpStatus status;
     private final String message;
 }
