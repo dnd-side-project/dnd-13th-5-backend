@@ -8,6 +8,6 @@ public class ExampleFailTest {
 
     @Test
     void failTest() {
-        fail("의도적으로 실패시킨 테스트입니다.");
+        fail("의도적으로 실패시킨 테스트입니다22.");
     }
 }
