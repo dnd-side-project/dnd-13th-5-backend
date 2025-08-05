@@ -50,6 +50,7 @@ jobs:
         run: ./gradlew test --info
 
   image-build:
+    if: github.event.action == 'closed' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       id-token: write
