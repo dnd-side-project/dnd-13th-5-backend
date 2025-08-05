@@ -40,12 +40,14 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run tests
-        run: >
-          ./gradlew test --info
-          -Dspring.datasource.url=jdbc:h2:mem:dnd_13th_5team_test;MODE=MYSQL
-          -Dspring.datasource.driver-class-name=org.h2.Driver
-          -Dspring.datasource.username=sa
-          -Dspring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+        env:
+          DB_DRIVER: "org.h2.Driver"
+          DB_URL: "jdbc:h2:mem:dnd_13th_5team_test;MODE=MYSQL"
+          DB_USERNAME: "sa"
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        run: ./gradlew test --info
 
   image-build:
     if: github.event.action == 'closed' && github.event.pull_request.merged == true
