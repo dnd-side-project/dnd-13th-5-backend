@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk
+FROM openjdk:21-jdk
 
 WORKDIR /dnd_13th_5team_dev
 
