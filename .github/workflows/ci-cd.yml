@@ -2,13 +2,43 @@ name: Backend CI/CD
 
 on:
   pull_request:
-    types: [closed]
+    types: [ opened, synchronize, closed ]
     branches: [dev]
     paths:
       - 'src/**'
       - '.github/**'
 
 jobs:
+  test:
+    if: github.event.action == 'opened' || github.event.action == 'synchronize'
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Set up jdk
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run tests
+        env:
+          DB_DRIVER: "org.h2.Driver"
+          DB_URL: "jdbc:h2:mem:dnd_13th_5team_dev;MODE=MYSQL"
+          DB_USERNAME: "sa"
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        run: ./gradlew test --info
+
   image-build:
     runs-on: ubuntu-latest
     permissions:
