@@ -42,9 +42,8 @@ dependencies {
     // H2
     runtimeOnly 'com.h2database:h2'
 
-    // Security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+//    // Security
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
