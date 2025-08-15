@@ -34,9 +34,15 @@ public class JwtProvider {
           .compact();
     }
 
-//    public String generateRefreshToken(Long userId) {
-//      //  구현 예정
-//    }
+  public String generateRefreshToken(Long userId) {
+    return Jwts.builder()
+        .claim("userId", userId)
+        .issuedAt(new Date(System.currentTimeMillis()))
+        .expiration(new Date(System.currentTimeMillis() + refreshExpiration))
+        .signWith(secretKey)
+        .compact();
+  }
+
     public Long extractUserId(String token){
         try{
           return Jwts.parser()
