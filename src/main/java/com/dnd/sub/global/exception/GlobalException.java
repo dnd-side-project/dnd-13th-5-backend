@@ -1,12 +1,17 @@
 package com.dnd.sub.global.exception;
 
 import com.dnd.sub.global.enums.GlobalErrorCode;
+import com.dnd.sub.global.enums.TokenErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class GlobalException extends RuntimeException {
     private final GlobalErrorCode errorCode;
-    private final String message;
+
+
+    public GlobalException(GlobalErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
+    }
 }
