@@ -43,6 +43,7 @@ public class KakaoAuthService {
         body.add("client_id", kakaoProperties.clientId());
         body.add("redirect_uri", kakaoProperties.redirectUrl());
         body.add("code", code);
+        body.add("client_secret", kakaoProperties.clientSecret());
         return body;
     }
 
