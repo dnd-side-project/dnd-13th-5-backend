@@ -1,6 +1,6 @@
-package com.dnd.sub.domain.member.service;
+package com.dnd.sub.domain.auth.service;
 
-import com.dnd.sub.domain.member.dto.KakaoTokenResponsed;
+import com.dnd.sub.domain.auth.dto.KakaoTokenResponsed;
 import com.dnd.sub.global.properties.KakaoProperties;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;

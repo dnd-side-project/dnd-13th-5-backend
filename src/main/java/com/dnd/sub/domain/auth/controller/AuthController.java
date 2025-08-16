@@ -1,7 +1,7 @@
-package com.dnd.sub.domain.member.controller;
+package com.dnd.sub.domain.auth.controller;
 
-import com.dnd.sub.domain.member.dto.KakaoTokenResponsed;
-import com.dnd.sub.domain.member.service.KakaoAuthService;
+import com.dnd.sub.domain.auth.dto.KakaoTokenResponsed;
+import com.dnd.sub.domain.auth.service.KakaoAuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final KakaoAuthService authService;
