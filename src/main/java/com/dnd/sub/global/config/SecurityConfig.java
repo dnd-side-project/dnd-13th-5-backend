@@ -26,6 +26,7 @@ public class SecurityConfig {
   private final CustomOAuth2UserService customOAuth2UserService;
   private final CustomSuccessHandler customSuccessHandler;
   private final JwtProvider jwtProvider;
+  private final JwtFilter jwtFilter;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,7 +43,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             a -> a.anyRequest().permitAll() //일단 다 허용
         )
-        .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
