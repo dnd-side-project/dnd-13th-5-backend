@@ -21,4 +21,9 @@ public class GlobalExceptionController {
         return ApiResponse.fail(e.getErrorCode());
     }
 
+    @ExceptionHandler(MemberException.class)
+    protected ApiResponse<Void> handleTokenException(MemberException e) {
+        log.error("MemberException: {}", e.getErrorCode().getMessage());
+        return ApiResponse.fail(e.getErrorCode());
+    }
 }

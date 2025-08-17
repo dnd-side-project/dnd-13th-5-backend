@@ -2,6 +2,7 @@ package com.dnd.sub.global.config;
 
 import com.dnd.sub.global.security.custom.CustomOAuth2UserService;
 import com.dnd.sub.global.security.handler.CustomSuccessHandler;
+import com.dnd.sub.global.security.jwt.JwtFilter;
 import com.dnd.sub.global.security.jwt.JwtProvider;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -39,7 +41,8 @@ public class SecurityConfig {
         .sessionManagement(s -> s.sessionCreationPolicy((SessionCreationPolicy.STATELESS)))
         .authorizeHttpRequests(
             a -> a.anyRequest().permitAll() //일단 다 허용
-        );
+        )
+        .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
