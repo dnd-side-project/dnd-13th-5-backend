@@ -1,6 +1,6 @@
 package com.dnd.sub.global.config;
 
-import java.util.Arrays;
+import com.dnd.sub.domain.auth.service.CustomOAuth2UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -10,8 +10,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.registration.ClientRegistration.ProviderDetails.UserInfoEndpoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -21,6 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
+  private final CustomOAuth2UserService customOAuth2UserService;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -29,10 +30,13 @@ public class SecurityConfig {
         .csrf(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable)
-        .oauth2Login(Customizer.withDefaults())
+        .oauth2Login((oauth2) -> oauth2
+            .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
+                .userService(customOAuth2UserService)))
         .sessionManagement(s -> s.sessionCreationPolicy((SessionCreationPolicy.STATELESS)))
         .authorizeHttpRequests(
-            a -> a.requestMatchers("/").permitAll());
+            a -> a.anyRequest().permitAll() //일단 다 허용
+        );
 
     return http.build();
   }

@@ -26,4 +26,5 @@ public class AuthController {
     public ResponseEntity<KakaoTokenResponsed> getAccessToken(@RequestParam String code) {
         return ResponseEntity.ok().body(authService.getKakaoAccessToken(code));
     }
+
 }
