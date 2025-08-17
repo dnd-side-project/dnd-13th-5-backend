@@ -1,6 +1,6 @@
-package com.dnd.sub.domain.auth.dto;
+package com.dnd.sub.global.security.custom;
 
-import java.util.ArrayList;
+import com.dnd.sub.global.security.dto.KakaoAuthMemberDto;
 import java.util.Collection;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;

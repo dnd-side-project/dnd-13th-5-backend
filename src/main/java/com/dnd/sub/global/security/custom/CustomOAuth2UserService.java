@@ -1,8 +1,7 @@
-package com.dnd.sub.domain.auth.service;
+package com.dnd.sub.global.security.custom;
 
-import com.dnd.sub.domain.auth.dto.KakaoAuthMemberDto;
-import com.dnd.sub.domain.auth.dto.CustomOAuth2User;
-import com.dnd.sub.domain.auth.dto.KakaoResponse;
+import com.dnd.sub.global.security.dto.KakaoAuthMemberDto;
+import com.dnd.sub.global.security.dto.KakaoResponse;
 import com.dnd.sub.domain.member.entity.Member;
 import com.dnd.sub.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +45,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 
     }
+
     private Member createNewMember(KakaoResponse kakaoResponse) {
 
         Member member = Member.builder()

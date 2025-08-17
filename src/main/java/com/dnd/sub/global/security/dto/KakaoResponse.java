@@ -1,4 +1,4 @@
-package com.dnd.sub.domain.auth.dto;
+package com.dnd.sub.global.security.dto;
 
 import java.util.Map;
 
