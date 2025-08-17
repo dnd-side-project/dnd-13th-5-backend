@@ -2,6 +2,7 @@ package com.dnd.sub.global.security.custom;
 
 import com.dnd.sub.global.security.dto.KakaoAuthMemberDto;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +16,12 @@ public class CustomOAuth2User implements OAuth2User {
 
     @Override
     public Map<String, Object> getAttributes() {
-        return null;
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("memberId", authMemberDto.memberId());
+        attributes.put("kakaoId", authMemberDto.kakaoId());
+        attributes.put("email", authMemberDto.email());
+        attributes.put("nickname", authMemberDto.nickname());
+        return attributes;
     }
 
     @Override
@@ -27,5 +33,9 @@ public class CustomOAuth2User implements OAuth2User {
     @Override
     public String getName() {
         return authMemberDto.nickname();
+    }
+
+    public Long getMemberId() {
+        return authMemberDto.memberId();
     }
 }

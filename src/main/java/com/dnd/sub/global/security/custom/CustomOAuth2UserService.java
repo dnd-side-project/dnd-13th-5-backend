@@ -37,6 +37,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             .orElseGet(() -> createNewMember(kakaoResponse));  // 없으면 생성
 
         KakaoAuthMemberDto memberDto = KakaoAuthMemberDto.builder()
+            .memberId(member.getId())
             .kakaoId(kakaoId)
             .email(email)
             .nickname(nickname).build();

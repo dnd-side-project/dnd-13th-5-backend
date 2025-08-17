@@ -1,4 +1,4 @@
-package com.dnd.sub.global.utils.jwt;
+package com.dnd.sub.global.security.jwt;
 
 import com.dnd.sub.global.enums.TokenErrorCode;
 import com.dnd.sub.global.exception.TokenException;
@@ -42,6 +42,7 @@ public class JwtProvider {
         .signWith(secretKey)
         .compact();
   }
+
 
     public Long extractUserId(String token){
         try{

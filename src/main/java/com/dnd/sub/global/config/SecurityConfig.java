@@ -1,6 +1,8 @@
 package com.dnd.sub.global.config;
 
 import com.dnd.sub.global.security.custom.CustomOAuth2UserService;
+import com.dnd.sub.global.security.handler.CustomSuccessHandler;
+import com.dnd.sub.global.security.jwt.JwtProvider;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -20,6 +22,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
   private final CustomOAuth2UserService customOAuth2UserService;
+  private final CustomSuccessHandler customSuccessHandler;
+  private final JwtProvider jwtProvider;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,7 +34,8 @@ public class SecurityConfig {
         .httpBasic(AbstractHttpConfigurer::disable)
         .oauth2Login((oauth2) -> oauth2
             .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
-                .userService(customOAuth2UserService)))
+                .userService(customOAuth2UserService))
+            .successHandler(customSuccessHandler))
         .sessionManagement(s -> s.sessionCreationPolicy((SessionCreationPolicy.STATELESS)))
         .authorizeHttpRequests(
             a -> a.anyRequest().permitAll() //일단 다 허용
