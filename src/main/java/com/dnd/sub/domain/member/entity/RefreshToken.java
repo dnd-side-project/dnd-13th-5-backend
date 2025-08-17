@@ -30,6 +30,6 @@ public class RefreshToken extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(length = 200)
-    private String refreshToken;
+    @Column(columnDefinition = "TEXT")
+    private String token;
 }
