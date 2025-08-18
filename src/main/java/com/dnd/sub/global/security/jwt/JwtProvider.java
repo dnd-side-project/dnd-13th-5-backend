@@ -34,14 +34,14 @@ public class JwtProvider {
           .compact();
     }
 
-  public String generateRefreshToken(Long userId) {
-    return Jwts.builder()
-        .claim("userId", userId)
-        .issuedAt(new Date(System.currentTimeMillis()))
-        .expiration(new Date(System.currentTimeMillis() + refreshExpiration))
-        .signWith(secretKey)
-        .compact();
-  }
+    public String generateRefreshToken(Long userId) {
+        return Jwts.builder()
+            .claim("userId", userId)
+            .issuedAt(new Date(System.currentTimeMillis()))
+            .expiration(new Date(System.currentTimeMillis() + refreshExpiration))
+            .signWith(secretKey)
+            .compact();
+    }
 
 
     public Long extractUserId(String token){
@@ -58,5 +58,6 @@ public class JwtProvider {
           throw new TokenException(TokenErrorCode.INVALID_TOKEN);
         }
     }
+
 
 }

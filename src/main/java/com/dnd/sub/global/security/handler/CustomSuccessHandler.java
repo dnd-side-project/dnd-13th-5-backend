@@ -2,7 +2,7 @@ package com.dnd.sub.global.security.handler;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import com.dnd.sub.domain.member.service.RefreshTokenService;
+import com.dnd.sub.domain.auth.service.RefreshTokenService;
 import com.dnd.sub.global.security.custom.CustomOAuth2User;
 import com.dnd.sub.global.security.jwt.JwtProvider;
 import com.dnd.sub.global.util.CookieUtil;

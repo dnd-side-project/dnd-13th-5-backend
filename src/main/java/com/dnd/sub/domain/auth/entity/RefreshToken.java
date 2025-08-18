@@ -1,5 +1,6 @@
-package com.dnd.sub.domain.member.entity;
+package com.dnd.sub.domain.auth.entity;
 
+import com.dnd.sub.domain.member.entity.Member;
 import com.dnd.sub.global.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,4 +33,8 @@ public class RefreshToken extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     private String token;
+
+    public void updateToken(String token) {
+        this.token = token;
+    }
 }
