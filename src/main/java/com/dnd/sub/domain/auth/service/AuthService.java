@@ -28,7 +28,7 @@ public class AuthService {
             refreshTokenService.removeRefresh(refreshToken);
             refreshTokenService.addRefresh(memberId, newRefresh);
 
-            return new TokenResponse(newAccess, refreshToken);
+            return new TokenResponse(newAccess, newRefresh);
         }
 
         return new TokenResponse(newAccess, refreshToken);
