@@ -19,3 +19,9 @@ secret:
     credentials:
       access-key: ${AWS_ACCESS_KEY:fakeAwsAccessKey}
       secret-key: ${AWS_SECRET_KEY:fakeAwsSecretKey}
+
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-expiration: ${ACCESS_EXPIRATION}
+  refresh-expiration: ${REFRESH_EXPIRATION}

@@ -46,3 +46,5 @@ docker/.env
 
 ### local yml ###
 /src/main/resources/application-local.yml
+
+.DS_Store
