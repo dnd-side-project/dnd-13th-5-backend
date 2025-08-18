@@ -13,6 +13,23 @@ spring:
     show-sql: true
     properties.hibernate.format_sql: true
 
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID:fake-kakao-client-id}
+            client-secret: ${KAKAO_CLIENT_SECRET:fake-kakao-client-secret}
+            scope: ${KAKAO_SCOPE:profile_nickname,profile_image,account_email}
+            authorization-grant-type: authorization_code
+            redirect-uri: ${KAKAO_REDIRECT_URI:http://fake-test-domain.com/oauth/callback}
+        provider:
+          kakao:
+            authorization-uri: ${KAKAO_AUTHORIZATION_URI:http://fake-kakao-auth.com/authorize}
+            token-uri: ${KAKAO_TOKEN_URI:http://fake-kakao-token.com/token}
+            user-info-uri: ${KAKAO_USER_INFO_URI:http://fake-kakao-userinfo.com/user}
+            user-name-attribute: ${KAKAO_USER_NAME_ATTRIBUTE:id}
+
 secret:
   aws:
     region: ${AWS_REGION:fakeAWSRegion}
