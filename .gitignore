@@ -43,3 +43,8 @@ docker/.env
 
 ### docker data ###
 /docker/data/mysql/dnd_local
+
+### local yml ###
+/src/main/resources/application-local.yml
+
+.DS_Store

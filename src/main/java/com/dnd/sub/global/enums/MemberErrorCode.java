@@ -6,14 +6,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum GlobalSuccessCode implements SuccessCode{
+public enum MemberErrorCode implements ErrorCode {
+    NOT_FOUND("UNF-401", HttpStatus.NOT_FOUND, "해당 유저(id)를 찾을 수 없습니다.");
 
-    OK(HttpStatus.OK, "success", "응답 성공"),
-    CREATED(HttpStatus.CREATED, "exampleCode", "생성 성공");
-
-    private final HttpStatus status;
     private final String code;
+    private final HttpStatus status;
     private final String message;
-
-
 }
