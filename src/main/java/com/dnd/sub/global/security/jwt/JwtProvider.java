@@ -3,6 +3,7 @@ package com.dnd.sub.global.security.jwt;
 import com.dnd.sub.global.enums.TokenErrorCode;
 import com.dnd.sub.global.exception.TokenException;
 import com.dnd.sub.global.properties.JwtProperties;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -60,4 +61,44 @@ public class JwtProvider {
     }
 
 
+    //토큰 유효시간 추출
+    public long getTokenExpirationTime(String token) {
+        try {
+            Claims claims = parseClaims(token);
+            Date expiration = claims.getExpiration();
+            Date now = new Date();
+            return expiration.getTime() - now.getTime();
+        } catch (ExpiredJwtException e) {
+            throw new TokenException(TokenErrorCode.EXPIRED_TOKEN);
+        } catch (JwtException e) {
+            throw new TokenException(TokenErrorCode.INVALID_TOKEN);
+        }
+    }
+
+    public boolean isReFreshTokenExpiredSoon(String token) {
+        try {
+            long expirationTime = getTokenExpirationTime(token);
+
+            if (expirationTime < 0) {
+                return false;
+            }
+
+            long remainDay = expirationTime / (1000 * 60 * 60 * 24);
+
+            return remainDay <= 5;
+        } catch (ExpiredJwtException e) {
+            throw new TokenException(TokenErrorCode.EXPIRED_TOKEN);
+        } catch (JwtException e) {
+            throw new TokenException(TokenErrorCode.INVALID_TOKEN);
+        }
+
+    }
+
+    private Claims parseClaims(String token) {
+        return Jwts.parser()
+            .verifyWith(secretKey)
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
+    }
 }

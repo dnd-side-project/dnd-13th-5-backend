@@ -6,9 +6,12 @@ import com.dnd.sub.global.dto.ApiResponse;
 import com.dnd.sub.global.enums.GlobalSuccessCode;
 import com.dnd.sub.global.enums.TokenErrorCode;
 import com.dnd.sub.global.exception.TokenException;
+import com.dnd.sub.global.util.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +33,9 @@ public class AuthController {
         TokenResponse tokenResponse = authService.reissueByRefresh(refreshToken);
 
         response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + tokenResponse.accessToken());
-
+        ResponseCookie responseCookie = CookieUtil.createCookie("refresh_token",
+            tokenResponse.refreshToken(), 60 * 60 * 24 * 14);
+        response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
         return ApiResponse.success(GlobalSuccessCode.OK);
     }
 

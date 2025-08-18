@@ -21,11 +21,17 @@ public class AuthService {
         Long memberId = jwtProvider.extractUserId(refreshToken);
 
         String newAccess  = jwtProvider.generateToken(memberId);
-        String newRefresh = jwtProvider.generateRefreshToken(memberId);
-        refreshTokenService.addRefresh(memberId, newRefresh);
 
+        if (jwtProvider.isReFreshTokenExpiredSoon(refreshToken)) {
+            String newRefresh = jwtProvider.generateRefreshToken(memberId);
 
-        return new TokenResponse(newAccess,newRefresh);
+            refreshTokenService.removeRefresh(refreshToken);
+            refreshTokenService.addRefresh(memberId, newRefresh);
+
+            return new TokenResponse(newAccess, refreshToken);
+        }
+
+        return new TokenResponse(newAccess, refreshToken);
     }
 
 
