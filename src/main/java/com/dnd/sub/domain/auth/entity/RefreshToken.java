@@ -38,7 +38,7 @@ public class RefreshToken extends BaseEntity {
     }
 
     @Builder
-    public RefreshToken(Member member, String refreshToken) {
+    public RefreshToken(final Member member, final String refreshToken) {
         this.member = member;
         this.refreshToken = refreshToken;
     }
