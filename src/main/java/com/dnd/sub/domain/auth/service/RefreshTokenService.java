@@ -35,7 +35,7 @@ public class RefreshTokenService {
 
     @Transactional
     public void removeRefresh(String refreshToken) {
-        refreshTokenRepository.deleteByToken(refreshToken);
+        refreshTokenRepository.deleteByRefreshToken(refreshToken);
     }
 
     @Transactional
