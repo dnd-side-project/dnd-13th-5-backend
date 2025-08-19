@@ -1,13 +1,14 @@
 package com.dnd.sub.domain.auth.service;
 
-import com.dnd.sub.domain.member.entity.Member;
 import com.dnd.sub.domain.auth.entity.RefreshToken;
 import com.dnd.sub.domain.auth.repository.RefreshTokenRepository;
+import com.dnd.sub.domain.member.entity.Member;
 import com.dnd.sub.domain.member.service.MemberService;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,20 +22,16 @@ public class RefreshTokenService {
         Member member = memberService.findById(memberId);
         Optional<RefreshToken> rt = refreshTokenRepository.findByMember(member);
         if (rt.isPresent()) {
-            rt.get().updateToken(refreshToken);
+            rt.get().updateRefreshToken(refreshToken);
         } else {
-            RefreshToken token = RefreshToken.builder()
-                .member(member)
-                .token(refreshToken)
-                .build();
-
+            RefreshToken token = new RefreshToken(member, refreshToken);
             refreshTokenRepository.save(token);
         }
     }
 
     @Transactional
     public void removeRefresh(String refreshToken) {
-        refreshTokenRepository.deleteByToken(refreshToken);
+        refreshTokenRepository.deleteByRefreshToken(refreshToken);
     }
 
     @Transactional
