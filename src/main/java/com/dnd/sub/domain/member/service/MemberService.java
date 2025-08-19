@@ -1,5 +1,6 @@
 package com.dnd.sub.domain.member.service;
 
+import com.dnd.sub.domain.member.dto.response.MemberInfoResponse;
 import com.dnd.sub.domain.member.entity.Member;
 import com.dnd.sub.domain.member.repository.MemberRepository;
 import com.dnd.sub.domain.member.exception.MemberErrorCode;
@@ -18,5 +19,11 @@ public class MemberService {
     public Member findById(Long id) {
         return memberRepository.findById(id)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public MemberInfoResponse getMemberInfo(Long memberId) {
+        Member member = findById(memberId);
+        return new MemberInfoResponse(member.getEmail(), member.getName());
     }
 }
