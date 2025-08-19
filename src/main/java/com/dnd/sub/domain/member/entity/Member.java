@@ -34,12 +34,16 @@ public class Member extends BaseEntity {
     @Column(columnDefinition = "TINYINT(1)")
     private boolean isNotificationOn = true;
 
-    public void updateNotificationOn() {
+    public void updateIsNotificationOn() {
       this.isNotificationOn = !this.isNotificationOn;
   }
 
   @Builder
-  public Member(String name, String email, String kakaoId) {
+  public Member(
+      final String name,
+      final String email,
+      final String kakaoId
+  ) {
       this.name = name;
       this.email = email;
       this.kakaoId = kakaoId;
