@@ -3,6 +3,8 @@ package com.dnd.sub.domain.member.entity;
 import com.dnd.sub.global.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +31,7 @@ public class MonthlyReport extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "month", length = 20, nullable = false)
     private MonthType month;
 
@@ -39,7 +42,12 @@ public class MonthlyReport extends BaseEntity {
     private int subscriptionCount;
 
     @Builder
-    public MonthlyReport(Member member, MonthType month, int monthlySpending, int subscriptionCount) {
+    public MonthlyReport(
+        final Member member,
+        final MonthType month,
+        final int monthlySpending,
+        final int subscriptionCount
+    ) {
         this.member = member;
         this.month = month;
         this.monthlySpending = monthlySpending;
