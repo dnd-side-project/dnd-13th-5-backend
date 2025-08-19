@@ -1,7 +1,6 @@
-package com.dnd.sub.global.exception;
+package com.dnd.sub.domain.member.exception;
 
 
-import com.dnd.sub.global.enums.MemberErrorCode;
 import lombok.Getter;
 
 @Getter

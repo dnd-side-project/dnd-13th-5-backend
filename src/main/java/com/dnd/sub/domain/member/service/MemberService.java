@@ -2,8 +2,8 @@ package com.dnd.sub.domain.member.service;
 
 import com.dnd.sub.domain.member.entity.Member;
 import com.dnd.sub.domain.member.repository.MemberRepository;
-import com.dnd.sub.global.enums.MemberErrorCode;
-import com.dnd.sub.global.exception.MemberException;
+import com.dnd.sub.domain.member.exception.MemberErrorCode;
+import com.dnd.sub.domain.member.exception.MemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

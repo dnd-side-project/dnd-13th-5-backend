@@ -1,5 +1,7 @@
 package com.dnd.sub.global.exception;
 
+import com.dnd.sub.domain.auth.exception.TokenException;
+import com.dnd.sub.domain.member.exception.MemberException;
 import com.dnd.sub.global.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,7 +24,7 @@ public class GlobalExceptionController {
     }
 
     @ExceptionHandler(MemberException.class)
-    protected ApiResponse<Void> handleTokenException(MemberException e) {
+    protected ApiResponse<Void> handleMemberException(MemberException e) {
         log.error("MemberException: {}", e.getErrorCode().getMessage());
         return ApiResponse.fail(e.getErrorCode());
     }
