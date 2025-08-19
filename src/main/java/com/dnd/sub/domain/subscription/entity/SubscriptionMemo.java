@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "subscription")
+@Table(name = "subscription_memo")
 @Entity
 public class SubscriptionMemo {
 

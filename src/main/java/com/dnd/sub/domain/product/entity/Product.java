@@ -3,6 +3,8 @@ package com.dnd.sub.domain.product.entity;
 import com.dnd.sub.global.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "subscription")
+@Table(name = "product")
 @Entity
 public class Product extends BaseEntity {
 
@@ -25,6 +27,7 @@ public class Product extends BaseEntity {
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "category", length = 100, nullable = false)
     private ProductCategoryType category;
 
