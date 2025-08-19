@@ -12,7 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,7 +36,6 @@ public class RefreshToken extends BaseEntity {
         this.refreshToken = refreshToken;
     }
 
-    @Builder
     public RefreshToken(final Member member, final String refreshToken) {
         this.member = member;
         this.refreshToken = refreshToken;
