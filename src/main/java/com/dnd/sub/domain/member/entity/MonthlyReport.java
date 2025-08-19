@@ -39,7 +39,7 @@ public class MonthlyReport extends BaseEntity {
     private int subscriptionCount;
 
     @Builder
-    private MonthlyReport(Member member, MonthType month, int monthlySpending, int subscriptionCount) {
+    public MonthlyReport(Member member, MonthType month, int monthlySpending, int subscriptionCount) {
         this.member = member;
         this.month = month;
         this.monthlySpending = monthlySpending;
