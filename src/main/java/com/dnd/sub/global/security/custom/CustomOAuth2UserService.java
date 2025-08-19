@@ -50,7 +50,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private Member createNewMember(KakaoResponse kakaoResponse) {
 
         Member member = Member.builder()
-            .username(kakaoResponse.getNickname())
+            .name(kakaoResponse.getNickname())
             .email(kakaoResponse.getEmail())
             .kakaoId(kakaoResponse.getKakaoId())
             .isNotificationOn(true)

@@ -42,10 +42,12 @@ public class Member extends BaseEntity {
   public Member(
       final String name,
       final String email,
-      final String kakaoId
+      final String kakaoId,
+      final boolean isNotificationOn
   ) {
       this.name = name;
       this.email = email;
       this.kakaoId = kakaoId;
+      this.isNotificationOn = isNotificationOn;
   }
 }
