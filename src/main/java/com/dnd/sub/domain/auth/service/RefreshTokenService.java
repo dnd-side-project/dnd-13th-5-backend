@@ -24,11 +24,7 @@ public class RefreshTokenService {
         if (rt.isPresent()) {
             rt.get().updateRefreshToken(refreshToken);
         } else {
-            RefreshToken token = RefreshToken.builder()
-                .member(member)
-                .refreshToken(refreshToken)
-                .build();
-
+            RefreshToken token = new RefreshToken(member, refreshToken);
             refreshTokenRepository.save(token);
         }
     }
