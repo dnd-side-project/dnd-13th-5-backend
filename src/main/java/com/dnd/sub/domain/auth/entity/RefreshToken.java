@@ -11,16 +11,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
-@Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class RefreshToken extends BaseEntity {
 
     @Id
@@ -31,10 +28,16 @@ public class RefreshToken extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(columnDefinition = "TEXT")
-    private String token;
+    @Column(name = "refresh_token", columnDefinition = "TEXT")
+    private String refreshToken;
 
-    public void updateToken(String token) {
-        this.token = token;
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    @Builder
+    public RefreshToken(Member member, String refreshToken) {
+        this.member = member;
+        this.refreshToken = refreshToken;
     }
 }
