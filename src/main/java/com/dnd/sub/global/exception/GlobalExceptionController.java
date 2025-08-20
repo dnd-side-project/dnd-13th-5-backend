@@ -28,4 +28,5 @@ public class GlobalExceptionController {
         log.error("MemberException: {}", e.getErrorCode().getMessage());
         return ApiResponse.fail(e.getErrorCode());
     }
+
 }
