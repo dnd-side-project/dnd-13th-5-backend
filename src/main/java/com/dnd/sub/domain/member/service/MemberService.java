@@ -1,5 +1,6 @@
 package com.dnd.sub.domain.member.service;
 
+import com.dnd.sub.domain.member.dto.request.UpdateMemberRequest;
 import com.dnd.sub.domain.member.dto.response.MemberInfoResponse;
 import com.dnd.sub.domain.member.entity.Member;
 import com.dnd.sub.domain.member.repository.MemberRepository;
@@ -24,6 +25,13 @@ public class MemberService {
     @Transactional(readOnly = true)
     public MemberInfoResponse getMemberInfo(Long memberId) {
         Member member = findById(memberId);
+        return new MemberInfoResponse(member.getEmail(), member.getName());
+    }
+
+    @Transactional
+    public MemberInfoResponse updateMemberInfo(Long memberId, UpdateMemberRequest request) {
+        Member member = findById(memberId);
+        member.updateEmail(request.email());
         return new MemberInfoResponse(member.getEmail(), member.getName());
     }
 }

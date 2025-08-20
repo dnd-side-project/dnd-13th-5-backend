@@ -1,5 +1,6 @@
 package com.dnd.sub.domain.member.controller;
 
+import com.dnd.sub.domain.member.dto.request.UpdateMemberRequest;
 import com.dnd.sub.domain.member.dto.response.MemberInfoResponse;
 import com.dnd.sub.domain.member.dto.response.MemberSuccessCode;
 import com.dnd.sub.domain.member.service.MemberService;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,9 +29,9 @@ public class MemberController {
     }
 
     @PatchMapping("/my/info")
-    public ApiResponse<MemberInfoResponse> updateMemberInfo(
-        @AuthenticationPrincipal Long memberId) {
-        MemberInfoResponse response = memberService.getMemberInfo(memberId);
+    public ApiResponse<MemberInfoResponse> updateMemberInfo(@AuthenticationPrincipal Long memberId,
+        @RequestBody UpdateMemberRequest request) {
+        MemberInfoResponse response = memberService.updateMemberInfo(memberId, request);
         return ApiResponse.success(GlobalSuccessCode.OK, response);
     }
 
