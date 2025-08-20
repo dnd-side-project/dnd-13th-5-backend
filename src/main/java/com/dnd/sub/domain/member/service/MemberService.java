@@ -25,13 +25,23 @@ public class MemberService {
     @Transactional(readOnly = true)
     public MemberInfoResponse getMemberInfo(Long memberId) {
         Member member = findById(memberId);
-        return new MemberInfoResponse(member.getEmail(), member.getName());
+        return new MemberInfoResponse(member.getEmail(), member.getName(),
+            member.isNotificationOn());
     }
 
     @Transactional
     public MemberInfoResponse updateMemberInfo(Long memberId, UpdateMemberRequest request) {
         Member member = findById(memberId);
         member.updateEmail(request.email());
-        return new MemberInfoResponse(member.getEmail(), member.getName());
+        return new MemberInfoResponse(member.getEmail(), member.getName(),
+            member.isNotificationOn());
+    }
+
+    @Transactional
+    public MemberInfoResponse updateNotificationOn(Long memberId) {
+        Member member = findById(memberId);
+        member.updateIsNotificationOn();
+        return new MemberInfoResponse(member.getEmail(), member.getName(),
+            member.isNotificationOn());
     }
 }
