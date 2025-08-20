@@ -37,6 +37,7 @@ public interface MemberControllerDocs {
         security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @PatchMapping("/my/notification")
-    ApiResponse<MemberInfoResponse> updateNoti(@AuthenticationPrincipal Long memberId);
+    ApiResponse<MemberInfoResponse> updateNotificationStatus(
+        @AuthenticationPrincipal Long memberId);
 
 }

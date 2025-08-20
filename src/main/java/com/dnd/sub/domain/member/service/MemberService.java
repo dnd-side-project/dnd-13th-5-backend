@@ -38,7 +38,7 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberInfoResponse updateNotificationOn(Long memberId) {
+    public MemberInfoResponse updateNotificationStatus(Long memberId) {
         Member member = findById(memberId);
         member.updateIsNotificationOn();
         return new MemberInfoResponse(member.getEmail(), member.getName(),
