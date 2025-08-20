@@ -5,8 +5,6 @@ import com.dnd.sub.domain.member.dto.response.MemberInfoResponse;
 import com.dnd.sub.domain.member.dto.response.MemberSuccessCode;
 import com.dnd.sub.domain.member.service.MemberService;
 import com.dnd.sub.global.dto.ApiResponse;
-import com.dnd.sub.global.enums.GlobalSuccessCode;
-import com.dnd.sub.global.enums.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
