@@ -29,7 +29,8 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
         QProduct p = QProduct.product;
         QProductPlan pp = QProductPlan.productPlan;
 
-        BooleanBuilder builder = new BooleanBuilder();
+        BooleanBuilder builder = new BooleanBuilder()
+            .and(s.member.id.eq(memberId));
 
         if (category != null) {
             builder.and(p.category.eq(category));
