@@ -7,8 +7,8 @@ public record GetMySubscriptionDto(
     Long id,
     String name,
     ProductCategoryType category,
-    int cycleNum,
-    PayCycleUnitType cycleUnit,
+    int payCycleNum,
+    PayCycleUnitType payCycleUnit,
     int price,
     boolean isFavorites,
     String imageUrl
