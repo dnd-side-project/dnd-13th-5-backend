@@ -38,16 +38,20 @@ public class Member extends BaseEntity {
       this.isNotificationOn = !this.isNotificationOn;
   }
 
-  @Builder
-  public Member(
-      final String name,
-      final String email,
-      final String kakaoId,
-      final boolean isNotificationOn
-  ) {
-      this.name = name;
-      this.email = email;
-      this.kakaoId = kakaoId;
-      this.isNotificationOn = isNotificationOn;
-  }
+    public void updateEmail(String email) {
+        this.email = email;
+    }
+
+    @Builder
+    public Member(
+        final String name,
+        final String email,
+        final String kakaoId,
+        final boolean isNotificationOn
+    ) {
+        this.name = name;
+        this.email = email;
+        this.kakaoId = kakaoId;
+        this.isNotificationOn = isNotificationOn;
+    }
 }

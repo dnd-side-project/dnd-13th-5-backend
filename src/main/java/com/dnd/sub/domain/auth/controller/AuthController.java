@@ -4,15 +4,13 @@ import com.dnd.sub.domain.auth.dto.response.TokenResponse;
 import com.dnd.sub.domain.auth.service.AuthService;
 import com.dnd.sub.global.dto.ApiResponse;
 import com.dnd.sub.global.enums.GlobalSuccessCode;
-import com.dnd.sub.global.enums.TokenErrorCode;
-import com.dnd.sub.global.exception.TokenException;
+import com.dnd.sub.domain.auth.exception.TokenErrorCode;
+import com.dnd.sub.domain.auth.exception.TokenException;
 import com.dnd.sub.global.util.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +24,10 @@ public class AuthController {
     private final AuthService authService;
 
     @GetMapping("/reissue")
-    public ApiResponse<Void> reissue(@CookieValue(value = "refresh_token", required = false) String refreshToken,
-        HttpServletResponse response) {
+    public ApiResponse<Void> reissue(
+        @CookieValue(value = "refresh_token", required = false) String refreshToken,
+        HttpServletResponse response
+    ) {
         if (refreshToken == null) {
             throw new TokenException(TokenErrorCode.REFRESH_NOT_FOUND);
         }

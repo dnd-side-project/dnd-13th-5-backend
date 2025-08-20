@@ -27,7 +27,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             throw new OAuth2AuthenticationException(new OAuth2Error("unsupported_provider", registrationId, null));
         }
 
-
         KakaoResponse kakaoResponse = new KakaoResponse(oAuth2User.getAttributes());
         String kakaoId = kakaoResponse.getKakaoId();
         String nickname = kakaoResponse.getNickname();
@@ -43,7 +42,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             .nickname(nickname).build();
 
         return new CustomOAuth2User(memberDto);
-
 
     }
 

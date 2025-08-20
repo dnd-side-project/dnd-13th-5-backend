@@ -1,9 +1,11 @@
 package com.dnd.sub.domain.member.service;
 
+import com.dnd.sub.domain.member.dto.request.UpdateMemberRequest;
+import com.dnd.sub.domain.member.dto.response.MemberInfoResponse;
 import com.dnd.sub.domain.member.entity.Member;
 import com.dnd.sub.domain.member.repository.MemberRepository;
-import com.dnd.sub.global.enums.MemberErrorCode;
-import com.dnd.sub.global.exception.MemberException;
+import com.dnd.sub.domain.member.exception.MemberErrorCode;
+import com.dnd.sub.domain.member.exception.MemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,5 +20,18 @@ public class MemberService {
     public Member findById(Long id) {
         return memberRepository.findById(id)
             .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public MemberInfoResponse getMemberInfo(Long memberId) {
+        Member member = findById(memberId);
+        return new MemberInfoResponse(member.getEmail(), member.getName());
+    }
+
+    @Transactional
+    public MemberInfoResponse updateMemberInfo(Long memberId, UpdateMemberRequest request) {
+        Member member = findById(memberId);
+        member.updateEmail(request.email());
+        return new MemberInfoResponse(member.getEmail(), member.getName());
     }
 }

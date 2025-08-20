@@ -1,5 +1,6 @@
-package com.dnd.sub.global.enums;
+package com.dnd.sub.domain.member.exception;
 
+import com.dnd.sub.global.enums.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -7,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum MemberErrorCode implements ErrorCode {
-    NOT_FOUND("UNF-401", HttpStatus.NOT_FOUND, "해당 유저(id)를 찾을 수 없습니다.");
+    NOT_FOUND("MF-401", HttpStatus.NOT_FOUND, "해당 유저(id)를 찾을 수 없습니다.");
 
     private final String code;
     private final HttpStatus status;

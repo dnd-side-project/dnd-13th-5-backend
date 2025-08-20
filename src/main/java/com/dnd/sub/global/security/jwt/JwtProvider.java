@@ -1,7 +1,7 @@
 package com.dnd.sub.global.security.jwt;
 
-import com.dnd.sub.global.enums.TokenErrorCode;
-import com.dnd.sub.global.exception.TokenException;
+import com.dnd.sub.domain.auth.exception.TokenErrorCode;
+import com.dnd.sub.domain.auth.exception.TokenException;
 import com.dnd.sub.global.properties.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

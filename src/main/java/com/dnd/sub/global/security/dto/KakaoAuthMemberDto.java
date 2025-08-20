@@ -9,5 +9,4 @@ public record KakaoAuthMemberDto(
     String nickname,
     String email
 ) {
-
 }
