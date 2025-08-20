@@ -34,4 +34,12 @@ public class MemberController implements MemberControllerDocs {
         return ApiResponse.success(MemberSuccessCode.MEMBER_INFO_UPDATE, response);
     }
 
+    @PatchMapping("/my/notification")
+    public ApiResponse<MemberInfoResponse> updateNotificationStatus(
+        @AuthenticationPrincipal Long memberId) {
+        MemberInfoResponse response = memberService.updateNotificationStatus(memberId);
+        return ApiResponse.success(MemberSuccessCode.MEMBER_NOTI_UPDATE, response);
+    }
+
+
 }
