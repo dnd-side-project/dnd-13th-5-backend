@@ -32,7 +32,7 @@ public class MemberController {
     public ApiResponse<MemberInfoResponse> updateMemberInfo(@AuthenticationPrincipal Long memberId,
         @RequestBody UpdateMemberRequest request) {
         MemberInfoResponse response = memberService.updateMemberInfo(memberId, request);
-        return ApiResponse.success(GlobalSuccessCode.OK, response);
+        return ApiResponse.success(MemberSuccessCode.MEMBER_INFO_UPDATE, response);
     }
 
 }
