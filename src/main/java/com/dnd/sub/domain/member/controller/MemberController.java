@@ -35,7 +35,7 @@ public class MemberController implements MemberControllerDocs {
     }
 
     @PatchMapping("/my/notification")
-    public ApiResponse<MemberInfoResponse> updateAlarm(@AuthenticationPrincipal Long memberId) {
+    public ApiResponse<MemberInfoResponse> updateNoti(@AuthenticationPrincipal Long memberId) {
         MemberInfoResponse response = memberService.updateNotificationOn(memberId);
         return ApiResponse.success(MemberSuccessCode.MEMBER_NOTI_UPDATE, response);
     }

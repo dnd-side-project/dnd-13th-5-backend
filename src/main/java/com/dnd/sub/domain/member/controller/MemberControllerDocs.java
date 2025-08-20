@@ -2,6 +2,7 @@ package com.dnd.sub.domain.member.controller;
 
 import com.dnd.sub.domain.member.dto.request.UpdateMemberRequest;
 import com.dnd.sub.domain.member.dto.response.MemberInfoResponse;
+import com.dnd.sub.domain.member.dto.response.MemberSuccessCode;
 import com.dnd.sub.global.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -29,5 +30,13 @@ public interface MemberControllerDocs {
     )
     @PatchMapping("/my/info")
     ApiResponse<MemberInfoResponse> updateMemberInfo(@AuthenticationPrincipal Long memberId, @RequestBody UpdateMemberRequest request);
+
+    @Operation(
+        summary = "내 알람 상태 수정",
+        description = "내 이메일 알람 상태를 수정합니다.",
+        security = @SecurityRequirement(name = "Bearer Authentication")
+    )
+    @PatchMapping("/my/notification")
+    ApiResponse<MemberInfoResponse> updateNoti(@AuthenticationPrincipal Long memberId);
 
 }
