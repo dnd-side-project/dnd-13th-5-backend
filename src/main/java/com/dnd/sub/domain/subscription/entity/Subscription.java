@@ -5,8 +5,9 @@ import com.dnd.sub.domain.paymentmethod.entity.PaymentMethod;
 import com.dnd.sub.domain.product.entity.Product;
 import com.dnd.sub.global.entity.BaseEntity;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,6 +44,9 @@ public class Subscription extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private PaymentMethod paymentMethod;
 
+    @Column(name = "plan_id", nullable = false)
+    private Long planId;
+
     @Column(name = "started_at", nullable = false)
     private LocalDate startedAt;
 
@@ -52,9 +56,12 @@ public class Subscription extends BaseEntity {
     @Column(name = "pay_type", length = 20, nullable = false)
     private String payType;
 
-    @Convert(converter = PayCycleConverter.class)
-    @Column(name = "pay_cycle", length = 20, nullable = false)
-    private PayCycle payCycle;
+    @Column(name = "pay_cycle_num", nullable = true)
+    private int payCycleNum;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "pay_cycle_unit", length = 20, nullable = true)
+    private PayCycleUnitType payCycleUnit;
 
     @Column(name = "is_favorite", columnDefinition = "TINYINT(1)", nullable = false)
     private boolean isFavorite = false;
@@ -68,17 +75,21 @@ public class Subscription extends BaseEntity {
         final Member member,
         final Product product,
         final PaymentMethod paymentMethod,
+        final Long planId,
         final LocalDate startedAt,
         final int participantCount,
         final String payType,
-        final PayCycle payCycle
+        final int payCycleNum,
+        final PayCycleUnitType payCycleUnit
     ) {
         this.member = member;
         this.product = product;
         this.paymentMethod = paymentMethod;
+        this.planId = planId;
         this.startedAt = startedAt;
         this.participantCount = participantCount;
         this.payType = payType;
-        this.payCycle = payCycle;
+        this.payCycleNum = payCycleNum;
+        this.payCycleUnit = payCycleUnit;
     }
 }

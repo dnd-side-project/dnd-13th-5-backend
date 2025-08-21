@@ -40,6 +40,4 @@ public class MemberController implements MemberControllerDocs {
         MemberInfoResponse response = memberService.updateNotificationStatus(memberId);
         return ApiResponse.success(MemberSuccessCode.MEMBER_NOTI_UPDATE, response);
     }
-
-
 }
