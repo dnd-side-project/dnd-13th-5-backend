@@ -29,8 +29,9 @@ public class SubscriptionController {
         @RequestParam(required = false) ProductCategoryType category,
         @RequestParam(required = false) SubscriptionSortType sort
     ) {
-        List<GetMySubscriptionDto> result = subscriptionService.getMySubscriptions(memberId, category, sort);
-        GetMySubscriptionsResponse response = new GetMySubscriptionsResponse(result);
+        List<GetMySubscriptionDto> mySubscriptions = subscriptionService.getMySubscriptions(memberId, category, sort);
+        GetMySubscriptionsResponse response = new GetMySubscriptionsResponse(mySubscriptions);
+
         return ApiResponse.success(GET_MY_SUBSCRIPTIONS, response);
     }
 }
