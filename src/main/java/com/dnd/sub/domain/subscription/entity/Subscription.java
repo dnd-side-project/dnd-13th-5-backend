@@ -53,11 +53,11 @@ public class Subscription extends BaseEntity {
     @Column(name = "pay_type", length = 20, nullable = false)
     private String payType;
 
-    @Column(name = "pay_cycle_num", nullable = false)
+    @Column(name = "pay_cycle_num", nullable = true)
     private int payCycleNum;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "pay_cycle_unit", length = 20, nullable = false)
+    @Column(name = "pay_cycle_unit", length = 20, nullable = true)
     private PayCycleUnitType payCycleUnit;
 
     @Column(name = "is_favorite", columnDefinition = "TINYINT(1)", nullable = false)
