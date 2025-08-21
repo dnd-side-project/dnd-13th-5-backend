@@ -8,10 +8,10 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum GlobalSuccessCode implements SuccessCode{
 
-    OK(HttpStatus.OK, "success", "응답 성공"),
-    CREATED(HttpStatus.CREATED, "exampleCode", "생성 성공");
+    OK(HttpStatus.OK.value(), "success", "응답 성공"),
+    CREATED(HttpStatus.CREATED.value(), "exampleCode", "생성 성공");
 
-    private final HttpStatus status;
+    private final int status;
     private final String code;
     private final String message;
 
