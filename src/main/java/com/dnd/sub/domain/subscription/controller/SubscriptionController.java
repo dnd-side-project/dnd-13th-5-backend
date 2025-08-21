@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static com.dnd.sub.domain.subscription.dto.response.SubscriptionSuccessCode.GET_MY_FAVORITES;
 import static com.dnd.sub.domain.subscription.dto.response.SubscriptionSuccessCode.GET_MY_SUBSCRIPTIONS;
 
 @RequiredArgsConstructor
@@ -33,5 +34,18 @@ public class SubscriptionController {
         GetMySubscriptionsResponse response = new GetMySubscriptionsResponse(mySubscriptions);
 
         return ApiResponse.success(GET_MY_SUBSCRIPTIONS, response);
+    }
+
+    @GetMapping("/my/favorites")
+    public ApiResponse<GetMySubscriptionsResponse> getMyFavorites(
+        @AuthenticationPrincipal Long memberId,
+        @RequestParam(required = false) ProductCategoryType category,
+        @RequestParam(required = false) SubscriptionSortType sort
+    ) {
+        List<GetMySubscriptionDto> myFavorites = subscriptionService.getMyFavorites(memberId,
+            category, sort);
+        GetMySubscriptionsResponse response = new GetMySubscriptionsResponse(myFavorites);
+
+        return ApiResponse.success(GET_MY_FAVORITES, response);
     }
 }

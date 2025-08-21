@@ -65,6 +65,50 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
         return services;
     }
 
+    @Override
+    public List<GetMySubscriptionDto> findMyFavorites(Long memberId, ProductCategoryType category,
+        SubscriptionSortType sort) {
+        QSubscription s = QSubscription.subscription;
+        QProduct p = QProduct.product;
+        QProductPlan pp = QProductPlan.productPlan;
+
+        BooleanBuilder builder = new BooleanBuilder()
+            .and(s.member.id.eq(memberId))
+            .and(s.isFavorite.eq(true));
+
+        if (category != null) {
+            builder.and(p.category.eq(category));
+        }
+
+        List<Tuple> tuples = query
+            .select(s, p, pp.price)
+            .from(s)
+            .join(s.product, p)
+            .leftJoin(pp).on(pp.id.eq(s.planId))
+            .where(builder)
+            .orderBy(buildOrderSpec(sort, s, p, pp))
+            .fetch();
+
+        List<GetMySubscriptionDto> services = tuples.stream().map(t -> {
+            Subscription sub = t.get(s);
+            Product prod = t.get(p);
+            int price = t.get(pp.price);
+
+            return new GetMySubscriptionDto(
+                sub.getId(),
+                prod.getName(),
+                prod.getCategory(),
+                sub.getPayCycleNum(),
+                sub.getPayCycleUnit(),
+                price,
+                sub.isFavorite(),
+                prod.getImageUrl()
+            );
+        }).toList();
+
+        return services;
+    }
+
     private OrderSpecifier<?>[] buildOrderSpec(SubscriptionSortType sort, QSubscription s, QProduct p, QProductPlan pp) {
         if (sort == null) {
             return new OrderSpecifier<?>[]{ p.name.asc() };
