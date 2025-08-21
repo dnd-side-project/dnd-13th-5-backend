@@ -40,7 +40,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
             .select(s, p, pp.price)
             .from(s)
             .join(s.product, p)
-            .leftJoin(pp).on(pp.product.eq(p))
+            .leftJoin(pp).on(pp.id.eq(s.planId))
             .where(builder)
             .orderBy(buildOrderSpec(sort, s, p, pp))
             .fetch();
