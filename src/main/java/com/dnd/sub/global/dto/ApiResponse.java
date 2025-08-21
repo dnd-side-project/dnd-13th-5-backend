@@ -1,15 +1,12 @@
 package com.dnd.sub.global.dto;
 
 import com.dnd.sub.global.enums.ErrorCode;
-import com.dnd.sub.global.enums.GlobalErrorCode;
-import com.dnd.sub.global.enums.GlobalSuccessCode;
 import com.dnd.sub.global.enums.SuccessCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.springframework.http.HttpStatus;
 
 
 public record ApiResponse<T>(
-        HttpStatus status,
+        int status,
         String code,
         String message,
         @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -26,6 +23,5 @@ public record ApiResponse<T>(
     public static <T> ApiResponse<T> fail(final ErrorCode code) {
         return new ApiResponse<>(code.getStatus(), code.getCode(), code.getMessage() ,null);
     }
-
 
 }

@@ -8,12 +8,12 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum MemberSuccessCode implements SuccessCode {
-    MEMBER_INFO_OK("MIS-201", HttpStatus.OK, "사용자 정보 조회 성공"),
-    MEMBER_INFO_UPDATE("MIS-202", HttpStatus.OK, "이메일 변경 완료"),
-    MEMBER_NOTI_UPDATE("MIS-203", HttpStatus.OK, "알람 상태 변경 완료");
+    MEMBER_INFO_OK(HttpStatus.OK.value(), "MIS-201", "사용자 정보 조회 성공"),
+    MEMBER_INFO_UPDATE(HttpStatus.OK.value(), "MIS-202", "이메일 변경 완료"),
+    MEMBER_NOTI_UPDATE(HttpStatus.OK.value(), "MIS-203", "알람 상태 변경 완료");
 
+    private final int status;
     private final String code;
-    private final HttpStatus status;
     private final String message;
 
 }
