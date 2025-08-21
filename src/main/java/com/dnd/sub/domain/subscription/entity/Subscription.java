@@ -75,6 +75,7 @@ public class Subscription extends BaseEntity {
         final Member member,
         final Product product,
         final PaymentMethod paymentMethod,
+        final Long planId,
         final LocalDate startedAt,
         final int participantCount,
         final String payType,
@@ -84,6 +85,7 @@ public class Subscription extends BaseEntity {
         this.member = member;
         this.product = product;
         this.paymentMethod = paymentMethod;
+        this.planId = planId;
         this.startedAt = startedAt;
         this.participantCount = participantCount;
         this.payType = payType;
