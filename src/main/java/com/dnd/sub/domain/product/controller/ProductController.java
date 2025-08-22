@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.dnd.sub.domain.product.dto.response.ProductSuccessCode.*;
@@ -38,12 +37,8 @@ public class ProductController {
     }
 
     @GetMapping("/info")
-    public ApiResponse<GetSelectedProductsInfoResponse> getSelectedProductsInfo(@RequestParam String productIds) {
-        List<Long> ids = Arrays.stream(productIds.split(","))
-            .map(Long::parseLong)
-            .toList();
-
-        List<GetSelectedProductsInfoDto> products = productService.getSelectedProductsInfo(ids);
+    public ApiResponse<GetSelectedProductsInfoResponse> getSelectedProductsInfo(@RequestParam List<Long> productIds) {
+        List<GetSelectedProductsInfoDto> products = productService.getSelectedProductsInfo(productIds);
         GetSelectedProductsInfoResponse response = new GetSelectedProductsInfoResponse(products);
 
         return ApiResponse.success(GET_SELECTED_PRODUCTS_INFO, response);
