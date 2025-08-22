@@ -23,11 +23,12 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
 
     private final JPAQueryFactory query;
 
+    private static final QSubscription s = QSubscription.subscription;
+    private static final QProduct p = QProduct.product;
+    private static final QProductPlan pp = QProductPlan.productPlan;
+
     @Override
     public List<GetMySubscriptionDto> findMySubscriptions(Long memberId, ProductCategoryType category, SubscriptionSortType sort) {
-        QSubscription s = QSubscription.subscription;
-        QProduct p = QProduct.product;
-        QProductPlan pp = QProductPlan.productPlan;
 
         BooleanBuilder builder = new BooleanBuilder()
             .and(s.member.id.eq(memberId));
@@ -35,6 +36,27 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
         if (category != null) {
             builder.and(p.category.eq(category));
         }
+
+        return findSubscriptions(builder, sort);
+    }
+
+    @Override
+    public List<GetMySubscriptionDto> findMyFavorites(Long memberId, ProductCategoryType category,
+        SubscriptionSortType sort) {
+
+        BooleanBuilder builder = new BooleanBuilder()
+            .and(s.member.id.eq(memberId))
+            .and(s.isFavorite.eq(true));
+
+        if (category != null) {
+            builder.and(p.category.eq(category));
+        }
+
+        return findSubscriptions(builder, sort);
+    }
+
+    private List<GetMySubscriptionDto> findSubscriptions(BooleanBuilder builder,
+        SubscriptionSortType sort) {
 
         List<Tuple> tuples = query
             .select(s, p, pp.price)
@@ -64,6 +86,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
 
         return services;
     }
+
 
     private OrderSpecifier<?>[] buildOrderSpec(SubscriptionSortType sort, QSubscription s, QProduct p, QProductPlan pp) {
         if (sort == null) {
