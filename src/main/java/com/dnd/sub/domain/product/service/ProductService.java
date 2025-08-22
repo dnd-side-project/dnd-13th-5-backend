@@ -1,5 +1,6 @@
 package com.dnd.sub.domain.product.service;
 
+import com.dnd.sub.domain.product.dto.GetAllPlanOfProductDto;
 import com.dnd.sub.domain.product.dto.GetProductDto;
 import com.dnd.sub.domain.product.entity.Product;
 import com.dnd.sub.domain.product.entity.ProductCategoryType;
@@ -33,7 +34,7 @@ public class ProductService {
         List<Product> products = productRepository.findAllByCategory(category);
 
         return products.stream().map(p -> {
-            List<ProductPlan> productPlans = productPlanRepository.findByProductId(p.getId());
+            List<ProductPlan> productPlans = productPlanRepository.findAllByProductId(p.getId());
 
             return new GetProductDto(
                 p.getId(),
@@ -58,5 +59,16 @@ public class ProductService {
             .mapToInt(ProductPlan::getPrice)
             .max()
             .orElse(0);
+    }
+
+    public List<GetAllPlanOfProductDto> getAllPlanOfProduct(Long productId) {
+        List<ProductPlan> plans = productPlanRepository.findAllByProductId(productId);
+
+        return plans.stream().map(p -> new GetAllPlanOfProductDto(
+            p.getId(),
+            p.getName(),
+            p.getPrice(),
+            p.getBenefit()
+        )).toList();
     }
 }
