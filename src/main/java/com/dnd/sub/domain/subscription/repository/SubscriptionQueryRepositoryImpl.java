@@ -66,7 +66,8 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                 .leftJoin(pp).on(pp.id.eq(s.planId))
                 .where(s.member.id.eq(memberId)
                         .and(s.nextPaymentDay.isNotNull())
-                        .and(s.nextPaymentDay.goe(LocalDate.now())))
+                        .and(s.nextPaymentDay.goe(LocalDate.now()))
+                        .and(s.nextPaymentDay.loe(LocalDate.now().plusDays(7))))
                 .orderBy(s.nextPaymentDay.asc())
                 .limit(5)
                 .fetch();
