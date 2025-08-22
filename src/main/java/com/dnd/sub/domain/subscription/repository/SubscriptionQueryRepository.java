@@ -9,7 +9,5 @@ import java.util.List;
 public interface SubscriptionQueryRepository {
     List<GetMySubscriptionDto> findMySubscriptions(Long memberId, ProductCategoryType category, SubscriptionSortType sort);
 
-    List<GetMySubscriptionDto> findMyFavorites(Long memberId, ProductCategoryType category,
-        SubscriptionSortType sort);
-
+    List<GetMySubscriptionDto> findMyFavorites(Long memberId, ProductCategoryType category, SubscriptionSortType sort);
 }

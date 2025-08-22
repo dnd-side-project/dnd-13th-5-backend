@@ -42,8 +42,7 @@ public class SubscriptionController {
         @RequestParam(required = false) ProductCategoryType category,
         @RequestParam(required = false) SubscriptionSortType sort
     ) {
-        List<GetMySubscriptionDto> myFavorites = subscriptionService.getMyFavorites(memberId,
-            category, sort);
+        List<GetMySubscriptionDto> myFavorites = subscriptionService.getMyFavorites(memberId, category, sort);
         GetMySubscriptionsResponse response = new GetMySubscriptionsResponse(myFavorites);
 
         return ApiResponse.success(GET_MY_FAVORITES, response);

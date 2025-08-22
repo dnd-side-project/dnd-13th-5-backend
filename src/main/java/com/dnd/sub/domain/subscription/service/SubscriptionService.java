@@ -23,8 +23,7 @@ public class SubscriptionService {
         return subscriptionRepository.findMySubscriptions(memberId, category, sort);
     }
 
-    public List<GetMySubscriptionDto> getMyFavorites(Long memberId, ProductCategoryType category,
-        SubscriptionSortType sort) {
+    public List<GetMySubscriptionDto> getMyFavorites(Long memberId, ProductCategoryType category, SubscriptionSortType sort) {
         return subscriptionRepository.findMyFavorites(memberId, category, sort);
     }
 }
