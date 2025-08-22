@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class MemberExceptionHandler {
 
     @ExceptionHandler(MemberException.class)
-    protected ApiResponse<Void> handleMemberException(MemberException e) {
+    protected ApiResponse<Void> handleMemberException(final MemberException e) {
         log.error("MemberException: {}", e.getErrorCode().getMessage());
         return ApiResponse.fail(e.getErrorCode());
     }
