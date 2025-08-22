@@ -1,9 +1,5 @@
 package com.dnd.sub.domain.subscription.dto;
 
-import com.dnd.sub.domain.product.entity.ProductCategoryType;
-import com.dnd.sub.domain.subscription.entity.PayCycleUnitType;
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDate;
 
 public record GetPaymentSoonDto(
