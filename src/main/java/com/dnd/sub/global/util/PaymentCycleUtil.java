@@ -14,8 +14,10 @@ public class PaymentCycleUtil {
     //다음 결제일 date는 현재 다음 결제예정일, startDate는 최초 예정일
     public static LocalDate nextPaymentDay(LocalDate date, LocalDate startDate, int cycleNum, PayCycleUnitType cycleUnit) {
         switch (cycleUnit) {
-            case DAY: return date.plusDays(cycleNum);
-            case WEEK: return date.plusWeeks(cycleNum);
+            case DAY:
+                return date.plusDays(cycleNum);
+            case WEEK:
+                return date.plusWeeks(cycleNum);
             case MONTH:
                 return addMonths(date, startDate, cycleNum);
             case YEAR:
