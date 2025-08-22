@@ -21,7 +21,7 @@ public class PaymentCycleUtil {
             case MONTH:
                 return addMonths(date, startDate, cycleNum);
             case YEAR:
-                return addYears(date, cycleNum);
+                return addYears(date, startDate, cycleNum);
             default:
                 throw new CycleException(CycleErrorCode.CYCLE_TYPE_ERROR);
         }
@@ -35,11 +35,20 @@ public class PaymentCycleUtil {
     }
 
     //윤년 조정
-    private static LocalDate addYears(LocalDate date, int years) {
-        try {
-            return date.plusYears(years);
-        } catch (DateTimeException e) {
-            return date.plusYears(years).withDayOfMonth(28);
+    private static LocalDate addYears(LocalDate date, LocalDate startDate, int years) {
+
+        int nextYear = date.getYear() + years;
+        boolean isLeapYear = (nextYear % 4 == 0 && nextYear % 100 != 0) || nextYear % 400 == 0;
+        boolean isFeb29 = (startDate.getMonthValue() == 2 && startDate.getDayOfMonth() == 29);
+
+        if (date.getMonthValue() == 2 && isFeb29) {
+
+            if (isLeapYear) {
+                return LocalDate.of(nextYear, 2, 29);
+            }
+            return LocalDate.of(nextYear, 2, 28);
         }
+
+        return date.plusYears(years);
     }
 }
