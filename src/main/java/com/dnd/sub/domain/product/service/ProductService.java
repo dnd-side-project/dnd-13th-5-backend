@@ -2,6 +2,7 @@ package com.dnd.sub.domain.product.service;
 
 import com.dnd.sub.domain.product.dto.GetAllPlanOfProductDto;
 import com.dnd.sub.domain.product.dto.GetProductDto;
+import com.dnd.sub.domain.product.dto.GetSelectedProductsInfoDto;
 import com.dnd.sub.domain.product.entity.Product;
 import com.dnd.sub.domain.product.entity.ProductCategoryType;
 import com.dnd.sub.domain.product.entity.ProductPlan;
@@ -23,12 +24,6 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductPlanRepository productPlanRepository;
-
-    public List<String> getProductCategories() {
-        return Arrays.stream(ProductCategoryType.values())
-            .map(ProductCategoryType::getCategory)
-            .toList();
-    }
 
     public List<GetProductDto> getAllProducts(ProductCategoryType category) {
         List<Product> products = productRepository.findAllByCategory(category);
@@ -59,6 +54,35 @@ public class ProductService {
             .mapToInt(ProductPlan::getPrice)
             .max()
             .orElse(0);
+    }
+
+    public List<GetSelectedProductsInfoDto> getSelectedProductsInfo(List<Long> productIds) {
+        List<Product> products = productRepository.findAllById(productIds);
+
+        return products.stream().map(p -> {
+            List<ProductPlan> productPlans = productPlanRepository.findAllByProductId(p.getId());
+
+            List<GetSelectedProductsInfoDto.ProductPlans> plans = productPlans.stream()
+                .map(plan -> new GetSelectedProductsInfoDto.ProductPlans(
+                    plan.getId(),
+                    plan.getName(),
+                    plan.getBenefit()
+                ))
+                .toList();
+
+            return new GetSelectedProductsInfoDto(
+                p.getId(),
+                p.getName(),
+                p.getImageUrl(),
+                plans
+            );
+        }).toList();
+    }
+
+    public List<String> getProductCategories() {
+        return Arrays.stream(ProductCategoryType.values())
+            .map(ProductCategoryType::getCategory)
+            .toList();
     }
 
     public List<GetAllPlanOfProductDto> getAllPlanOfProduct(Long productId) {

@@ -11,6 +11,7 @@ public enum ProductSuccessCode implements SuccessCode {
     GET_PRODUCT_CATEGORIES(HttpStatus.OK.value(), "PS-201", "구독 카테고리 목록 조회 성공"),
     GET_ALL_PRODUCTS(HttpStatus.OK.value(), "PS-202", "구독 서비스 전체 조회 성공"),
     GET_ALL_PLAN_OF_PRODUCT(HttpStatus.OK.value(), "PS-203", "구독 서비스 별 요금제 목록 조회 성공"),
+    GET_SELECTED_PRODUCTS_INFO(HttpStatus.OK.value(), "PS-204", "선택한 구독 서비스 정보 조회 성공")
     ;
 
     private final int status;
