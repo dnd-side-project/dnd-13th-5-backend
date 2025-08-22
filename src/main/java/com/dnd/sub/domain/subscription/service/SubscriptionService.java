@@ -22,4 +22,8 @@ public class SubscriptionService {
     public List<GetMySubscriptionDto> getMySubscriptions(Long memberId, ProductCategoryType category, SubscriptionSortType sort) {
         return subscriptionRepository.findMySubscriptions(memberId, category, sort);
     }
+
+    public List<GetMySubscriptionDto> getMyFavorites(Long memberId, ProductCategoryType category, SubscriptionSortType sort) {
+        return subscriptionRepository.findMyFavorites(memberId, category, sort);
+    }
 }
