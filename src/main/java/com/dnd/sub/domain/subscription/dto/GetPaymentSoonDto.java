@@ -10,7 +10,6 @@ public record GetPaymentSoonDto(
         Long id,
         String name,
         int price,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         LocalDate nextDueDate
 ) {
 }
