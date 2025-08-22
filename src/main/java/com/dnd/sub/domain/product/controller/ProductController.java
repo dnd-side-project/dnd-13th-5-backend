@@ -26,20 +26,20 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/categories")
-    public ApiResponse<GetProductCategoriesResponse> getProductCategories() {
-        List<String> categories = productService.getProductCategories();
-        GetProductCategoriesResponse response = new GetProductCategoriesResponse(categories);
-
-        return ApiResponse.success(GET_PRODUCT_CATEGORIES, response);
-    }
-
     @GetMapping
     public ApiResponse<GetAllProductsResponse> getAllProducts(@RequestParam(required = false) ProductCategoryType category) {
         List<GetProductDto> products = productService.getAllProducts(category);
         GetAllProductsResponse response = GetAllProductsResponse.from(products);
 
         return ApiResponse.success(GET_ALL_PRODUCTS, response);
+    }
+
+    @GetMapping("/categories")
+    public ApiResponse<GetProductCategoriesResponse> getProductCategories() {
+        List<String> categories = productService.getProductCategories();
+        GetProductCategoriesResponse response = new GetProductCategoriesResponse(categories);
+
+        return ApiResponse.success(GET_PRODUCT_CATEGORIES, response);
     }
 
     @GetMapping("/{productId}/plans")
