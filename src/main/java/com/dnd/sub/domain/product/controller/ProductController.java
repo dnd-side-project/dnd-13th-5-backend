@@ -1,15 +1,20 @@
 package com.dnd.sub.domain.product.controller;
 
-import com.dnd.sub.domain.product.service.ProductService;
+import com.dnd.sub.domain.product.dto.GetProductDto;
+import com.dnd.sub.domain.product.dto.response.GetAllProductsResponse;
 import com.dnd.sub.domain.product.dto.response.GetProductCategoriesResponse;
+import com.dnd.sub.domain.product.entity.ProductCategoryType;
+import com.dnd.sub.domain.product.service.ProductService;
 import com.dnd.sub.global.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static com.dnd.sub.domain.product.dto.response.ProductSuccessCode.GET_ALL_PRODUCTS;
 import static com.dnd.sub.domain.product.dto.response.ProductSuccessCode.GET_PRODUCT_CATEGORIES;
 
 @RequiredArgsConstructor
@@ -25,5 +30,13 @@ public class ProductController {
         GetProductCategoriesResponse response = new GetProductCategoriesResponse(categories);
 
         return ApiResponse.success(GET_PRODUCT_CATEGORIES, response);
+    }
+
+    @GetMapping
+    public ApiResponse<GetAllProductsResponse> getAllProducts(@RequestParam(required = false) ProductCategoryType category) {
+        List<GetProductDto> products = productService.getAllProducts(category);
+        GetAllProductsResponse response = GetAllProductsResponse.from(products);
+
+        return ApiResponse.success(GET_ALL_PRODUCTS, response);
     }
 }
