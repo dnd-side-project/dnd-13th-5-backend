@@ -3,6 +3,7 @@ package com.dnd.sub.domain.subscription.service;
 import com.dnd.sub.domain.product.entity.ProductCategoryType;
 import com.dnd.sub.domain.subscription.controller.SubscriptionSortType;
 import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDto;
+import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
 import com.dnd.sub.domain.subscription.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,5 +26,9 @@ public class SubscriptionService {
 
     public List<GetMySubscriptionDto> getMyFavorites(Long memberId, ProductCategoryType category, SubscriptionSortType sort) {
         return subscriptionRepository.findMyFavorites(memberId, category, sort);
+    }
+
+    public List<GetPaymentSoonDto> getPaymentSoon(Long memberId) {
+        return subscriptionRepository.findPaymentSoon(memberId);
     }
 }

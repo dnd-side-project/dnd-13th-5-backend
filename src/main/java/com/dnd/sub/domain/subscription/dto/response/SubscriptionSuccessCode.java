@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum SubscriptionSuccessCode implements SuccessCode {
     GET_MY_SUBSCRIPTIONS(HttpStatus.OK.value(), "SS-201", "내 구독 서비스 전체 조회 성공"),
-    GET_MY_FAVORITES(HttpStatus.OK.value(), "SS-202", "내 즐겨찾기 전체 조회 성공")
+    GET_MY_FAVORITES(HttpStatus.OK.value(), "SS-202", "내 즐겨찾기 전체 조회 성공"),
+    GET_PAYMENT_SOON(HttpStatus.OK.value(), "SS-203", "결제 임박 서비스 조회 성공")
     ;
 
     private final int status;

@@ -6,6 +6,7 @@ import com.dnd.sub.domain.product.entity.QProduct;
 import com.dnd.sub.domain.product.entity.QProductPlan;
 import com.dnd.sub.domain.subscription.controller.SubscriptionSortType;
 import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDto;
+import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
 import com.dnd.sub.domain.subscription.entity.QSubscription;
 import com.dnd.sub.domain.subscription.entity.Subscription;
 import com.querydsl.core.BooleanBuilder;
@@ -14,6 +15,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.querydsl.core.types.dsl.Expressions.numberTemplate;
@@ -41,8 +43,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
     }
 
     @Override
-    public List<GetMySubscriptionDto> findMyFavorites(Long memberId, ProductCategoryType category,
-        SubscriptionSortType sort) {
+    public List<GetMySubscriptionDto> findMyFavorites(Long memberId, ProductCategoryType category, SubscriptionSortType sort) {
 
         BooleanBuilder builder = new BooleanBuilder()
             .and(s.member.id.eq(memberId))
@@ -53,6 +54,35 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
         }
 
         return findSubscriptions(builder, sort);
+    }
+
+    @Override
+    public List<GetPaymentSoonDto> findPaymentSoon(Long memberId) {
+
+        List<Tuple> tuples = query
+                .select(s, p, pp.price)
+                .from(s)
+                .join(s.product, p)
+                .leftJoin(pp).on(pp.id.eq(s.planId))
+                .where(s.member.id.eq(memberId)
+                        .and(s.nextPaymentDay.isNotNull())
+                        .and(s.nextPaymentDay.goe(LocalDate.now())))
+                .orderBy(s.nextPaymentDay.asc())
+                .limit(5)
+                .fetch();
+
+        return tuples.stream().map(t -> {
+            Subscription sub = t.get(s);
+            Product prod = t.get(p);
+            int price = t.get(pp.price);
+
+            return new GetPaymentSoonDto(
+                    sub.getId(),
+                    prod.getName(),
+                    price,
+                    sub.getNextPaymentDay()
+            );
+        }).toList();
     }
 
     private List<GetMySubscriptionDto> findSubscriptions(BooleanBuilder builder,
