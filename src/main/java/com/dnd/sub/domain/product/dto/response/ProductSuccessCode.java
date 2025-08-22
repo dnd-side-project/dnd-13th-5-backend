@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ProductSuccessCode implements SuccessCode {
     GET_PRODUCT_CATEGORIES(HttpStatus.OK.value(), "PCS-201", "구독 카테고리 목록 조회 성공"),
+    GET_ALL_PRODUCTS(HttpStatus.OK.value(), "PCS-202", "구독 서비스 전체 조회 성공"),
     ;
 
     private final int status;

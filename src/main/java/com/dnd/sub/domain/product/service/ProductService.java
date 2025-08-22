@@ -1,6 +1,11 @@
 package com.dnd.sub.domain.product.service;
 
+import com.dnd.sub.domain.product.dto.GetProductDto;
+import com.dnd.sub.domain.product.entity.Product;
 import com.dnd.sub.domain.product.entity.ProductCategoryType;
+import com.dnd.sub.domain.product.entity.ProductPlan;
+import com.dnd.sub.domain.product.repository.ProductPlanRepository;
+import com.dnd.sub.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,9 +20,43 @@ import java.util.List;
 @Service
 public class ProductService {
 
+    private final ProductRepository productRepository;
+    private final ProductPlanRepository productPlanRepository;
+
     public List<String> getProductCategories() {
         return Arrays.stream(ProductCategoryType.values())
             .map(ProductCategoryType::getCategory)
             .toList();
+    }
+
+    public List<GetProductDto> getAllProducts(ProductCategoryType category) {
+        List<Product> products = productRepository.findAllByCategory(category);
+
+        return products.stream().map(p -> {
+            List<ProductPlan> productPlans = productPlanRepository.findByProductId(p.getId());
+
+            return new GetProductDto(
+                p.getId(),
+                p.getName(),
+                p.getCategory(),
+                p.getImageUrl(),
+                findPlanMinPrice(productPlans),
+                findPlanMaxPrice(productPlans)
+            );
+        }).toList();
+    }
+
+    private int findPlanMinPrice(List<ProductPlan> plans) {
+        return plans.stream()
+            .mapToInt(ProductPlan::getPrice)
+            .min()
+            .orElse(0);
+    }
+
+    private int findPlanMaxPrice(List<ProductPlan> plans) {
+        return plans.stream()
+            .mapToInt(ProductPlan::getPrice)
+            .max()
+            .orElse(0);
     }
 }
