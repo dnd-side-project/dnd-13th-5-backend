@@ -2,9 +2,11 @@ package com.dnd.sub.domain.product.controller;
 
 import com.dnd.sub.domain.product.dto.GetAllPlanOfProductDto;
 import com.dnd.sub.domain.product.dto.GetProductDto;
+import com.dnd.sub.domain.product.dto.GetSelectedProductsInfoDto;
 import com.dnd.sub.domain.product.dto.response.GetAllPlanOfProductResponse;
 import com.dnd.sub.domain.product.dto.response.GetAllProductsResponse;
 import com.dnd.sub.domain.product.dto.response.GetProductCategoriesResponse;
+import com.dnd.sub.domain.product.dto.response.GetSelectedProductsInfoResponse;
 import com.dnd.sub.domain.product.entity.ProductCategoryType;
 import com.dnd.sub.domain.product.service.ProductService;
 import com.dnd.sub.global.dto.ApiResponse;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.dnd.sub.domain.product.dto.response.ProductSuccessCode.*;
@@ -32,6 +35,18 @@ public class ProductController {
         GetAllProductsResponse response = GetAllProductsResponse.from(products);
 
         return ApiResponse.success(GET_ALL_PRODUCTS, response);
+    }
+
+    @GetMapping("/info")
+    public ApiResponse<GetSelectedProductsInfoResponse> getSelectedProductsInfo(@RequestParam String productIds) {
+        List<Long> ids = Arrays.stream(productIds.split(","))
+            .map(Long::parseLong)
+            .toList();
+
+        List<GetSelectedProductsInfoDto> products = productService.getSelectedProductsInfo(ids);
+        GetSelectedProductsInfoResponse response = new GetSelectedProductsInfoResponse(products);
+
+        return ApiResponse.success(GET_SELECTED_PRODUCTS_INFO, response);
     }
 
     @GetMapping("/categories")
