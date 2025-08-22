@@ -24,12 +24,6 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductPlanRepository productPlanRepository;
 
-    public List<String> getProductCategories() {
-        return Arrays.stream(ProductCategoryType.values())
-            .map(ProductCategoryType::getCategory)
-            .toList();
-    }
-
     public List<GetProductDto> getAllProducts(ProductCategoryType category) {
         List<Product> products = productRepository.findAllByCategory(category);
 
@@ -59,6 +53,12 @@ public class ProductService {
             .mapToInt(ProductPlan::getPrice)
             .max()
             .orElse(0);
+    }
+
+    public List<String> getProductCategories() {
+        return Arrays.stream(ProductCategoryType.values())
+            .map(ProductCategoryType::getCategory)
+            .toList();
     }
 
     public List<GetAllPlanOfProductDto> getAllPlanOfProduct(Long productId) {
