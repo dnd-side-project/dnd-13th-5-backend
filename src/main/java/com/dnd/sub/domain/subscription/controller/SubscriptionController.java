@@ -2,7 +2,9 @@ package com.dnd.sub.domain.subscription.controller;
 
 import com.dnd.sub.domain.product.entity.ProductCategoryType;
 import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDto;
+import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
 import com.dnd.sub.domain.subscription.dto.response.GetMySubscriptionsResponse;
+import com.dnd.sub.domain.subscription.dto.response.GetPaymentSoonResponse;
 import com.dnd.sub.domain.subscription.service.SubscriptionService;
 import com.dnd.sub.global.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.dnd.sub.domain.subscription.dto.response.SubscriptionSuccessCode.GET_MY_FAVORITES;
-import static com.dnd.sub.domain.subscription.dto.response.SubscriptionSuccessCode.GET_MY_SUBSCRIPTIONS;
+import static com.dnd.sub.domain.subscription.dto.response.SubscriptionSuccessCode.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/subscriptions")
@@ -46,5 +47,14 @@ public class SubscriptionController {
         GetMySubscriptionsResponse response = new GetMySubscriptionsResponse(myFavorites);
 
         return ApiResponse.success(GET_MY_FAVORITES, response);
+    }
+
+
+    @GetMapping("/my/payment-soon")
+    public ApiResponse<GetPaymentSoonResponse> getPaymentSoon(@AuthenticationPrincipal Long memberId) {
+        List<GetPaymentSoonDto> services = subscriptionService.getPaymentSoon(memberId);
+        GetPaymentSoonResponse response = new GetPaymentSoonResponse(services);
+
+        return ApiResponse.success(GET_PAYMENT_SOON, response);
     }
 }

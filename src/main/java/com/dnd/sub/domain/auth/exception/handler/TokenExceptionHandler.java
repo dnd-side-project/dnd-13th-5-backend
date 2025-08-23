@@ -1,6 +1,6 @@
-package com.dnd.sub.domain.product.exception.handler;
+package com.dnd.sub.domain.auth.exception.handler;
 
-import com.dnd.sub.domain.product.exception.ProductException;
+import com.dnd.sub.domain.auth.exception.TokenException;
 import com.dnd.sub.global.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -10,14 +10,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
-public class ProductExceptionHandler {
+public class TokenExceptionHandler {
 
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<Void> handleProductExceptionException(final ProductException e) {
+    @ExceptionHandler(TokenException.class)
+    protected ApiResponse<Void> handleTokenException(final TokenException e) {
         log.error("{} 발생!", e.getClass().getSimpleName(), e);
         return ApiResponse.fail(e.getErrorCode());
     }
