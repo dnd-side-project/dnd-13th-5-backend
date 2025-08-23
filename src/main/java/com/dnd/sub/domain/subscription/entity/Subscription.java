@@ -47,8 +47,11 @@ public class Subscription extends BaseEntity {
     @Column(name = "plan_id", nullable = false)
     private Long planId;
 
-    @Column(name = "started_at", nullable = false)
+    @Column(name = "started_at")
     private LocalDate startedAt;
+
+    @Column(name = "previous_payment_day")
+    private LocalDate previousPaymentDay;
 
     @Column(name = "next_payment_day")
     private LocalDate nextPaymentDay;
