@@ -95,15 +95,10 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
         LocalDate startDay = today.withDayOfMonth(1);
         LocalDate endDay = today.withDayOfMonth(today.lengthOfMonth());
 
-        String userName = query
-                .select(m.name)
-                .from(m)
-                .where(m.id.eq(memberId))
-                .fetchOne();
-
         List<Tuple> tuples = query
-                .select(s, pp.price)
+                .select(m.name, s, pp.price)
                 .from(s)
+                .join(s.member, m)
                 .join(s.product, p)
                 .leftJoin(pp).on(pp.id.eq(s.planId))
                 .where(s.member.id.eq(memberId)
@@ -111,6 +106,11 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                 .fetch();
 
         if (tuples.isEmpty()) {
+            String userName = query
+                    .select(m.name)
+                    .from(m)
+                    .where(m.id.eq(memberId))
+                    .fetchOne();
             return new GetPaymentTotalResponse(userName, 0, 0, 0, 0);
         }
 
