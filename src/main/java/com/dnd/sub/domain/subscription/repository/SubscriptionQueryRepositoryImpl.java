@@ -155,7 +155,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
         }
 
         return new GetPaymentTotalResponse(
-                userName,
+                tuples.get(0).get(m.name),
                 totalAmount,
                 remainingAmount,
                 progressPercentage,
