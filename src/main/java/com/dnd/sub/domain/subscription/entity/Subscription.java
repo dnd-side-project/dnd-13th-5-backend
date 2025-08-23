@@ -59,9 +59,6 @@ public class Subscription extends BaseEntity {
     @Column(name = "participant_count")
     private int participantCount;
 
-    @Column(name = "pay_type", length = 20, nullable = false)
-    private String payType;
-
     @Column(name = "pay_cycle_num", nullable = true)
     private int payCycleNum;
 
@@ -94,7 +91,6 @@ public class Subscription extends BaseEntity {
         final LocalDate previousPaymentDay,
         final LocalDate nextPaymentDay,
         final int participantCount,
-        final String payType,
         final int payCycleNum,
         final PayCycleUnitType payCycleUnit
     ) {
@@ -106,7 +102,6 @@ public class Subscription extends BaseEntity {
         this.previousPaymentDay = previousPaymentDay;
         this.nextPaymentDay = nextPaymentDay;
         this.participantCount = participantCount;
-        this.payType = payType;
         this.payCycleNum = payCycleNum;
         this.payCycleUnit = payCycleUnit;
     }
