@@ -90,7 +90,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
         SubscriptionSortType sort) {
 
         List<Tuple> tuples = query
-            .select(s, p, pp.price)
+            .select(s, p, pp.name, pp.price)
             .from(s)
             .join(s.product, p)
             .leftJoin(pp).on(pp.id.eq(s.planId))
@@ -101,6 +101,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
         List<GetMySubscriptionDto> services = tuples.stream().map(t -> {
             Subscription sub = t.get(s);
             Product prod = t.get(p);
+            String planName = t.get(pp.name);
             int price = t.get(pp.price);
 
             return new GetMySubscriptionDto(
@@ -109,6 +110,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                 prod.getCategory(),
                 sub.getPayCycleNum(),
                 sub.getPayCycleUnit(),
+                planName,
                 price,
                 sub.isFavorite(),
                 prod.getImageUrl()

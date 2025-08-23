@@ -9,6 +9,7 @@ public record GetMySubscriptionDto(
     ProductCategoryType category,
     int payCycleNum,
     PayCycleUnitType payCycleUnit,
+    String planName,
     int price,
     boolean isFavorites,
     String imageUrl

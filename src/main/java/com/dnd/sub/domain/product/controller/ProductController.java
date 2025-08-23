@@ -31,7 +31,7 @@ public class ProductController {
     @GetMapping
     public ApiResponse<GetAllProductsResponse> getAllProducts(@RequestParam(required = false) ProductCategoryType category) {
         List<GetProductDto> products = productService.getAllProducts(category);
-        GetAllProductsResponse response = GetAllProductsResponse.from(products);
+        GetAllProductsResponse response = new GetAllProductsResponse(products);
 
         return ApiResponse.success(GET_ALL_PRODUCTS, response);
     }
