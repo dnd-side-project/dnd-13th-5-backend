@@ -127,14 +127,19 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
             LocalDate nextPayDay = sub.getNextPaymentDay();
 
             // 이전 결제일이 이번달인 경우
-            boolean isPrevThisMonth = prevPayDay.isAfter(startDay.minusDays(1)) &&
-                    prevPayDay.isBefore(endDay.plusDays(1)) &&
-                    prevPayDay.isBefore(today.plusDays(1));
-
+            boolean isPrevThisMonth = false;
+            if (prevPayDay != null) {
+                isPrevThisMonth = !prevPayDay.isBefore(startDay) &&
+                        !prevPayDay.isAfter(endDay) &&
+                        !prevPayDay.isAfter(today);
+            }
             // 다음 결제일이 이번달인 경우
-            boolean isNextThisMonth = nextPayDay.isAfter(startDay.minusDays(1)) &&
-                    nextPayDay.isBefore(endDay.plusDays(1)) &&
-                    nextPayDay.isAfter(today);
+            boolean isNextThisMonth = false;
+            if (nextPayDay != null) {
+                isNextThisMonth = !nextPayDay.isBefore(startDay) &&
+                        !nextPayDay.isAfter(endDay) &&
+                        nextPayDay.isAfter(today);
+            }
 
             if (isPrevThisMonth || isNextThisMonth) {
                 totalAmount += price;
