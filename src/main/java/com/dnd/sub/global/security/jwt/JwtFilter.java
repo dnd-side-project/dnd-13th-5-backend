@@ -1,8 +1,8 @@
 package com.dnd.sub.global.security.jwt;
 
+import com.dnd.sub.domain.member.exception.MemberErrorCode;
+import com.dnd.sub.domain.member.exception.MemberException;
 import com.dnd.sub.domain.member.repository.MemberRepository;
-import com.dnd.sub.domain.auth.exception.TokenErrorCode;
-import com.dnd.sub.domain.auth.exception.TokenException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
             Long memberId = jwtProvider.extractUserId(token);
 
             memberRepository.findById(memberId)
-                .orElseThrow(() -> new TokenException(TokenErrorCode.NOT_FOUND_MEMBER));
+                    .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND));
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                 memberId, null, Collections.emptyList());
