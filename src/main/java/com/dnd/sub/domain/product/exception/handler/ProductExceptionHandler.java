@@ -5,12 +5,10 @@ import com.dnd.sub.global.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import static com.dnd.sub.domain.product.exception.ProductErrorCode.PRODUCT_ERROR;
-import static com.dnd.sub.global.dto.ApiResponse.fail;
 
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -18,9 +16,9 @@ import static com.dnd.sub.global.dto.ApiResponse.fail;
 public class ProductExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<ApiResponse<Void>> handleProductExceptionException(final ProductException e) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse<Void> handleProductExceptionException(final ProductException e) {
         log.error("{} 발생!", e.getClass().getSimpleName(), e);
-        return ResponseEntity.badRequest()
-                .body(fail(e.getErrorCode()));
+        return ApiResponse.fail(e.getErrorCode());
     }
 }
