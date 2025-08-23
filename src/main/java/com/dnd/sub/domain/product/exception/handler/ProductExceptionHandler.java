@@ -21,6 +21,6 @@ public class ProductExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleProductExceptionException(final ProductException e) {
         log.error("{} 발생!", e.getClass().getSimpleName(), e);
         return ResponseEntity.badRequest()
-            .body(fail(PRODUCT_ERROR));
+                .body(fail(e.getErrorCode()));
     }
 }

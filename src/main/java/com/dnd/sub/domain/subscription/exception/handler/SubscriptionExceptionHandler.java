@@ -21,6 +21,6 @@ public class SubscriptionExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleMemberActivityException(final SubscriptionException e) {
         log.error("{} 발생!", e.getClass().getSimpleName(), e);
         return ResponseEntity.badRequest()
-            .body(fail(SUBSCRIPTION_ERROR));
+                .body(fail(e.getErrorCode()));
     }
 }

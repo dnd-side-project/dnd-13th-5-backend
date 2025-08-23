@@ -2,7 +2,7 @@ package com.dnd.sub.global.util;
 
 import com.dnd.sub.domain.subscription.entity.PayCycleUnitType;
 import com.dnd.sub.domain.subscription.exception.PayCycleErrorCode;
-import com.dnd.sub.domain.subscription.exception.CycleException;
+import com.dnd.sub.domain.subscription.exception.PayCycleException;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;
@@ -22,7 +22,7 @@ public class PaymentCycleUtil {
             case YEAR:
                 return addYears(date, startDate, cycleNum);
             default:
-                throw new CycleException(PayCycleErrorCode.CYCLE_TYPE_ERROR);
+                throw new PayCycleException(PayCycleErrorCode.CYCLE_TYPE_ERROR);
         }
     }
 

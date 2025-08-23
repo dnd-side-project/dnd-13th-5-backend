@@ -5,8 +5,11 @@ import com.dnd.sub.global.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import static com.dnd.sub.global.dto.ApiResponse.fail;
 
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -14,8 +17,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class TokenExceptionHandler {
 
     @ExceptionHandler(TokenException.class)
-    protected ApiResponse<Void> handleTokenException(final TokenException e) {
+    protected ResponseEntity<ApiResponse<Void>> handleTokenException(final TokenException e) {
         log.error("TokenException: {}", e.getErrorCode().getMessage());
-        return ApiResponse.fail(e.getErrorCode());
+        return ResponseEntity.badRequest().body(fail(e.getErrorCode()));
     }
 }
