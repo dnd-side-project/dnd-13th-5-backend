@@ -1,5 +1,6 @@
 package com.dnd.sub.domain.subscription.repository;
 
+import com.dnd.sub.domain.member.entity.QMember;
 import com.dnd.sub.domain.product.entity.Product;
 import com.dnd.sub.domain.product.entity.ProductCategoryType;
 import com.dnd.sub.domain.product.entity.QProduct;
@@ -7,6 +8,7 @@ import com.dnd.sub.domain.product.entity.QProductPlan;
 import com.dnd.sub.domain.subscription.controller.SubscriptionSortType;
 import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
+import com.dnd.sub.domain.subscription.dto.response.GetPaymentTotalResponse;
 import com.dnd.sub.domain.subscription.entity.QSubscription;
 import com.dnd.sub.domain.subscription.entity.Subscription;
 import com.querydsl.core.BooleanBuilder;
@@ -28,6 +30,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
     private static final QSubscription s = QSubscription.subscription;
     private static final QProduct p = QProduct.product;
     private static final QProductPlan pp = QProductPlan.productPlan;
+    private static final QMember m = QMember.member;
 
     @Override
     public List<GetMySubscriptionDto> findMySubscriptions(Long memberId, ProductCategoryType category, SubscriptionSortType sort) {
@@ -84,6 +87,80 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                     sub.getNextPaymentDay()
             );
         }).toList();
+    }
+
+    @Override
+    public GetPaymentTotalResponse findPaymentTotal(Long memberId) {
+        LocalDate today = LocalDate.now();
+        LocalDate startDay = today.withDayOfMonth(1);
+        LocalDate endDay = today.withDayOfMonth(today.lengthOfMonth());
+
+        String userName = query
+                .select(m.name)
+                .from(m)
+                .where(m.id.eq(memberId))
+                .fetchOne();
+
+        List<Tuple> tuples = query
+                .select(s, pp.price)
+                .from(s)
+                .join(s.product, p)
+                .leftJoin(pp).on(pp.id.eq(s.planId))
+                .where(s.member.id.eq(memberId)
+                        .and(s.startedAt.isNotNull()))
+                .fetch();
+
+        if (tuples.isEmpty()) {
+            return new GetPaymentTotalResponse(userName, 0, 0, 0, 0);
+        }
+
+        int totalAmount = 0;
+        int usedAmount = 0;
+        int remainingAmount = 0;
+        int subCount = tuples.size();
+
+        for (Tuple tuple : tuples) {
+            Subscription sub = tuple.get(s);
+            Integer price = tuple.get(pp.price);
+
+            LocalDate prevPayDay = sub.getPreviousPaymentDay();
+            LocalDate nextPayDay = sub.getNextPaymentDay();
+
+            // 이전 결제일이 이번달인 경우
+            boolean isPrevThisMonth = prevPayDay.isAfter(startDay.minusDays(1)) &&
+                    prevPayDay.isBefore(endDay.plusDays(1)) &&
+                    prevPayDay.isBefore(today.plusDays(1));
+
+            // 다음 결제일이 이번달인 경우
+            boolean isNextThisMonth = nextPayDay.isAfter(startDay.minusDays(1)) &&
+                    nextPayDay.isBefore(endDay.plusDays(1)) &&
+                    nextPayDay.isAfter(today);
+
+            if (isPrevThisMonth || isNextThisMonth) {
+                totalAmount += price;
+            }
+
+            if (isPrevThisMonth) {
+                usedAmount += price;
+            }
+
+            if (isNextThisMonth) {
+                remainingAmount += price;
+            }
+        }
+
+        int progressPercentage = 0;
+        if (totalAmount > 0) {
+            progressPercentage = (100 * usedAmount) / totalAmount;
+        }
+
+        return new GetPaymentTotalResponse(
+                userName,
+                totalAmount,
+                remainingAmount,
+                progressPercentage,
+                subCount
+        );
     }
 
     private List<GetMySubscriptionDto> findSubscriptions(BooleanBuilder builder,

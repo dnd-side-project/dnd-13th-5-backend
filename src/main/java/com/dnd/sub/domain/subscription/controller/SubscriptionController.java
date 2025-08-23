@@ -5,6 +5,7 @@ import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
 import com.dnd.sub.domain.subscription.dto.response.GetMySubscriptionsResponse;
 import com.dnd.sub.domain.subscription.dto.response.GetPaymentSoonResponse;
+import com.dnd.sub.domain.subscription.dto.response.GetPaymentTotalResponse;
 import com.dnd.sub.domain.subscription.service.SubscriptionService;
 import com.dnd.sub.global.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,6 @@ public class SubscriptionController {
         return ApiResponse.success(GET_MY_FAVORITES, response);
     }
 
-
     @GetMapping("/my/payment-soon")
     public ApiResponse<GetPaymentSoonResponse> getPaymentSoon(@AuthenticationPrincipal Long memberId) {
         List<GetPaymentSoonDto> services = subscriptionService.getPaymentSoon(memberId);
@@ -57,4 +57,12 @@ public class SubscriptionController {
 
         return ApiResponse.success(GET_PAYMENT_SOON, response);
     }
+
+    @GetMapping("/my/total-payments")
+    public ApiResponse<GetPaymentTotalResponse> getPaymentTotal(@AuthenticationPrincipal Long memberId) {
+        GetPaymentTotalResponse response = subscriptionService.getPaymentTotal(memberId);
+
+        return ApiResponse.success(GET_PAYMENT_TOTAL, response);
+    }
+
 }
