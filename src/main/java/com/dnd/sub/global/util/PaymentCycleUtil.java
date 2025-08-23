@@ -1,11 +1,10 @@
 package com.dnd.sub.global.util;
 
 import com.dnd.sub.domain.subscription.entity.PayCycleUnitType;
-import com.dnd.sub.domain.subscription.exception.CycleErrorCode;
+import com.dnd.sub.domain.subscription.exception.PayCycleErrorCode;
 import com.dnd.sub.domain.subscription.exception.CycleException;
 import lombok.experimental.UtilityClass;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 
 @UtilityClass
@@ -23,7 +22,7 @@ public class PaymentCycleUtil {
             case YEAR:
                 return addYears(date, startDate, cycleNum);
             default:
-                throw new CycleException(CycleErrorCode.CYCLE_TYPE_ERROR);
+                throw new CycleException(PayCycleErrorCode.CYCLE_TYPE_ERROR);
         }
     }
 
@@ -38,12 +37,11 @@ public class PaymentCycleUtil {
     private static LocalDate addYears(LocalDate date, LocalDate startDate, int years) {
 
         int nextYear = date.getYear() + years;
-        boolean isLeapYear = (nextYear % 4 == 0 && nextYear % 100 != 0) || nextYear % 400 == 0;
         boolean isFeb29 = (startDate.getMonthValue() == 2 && startDate.getDayOfMonth() == 29);
 
         if (date.getMonthValue() == 2 && isFeb29) {
 
-            if (isLeapYear) {
+            if (date.isLeapYear()) {
                 return LocalDate.of(nextYear, 2, 29);
             }
             return LocalDate.of(nextYear, 2, 28);

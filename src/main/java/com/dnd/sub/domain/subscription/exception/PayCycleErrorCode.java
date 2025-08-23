@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum CycleErrorCode implements ErrorCode {
+public enum PayCycleErrorCode implements ErrorCode {
     CYCLE_TYPE_ERROR(HttpStatus.BAD_REQUEST.value(), "CF-400", "잘못된 결제 주기입니다."),
     ;
 
