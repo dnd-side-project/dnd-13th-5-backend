@@ -17,7 +17,7 @@ public class ProductExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<Void> handleProductExceptionException(final ProductException e) {
+    public ApiResponse<Void> handleProductException(final ProductException e) {
         log.error("{} 발생!", e.getClass().getSimpleName(), e);
         return ApiResponse.fail(e.getErrorCode());
     }
