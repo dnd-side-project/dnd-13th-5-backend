@@ -3,6 +3,8 @@ package com.dnd.sub.domain.subscription.dto;
 import com.dnd.sub.domain.product.entity.ProductCategoryType;
 import com.dnd.sub.domain.subscription.entity.PayCycleUnitType;
 
+import java.time.LocalDate;
+
 public record GetMySubscriptionDto(
     Long id,
     String name,
@@ -12,6 +14,7 @@ public record GetMySubscriptionDto(
     String planName,
     int price,
     boolean isFavorites,
-    String imageUrl
+    String imageUrl,
+    LocalDate nextDueDay
 ) {
 }

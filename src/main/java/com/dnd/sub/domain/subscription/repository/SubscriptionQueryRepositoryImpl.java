@@ -190,14 +190,14 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                 planName,
                 price,
                 sub.isFavorite(),
-                prod.getImageUrl()
+                    prod.getImageUrl(),
+                    sub.getNextPaymentDay()
             );
         }).toList();
 
         return services;
     }
-
-
+    
     private OrderSpecifier<?>[] buildOrderSpec(SubscriptionSortType sort, QSubscription s, QProduct p, QProductPlan pp) {
         if (sort == null) {
             return new OrderSpecifier<?>[]{ p.name.asc() };
