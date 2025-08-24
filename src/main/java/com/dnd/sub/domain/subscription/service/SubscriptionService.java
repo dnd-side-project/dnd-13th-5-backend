@@ -86,7 +86,7 @@ public class SubscriptionService {
             .orElseThrow(() -> new PaymentMethodException(PaymentMethodErrorCode.PAYMENT_METHOD_NOT_FOUND));
     }
 
-    public List<GetMySubscriptionDto> getMySubscriptions(Long memberId, ProductCategoryType category, SubscriptionSortType sort) {
+    public List<GetMySubscriptionDto> getMySubscriptions(final Long memberId, final ProductCategoryType category, final SubscriptionSortType sort) {
         validateMember(memberId);
 
         return subscriptionRepository.findMySubscriptions(memberId, category, sort);
@@ -98,19 +98,19 @@ public class SubscriptionService {
         }
     }
 
-    public List<GetMySubscriptionDto> getMyFavorites(Long memberId, ProductCategoryType category, SubscriptionSortType sort) {
+    public List<GetMySubscriptionDto> getMyFavorites(final Long memberId, final ProductCategoryType category, final SubscriptionSortType sort) {
         validateMember(memberId);
 
         return subscriptionRepository.findMyFavorites(memberId, category, sort);
     }
 
-    public List<GetPaymentSoonDto> getPaymentSoon(Long memberId) {
+    public List<GetPaymentSoonDto> getPaymentSoon(final Long memberId) {
         validateMember(memberId);
 
         return subscriptionRepository.findPaymentSoon(memberId);
     }
 
-    public GetPaymentTotalResponse getPaymentTotal(Long memberId) {
+    public GetPaymentTotalResponse getPaymentTotal(final Long memberId) {
         validateMember(memberId);
 
         return subscriptionRepository.findPaymentTotal(memberId);
