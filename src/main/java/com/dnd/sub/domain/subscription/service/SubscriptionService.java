@@ -49,7 +49,8 @@ public class SubscriptionService {
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     @Transactional
     public void updatePaymentDay() {
-        List<Subscription> subscriptions = subscriptionRepository.findByNextPaymentDayBefore(LocalDate.now(ZoneId.of("Asia/Seoul")));
+        final LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        List<Subscription> subscriptions = subscriptionRepository.findByNextPaymentDayBefore(today);
 
         for (Subscription sub : subscriptions) {
             LocalDate oldNextPaymentDay = sub.getNextPaymentDay();
