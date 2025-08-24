@@ -1,5 +1,6 @@
 package com.dnd.sub.domain.auth.controller;
 
+import com.dnd.sub.domain.auth.dto.response.AuthSuccessCode;
 import com.dnd.sub.domain.auth.dto.response.TokenResponse;
 import com.dnd.sub.domain.auth.service.AuthService;
 import com.dnd.sub.global.dto.ApiResponse;
@@ -43,7 +44,7 @@ public class AuthController implements AuthControllerDocs {
         ResponseCookie responseCookie = CookieUtil.createCookie("refresh_token",
             tokenResponse.refreshToken(), 60 * 60 * 24 * 14);
         response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
-        return ApiResponse.success(GlobalSuccessCode.OK);
+        return ApiResponse.success(AuthSuccessCode.REISSUE_OK);
     }
 
 }
