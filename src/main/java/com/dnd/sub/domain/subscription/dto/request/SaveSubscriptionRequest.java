@@ -8,7 +8,7 @@ public record SaveSubscriptionRequest(
     Long productId,
     Long planId,
     PayCycleUnitType payCycleUnit,
-    LocalDate startDay,
+    LocalDate startedAt,
     Long paymentMethodId,
     String memo,
     int participantCount
