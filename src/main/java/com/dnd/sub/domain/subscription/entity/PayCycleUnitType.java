@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum PayCycleUnitType {
-    DAY,
     WEEK,
     MONTH,
     YEAR

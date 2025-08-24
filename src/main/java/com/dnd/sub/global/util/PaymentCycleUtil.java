@@ -11,16 +11,14 @@ import java.time.LocalDate;
 public class PaymentCycleUtil {
 
     //다음 결제일 date는 현재 다음 결제예정일, startDate는 최초 예정일
-    public static LocalDate nextPaymentDay(LocalDate date, LocalDate startDate, int cycleNum, PayCycleUnitType cycleUnit) {
+    public static LocalDate nextPaymentDay(LocalDate date, LocalDate startDate, PayCycleUnitType cycleUnit) {
         switch (cycleUnit) {
-            case DAY:
-                return date.plusDays(cycleNum);
             case WEEK:
-                return date.plusWeeks(cycleNum);
+                return date.plusWeeks(1);
             case MONTH:
-                return addMonths(date, startDate, cycleNum);
+                return addMonths(date, startDate, 1);
             case YEAR:
-                return addYears(date, startDate, cycleNum);
+                return addYears(date, startDate, 1);
             default:
                 throw new PayCycleException(PayCycleErrorCode.CYCLE_TYPE_ERROR);
         }

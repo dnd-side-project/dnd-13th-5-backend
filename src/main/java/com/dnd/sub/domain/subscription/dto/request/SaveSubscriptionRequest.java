@@ -7,7 +7,6 @@ import java.time.LocalDate;
 public record SaveSubscriptionRequest(
     Long productId,
     Long planId,
-    int payCycleNum,
     PayCycleUnitType payCycleUnit,
     LocalDate startDay,
     Long paymentMethodId,

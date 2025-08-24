@@ -8,7 +8,6 @@ import java.time.LocalDate;
 public record SaveSubscriptionDto(
     Long productId,
     Long planId,
-    int payCycleNum,
     PayCycleUnitType payCycleUnit,
     LocalDate startDay,
     Long paymentMethodId,
@@ -20,7 +19,6 @@ public record SaveSubscriptionDto(
         return new SaveSubscriptionDto(
             request.productId(),
             request.planId(),
-            request.payCycleNum(),
             request.payCycleUnit(),
             request.startDay(),
             request.paymentMethodId(),

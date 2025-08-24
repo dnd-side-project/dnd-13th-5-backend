@@ -9,7 +9,6 @@ public record GetMySubscriptionDto(
     Long id,
     String name,
     ProductCategoryType category,
-    int payCycleNum,
     PayCycleUnitType payCycleUnit,
     String planName,
     int price,
