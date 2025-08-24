@@ -4,11 +4,10 @@ import com.dnd.sub.global.security.custom.CustomOAuth2UserService;
 import com.dnd.sub.global.security.handler.CustomLogoutSuccessHandler;
 import com.dnd.sub.global.security.handler.CustomOAuth2LogoutHandler;
 import com.dnd.sub.global.security.handler.CustomSuccessHandler;
+import com.dnd.sub.global.security.jwt.JwtAuthenticationEntryPoint;
 import com.dnd.sub.global.security.jwt.JwtFilter;
-import com.dnd.sub.global.security.jwt.JwtProvider;
 import java.util.List;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +29,7 @@ public class SecurityConfig {
   private final CustomOAuth2LogoutHandler customOAuth2LogoutHandler;
   private final CustomOAuth2UserService customOAuth2UserService;
   private final CustomSuccessHandler customSuccessHandler;
-  private final JwtProvider jwtProvider;
+  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
   private final JwtFilter jwtFilter;
   private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
@@ -46,6 +45,9 @@ public class SecurityConfig {
                 .userService(customOAuth2UserService))
                 .successHandler(customSuccessHandler))
         .sessionManagement(s -> s.sessionCreationPolicy((SessionCreationPolicy.STATELESS)))
+            .exceptionHandling(exceptions -> exceptions
+                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)  // 여기서 사용!
+            )
             .logout(logout -> logout
                     .logoutUrl("/api/auth/logout")
                     .addLogoutHandler(customOAuth2LogoutHandler)
