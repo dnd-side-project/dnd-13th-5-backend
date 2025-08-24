@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum PayType {
+public enum PaymentMethodType {
     CARD,
     ACCOUNT,
     EASY_PAY

@@ -24,12 +24,12 @@ public class PaymentMethod {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", length = 20, nullable = false)
-    private PayType type;
+    private PaymentMethodType type;
 
     @Column(name = "name", length = 10, nullable = false)
     private String name;
 
-    public PaymentMethod(final PayType type, final String name) {
+    public PaymentMethod(final PaymentMethodType type, final String name) {
         this.type = type;
         this.name = name;
     }
