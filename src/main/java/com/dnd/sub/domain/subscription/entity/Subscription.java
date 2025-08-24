@@ -76,6 +76,14 @@ public class Subscription extends BaseEntity {
         this.isFavorite = !this.isFavorite;
     }
 
+    public void updatePreviousPaymentDay(LocalDate date) {
+        this.previousPaymentDay = date;
+    }
+
+    public void updateNextPaymentDay(LocalDate date) {
+        this.nextPaymentDay = date;
+    }
+
     @Builder
     public Subscription(
         final Member member,
@@ -83,6 +91,7 @@ public class Subscription extends BaseEntity {
         final PaymentMethod paymentMethod,
         final Long planId,
         final LocalDate startedAt,
+        final LocalDate previousPaymentDay,
         final LocalDate nextPaymentDay,
         final int participantCount,
         final String payType,
@@ -94,6 +103,7 @@ public class Subscription extends BaseEntity {
         this.paymentMethod = paymentMethod;
         this.planId = planId;
         this.startedAt = startedAt;
+        this.previousPaymentDay = previousPaymentDay;
         this.nextPaymentDay = nextPaymentDay;
         this.participantCount = participantCount;
         this.payType = payType;
