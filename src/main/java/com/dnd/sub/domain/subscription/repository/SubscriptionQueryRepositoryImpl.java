@@ -82,7 +82,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                     sub.getId(),
                     prod.getName(),
                     price,
-                    sub.getStartedAt()
+                    sub.getNextPaymentDay()
             );
         }).toList();
     }
@@ -192,8 +192,8 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                 planName,
                 price,
                 sub.isFavorite(),
-                    prod.getImageUrl(),
-                    sub.getNextPaymentDay()
+                prod.getImageUrl(),
+                sub.getStartedAt()
             );
         }).toList();
 
