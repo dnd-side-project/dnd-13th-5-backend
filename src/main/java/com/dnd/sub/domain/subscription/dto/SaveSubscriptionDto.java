@@ -9,7 +9,7 @@ public record SaveSubscriptionDto(
     Long productId,
     Long planId,
     PayCycleUnitType payCycleUnit,
-    LocalDate startDay,
+    LocalDate startedAt,
     Long paymentMethodId,
     String memo,
     int participantCount
@@ -20,7 +20,7 @@ public record SaveSubscriptionDto(
             request.productId(),
             request.planId(),
             request.payCycleUnit(),
-            request.startDay(),
+            request.startedAt(),
             request.paymentMethodId(),
             request.memo(),
             request.participantCount()

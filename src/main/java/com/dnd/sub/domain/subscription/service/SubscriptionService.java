@@ -24,10 +24,12 @@ import com.dnd.sub.domain.subscription.repository.SubscriptionRepository;
 import com.dnd.sub.global.util.PaymentCycleUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 import static com.dnd.sub.domain.subscription.exception.SubscriptionErrorCode.MEMBER_SUBSCRIPTION_NOT_FOUND;
@@ -44,15 +46,32 @@ public class SubscriptionService {
     private final ProductRepository productRepository;
     private final PaymentMethodRepository paymentMethodRepository;
 
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
+    @Transactional
+    public void updatePaymentDay() {
+        final LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        List<Subscription> subscriptions = subscriptionRepository.findByNextPaymentDayBefore(today);
+
+        for (Subscription sub : subscriptions) {
+            LocalDate oldNextPaymentDay = sub.getNextPaymentDay();
+            sub.updatePreviousPaymentDay(oldNextPaymentDay);
+
+            LocalDate newNextPaymentDay = PaymentCycleUtil.nextPaymentDay(oldNextPaymentDay, sub.getStartedAt(), sub.getPayCycleUnit());
+            sub.updateNextPaymentDay(newNextPaymentDay);
+        }
+    }
+
     @Transactional
     public void saveSubscription(final Long memberId, final SaveSubscriptionDto dto) {
         final Member member = getMember(memberId);
         final Product product = getProduct(dto.productId());
         final PaymentMethod paymentMethod = getPaymentMethod(dto.paymentMethodId());
 
+        final LocalDate previousPaymentDay = PaymentCycleUtil.previousPaymentDay(dto.startedAt(), dto.payCycleUnit());
+
         final LocalDate nextPaymentDay = PaymentCycleUtil.nextPaymentDay(
-            dto.startDay(),
-            dto.startDay(),
+            dto.startedAt(),
+            dto.startedAt(),
             dto.payCycleUnit()
         );
 
@@ -61,7 +80,8 @@ public class SubscriptionService {
             .product(product)
             .paymentMethod(paymentMethod)
             .planId(dto.planId())
-            .startedAt(dto.startDay())
+            .startedAt(dto.startedAt())
+            .previousPaymentDay(previousPaymentDay)
             .nextPaymentDay(nextPaymentDay)
             .participantCount(dto.participantCount())
             .payCycleUnit(dto.payCycleUnit())
@@ -125,7 +145,7 @@ public class SubscriptionService {
     }
 
     private void validateMemberSubscription(final Long memberId, final Long subscriptionId) {
-        if(!subscriptionRepository.existsByMemberIdAndId(memberId, subscriptionId)) {
+        if(!subscriptionRepository.existsByIdAndMember_Id(subscriptionId, memberId)) {
             throw new SubscriptionException(MEMBER_SUBSCRIPTION_NOT_FOUND);
         }
     }
