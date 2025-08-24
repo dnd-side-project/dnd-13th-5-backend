@@ -1,5 +1,6 @@
 package com.dnd.sub.global.security.jwt;
 
+import com.dnd.sub.domain.auth.exception.TokenException;
 import com.dnd.sub.domain.member.exception.MemberErrorCode;
 import com.dnd.sub.domain.member.exception.MemberException;
 import com.dnd.sub.domain.member.repository.MemberRepository;
@@ -32,20 +33,23 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String token = parseBearerToken(request);
         if (StringUtils.hasText(token)) {
+            try {
+                Long memberId = jwtProvider.extractUserId(token);
 
-            Long memberId = jwtProvider.extractUserId(token);
-
-            memberRepository.findById(memberId)
+                memberRepository.findById(memberId)
                     .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND));
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                memberId, null, Collections.emptyList());
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                        memberId, null, Collections.emptyList());
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (TokenException e) {
+                SecurityContextHolder.clearContext();
+            } catch (MemberException e) {
+                SecurityContextHolder.clearContext();
+            }
         }
         filterChain.doFilter(request, response);
-
-
     }
 
 
@@ -54,7 +58,6 @@ public class JwtFilter extends OncePerRequestFilter {
         if (Strings.isNotBlank(authorization) && authorization.startsWith("Bearer ")) {
             return authorization.substring(7);
         }
-
         return null;
     }
 
