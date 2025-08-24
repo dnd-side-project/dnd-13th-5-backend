@@ -24,7 +24,7 @@ import static com.dnd.sub.domain.product.dto.response.ProductSuccessCode.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
 @RestController
-public class ProductController {
+public class ProductController implements ProductControllerDocs {
 
     private final ProductService productService;
 
