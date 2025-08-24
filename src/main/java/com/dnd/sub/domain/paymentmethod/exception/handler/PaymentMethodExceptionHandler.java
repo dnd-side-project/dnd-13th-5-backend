@@ -1,6 +1,6 @@
-package com.dnd.sub.domain.product.exception.handler;
+package com.dnd.sub.domain.paymentmethod.exception.handler;
 
-import com.dnd.sub.domain.product.exception.ProductException;
+import com.dnd.sub.domain.paymentmethod.exception.PaymentMethodException;
 import com.dnd.sub.global.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
-public class ProductExceptionHandler {
+public class PaymentMethodExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<Void> handleProductException(final ProductException e) {
+    public ApiResponse<Void> handlePaymentMethodException(final PaymentMethodException e) {
         log.error("{} 발생!", e.getClass().getSimpleName(), e);
         return ApiResponse.fail(e.getErrorCode());
     }

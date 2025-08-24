@@ -1,4 +1,4 @@
-package com.dnd.sub.domain.product.exception;
+package com.dnd.sub.domain.paymentmethod.exception;
 
 import com.dnd.sub.global.enums.ErrorCode;
 import lombok.Getter;
@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum ProductErrorCode implements ErrorCode {
+public enum PaymentMethodErrorCode implements ErrorCode {
 
-    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "PF-401", "존재하지 않는 구독 서비스입니다."),
+    PAYMENT_METHOD_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "PMF-401", "존재하지 않는 결제 수단입니다."),
     ;
 
     private final int status;

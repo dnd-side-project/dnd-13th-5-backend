@@ -47,30 +47,27 @@ public class Subscription extends BaseEntity {
     @Column(name = "plan_id", nullable = false)
     private Long planId;
 
-    @Column(name = "started_at")
+    @Column(name = "started_at", nullable = true)
     private LocalDate startedAt;
 
-    @Column(name = "previous_payment_day")
+    @Column(name = "previous_payment_day", nullable = true)
     private LocalDate previousPaymentDay;
 
-    @Column(name = "next_payment_day")
+    @Column(name = "next_payment_day", nullable = true)
     private LocalDate nextPaymentDay;
 
-    @Column(name = "participant_count")
+    @Column(name = "participant_count", nullable = false)
     private int participantCount;
 
-    @Column(name = "pay_type", length = 20, nullable = false)
-    private String payType;
-
-    @Column(name = "pay_cycle_num", nullable = true)
-    private int payCycleNum;
-
     @Enumerated(EnumType.STRING)
-    @Column(name = "pay_cycle_unit", length = 20, nullable = true)
+    @Column(name = "pay_cycle_unit", length = 20, nullable = false)
     private PayCycleUnitType payCycleUnit;
 
     @Column(name = "is_favorite", columnDefinition = "TINYINT(1)", nullable = false)
     private boolean isFavorite = false;
+
+    @Column(name = "memo", length = 200, nullable = true)
+    private String memo;
 
     public void updateIsFavorite() {
         this.isFavorite = !this.isFavorite;
@@ -94,9 +91,8 @@ public class Subscription extends BaseEntity {
         final LocalDate previousPaymentDay,
         final LocalDate nextPaymentDay,
         final int participantCount,
-        final String payType,
-        final int payCycleNum,
-        final PayCycleUnitType payCycleUnit
+        final PayCycleUnitType payCycleUnit,
+        final String memo
     ) {
         this.member = member;
         this.product = product;
@@ -106,8 +102,7 @@ public class Subscription extends BaseEntity {
         this.previousPaymentDay = previousPaymentDay;
         this.nextPaymentDay = nextPaymentDay;
         this.participantCount = participantCount;
-        this.payType = payType;
-        this.payCycleNum = payCycleNum;
         this.payCycleUnit = payCycleUnit;
+        this.memo = memo;
     }
 }

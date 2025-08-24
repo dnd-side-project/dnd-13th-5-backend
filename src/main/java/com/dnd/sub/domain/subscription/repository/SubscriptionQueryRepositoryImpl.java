@@ -20,8 +20,6 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.querydsl.core.types.dsl.Expressions.numberTemplate;
-
 @RequiredArgsConstructor
 public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryRepository {
 
@@ -190,7 +188,6 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                 sub.getId(),
                 prod.getName(),
                 prod.getCategory(),
-                sub.getPayCycleNum(),
                 sub.getPayCycleUnit(),
                 planName,
                 price,
@@ -212,12 +209,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
             case NAME -> new OrderSpecifier<?>[]{ p.name.asc() };
             case CHEAPEST -> new OrderSpecifier<?>[]{ pp.price.asc() };
             case OLDESTFIRST -> new OrderSpecifier<?>[]{ s.startedAt.asc() };
-            case DUESOON -> new OrderSpecifier<?>[]{
-                numberTemplate(Long.class,
-                    "UNIX_TIMESTAMP(DATE_ADD({0}, INTERVAL {1} {2}))",
-                    s.startedAt, s.payCycleNum, s.payCycleUnit.stringValue()
-                ).asc()
-            };
+            case DUESOON -> new OrderSpecifier<?>[]{ s.nextPaymentDay.asc()};
         };
     }
 }
