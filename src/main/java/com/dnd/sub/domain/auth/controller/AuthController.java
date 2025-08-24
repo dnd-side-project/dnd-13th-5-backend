@@ -7,6 +7,8 @@ import com.dnd.sub.global.enums.GlobalSuccessCode;
 import com.dnd.sub.domain.auth.exception.TokenErrorCode;
 import com.dnd.sub.domain.auth.exception.TokenException;
 import com.dnd.sub.global.util.CookieUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -19,10 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
-public class AuthController {
+public class AuthController implements AuthControllerDocs {
 
     private final AuthService authService;
 
+    @Operation(
+            summary = "토큰 재발급",
+            description = "쿠키의 리프레시토큰으로 헤더의 엑세스토큰을 재발급 합니다."
+    )
     @GetMapping("/reissue")
     public ApiResponse<Void> reissue(
         @CookieValue(value = "refresh_token", required = false) String refreshToken,
