@@ -19,6 +19,7 @@ import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
 import com.dnd.sub.domain.subscription.dto.SaveSubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.response.GetPaymentTotalResponse;
 import com.dnd.sub.domain.subscription.entity.Subscription;
+import com.dnd.sub.domain.subscription.exception.SubscriptionException;
 import com.dnd.sub.domain.subscription.repository.SubscriptionRepository;
 import com.dnd.sub.global.util.PaymentCycleUtil;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.dnd.sub.domain.subscription.exception.SubscriptionErrorCode.MEMBER_SUBSCRIPTION_NOT_FOUND;
+import static com.dnd.sub.domain.subscription.exception.SubscriptionErrorCode.SUBSCRIPTION_NOT_FOUND;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -83,18 +87,51 @@ public class SubscriptionService {
     }
 
     public List<GetMySubscriptionDto> getMySubscriptions(Long memberId, ProductCategoryType category, SubscriptionSortType sort) {
+        validateMember(memberId);
+
         return subscriptionRepository.findMySubscriptions(memberId, category, sort);
     }
 
+    private void validateMember(final Long memberId) {
+        if(!memberRepository.existsById(memberId)) {
+            throw new MemberException(MemberErrorCode.NOT_FOUND);
+        }
+    }
+
     public List<GetMySubscriptionDto> getMyFavorites(Long memberId, ProductCategoryType category, SubscriptionSortType sort) {
+        validateMember(memberId);
+
         return subscriptionRepository.findMyFavorites(memberId, category, sort);
     }
 
     public List<GetPaymentSoonDto> getPaymentSoon(Long memberId) {
+        validateMember(memberId);
+
         return subscriptionRepository.findPaymentSoon(memberId);
     }
 
     public GetPaymentTotalResponse getPaymentTotal(Long memberId) {
+        validateMember(memberId);
+
         return subscriptionRepository.findPaymentTotal(memberId);
+    }
+
+    @Transactional
+    public void updateIsFavorite(final Long memberId, final Long subscriptionId) {
+        validateMemberSubscription(memberId, subscriptionId);
+
+        final Subscription subscription = getSubscription(subscriptionId);
+        subscription.updateIsFavorite();
+    }
+
+    private void validateMemberSubscription(final Long memberId, final Long subscriptionId) {
+        if(!subscriptionRepository.existsByMemberIdAndId(memberId, subscriptionId)) {
+            throw new SubscriptionException(MEMBER_SUBSCRIPTION_NOT_FOUND);
+        }
+    }
+
+    private Subscription getSubscription(final Long subscriptionId) {
+        return subscriptionRepository.findById(subscriptionId)
+            .orElseThrow(() -> new SubscriptionException(SUBSCRIPTION_NOT_FOUND));
     }
 }
