@@ -14,6 +14,6 @@ public record GetMySubscriptionDto(
     int price,
     boolean isFavorites,
     String imageUrl,
-    LocalDate nextDueDay
+    LocalDate startedAt
 ) {
 }

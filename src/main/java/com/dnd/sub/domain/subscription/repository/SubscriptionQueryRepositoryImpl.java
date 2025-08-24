@@ -82,7 +82,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                     sub.getId(),
                     prod.getName(),
                     price,
-                    sub.getNextPaymentDay()
+                    sub.getStartedAt()
             );
         }).toList();
     }
