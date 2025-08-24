@@ -22,7 +22,7 @@ public interface SubscriptionControllerDocs {
 
     @Operation(
             summary = "구독 등록",
-            description = "구독을 등록합니다..",
+            description = "구독을 등록합니다.",
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @PostMapping
@@ -70,7 +70,7 @@ public interface SubscriptionControllerDocs {
 
     @Operation(
             summary = "즐겨찾기 추가 및 해지 api",
-            description = "해당 구독을 즐겨찾기 추가 혹은 해제 합니)",
+            description = "해당 구독을 즐겨찾기 추가 혹은 해제 합니다.",
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @PatchMapping("/{subscriptionId}/favorite")
