@@ -31,10 +31,10 @@ public class Product extends BaseEntity {
     @Column(name = "category", length = 100, nullable = false)
     private ProductCategoryType category;
 
-    @Column(name = "image_url", length = 500, nullable = false)
+    @Column(name = "image_url", length = 500, nullable = true)
     private String imageUrl;
 
-    @Column(name = "unsubscribe_url", length = 500, nullable = false)
+    @Column(name = "unsubscribe_url", length = 500, nullable = true)
     private String unsubscribeUrl;
 
     @Column(name = "is_admin_written", columnDefinition = "TINYINT(1)", nullable = false)
