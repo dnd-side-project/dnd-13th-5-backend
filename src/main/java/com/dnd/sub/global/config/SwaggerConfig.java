@@ -37,4 +37,20 @@ public class SwaggerConfig {
             .build();
     }
 
+    @Bean
+    public GroupedOpenApi productGroup() {
+        return GroupedOpenApi.builder()
+                .group("Product")
+                .pathsToMatch("/api/products/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi subscriptionGroup() {
+        return GroupedOpenApi.builder()
+                .group("Subscription")
+                .pathsToMatch("/api/subscriptions/**")
+                .build();
+    }
+
 }

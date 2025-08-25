@@ -32,7 +32,7 @@ import static com.dnd.sub.domain.subscription.dto.response.SubscriptionSuccessCo
 @RequiredArgsConstructor
 @RequestMapping("/api/subscriptions")
 @RestController
-public class SubscriptionController {
+public class SubscriptionController implements SubscriptionControllerDocs {
 
     private final SubscriptionService subscriptionService;
 
