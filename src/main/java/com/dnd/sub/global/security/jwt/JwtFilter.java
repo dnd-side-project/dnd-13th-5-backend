@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
@@ -32,9 +34,11 @@ public class JwtFilter extends OncePerRequestFilter {
         FilterChain filterChain) throws ServletException, IOException {
 
         String token = parseBearerToken(request);
+        log.info("Extracted token: {}", token);
         if (StringUtils.hasText(token)) {
             try {
                 Long memberId = jwtProvider.extractUserId(token);
+                log.info("Extracted member ID: {}", memberId);
 
                 memberRepository.findById(memberId)
                     .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND));
