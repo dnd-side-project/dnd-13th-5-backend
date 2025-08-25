@@ -3,7 +3,9 @@ package com.dnd.sub.domain.subscription.controller;
 import com.dnd.sub.domain.product.entity.ProductCategoryType;
 import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
+import com.dnd.sub.domain.subscription.dto.SaveCustomSubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.SaveSubscriptionDto;
+import com.dnd.sub.domain.subscription.dto.request.SaveCustomSubscriptionRequest;
 import com.dnd.sub.domain.subscription.dto.request.SaveSubscriptionRequest;
 import com.dnd.sub.domain.subscription.dto.response.GetMySubscriptionsResponse;
 import com.dnd.sub.domain.subscription.dto.response.GetPaymentSoonResponse;
@@ -41,6 +43,15 @@ public class SubscriptionController {
         subscriptionService.saveSubscription(memberId, dto);
 
         return ApiResponse.success(SAVE_SUBSCRIPTION);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/custom")
+    public ApiResponse<Void> saveCustomSubscription(@AuthenticationPrincipal Long memberId, @RequestBody SaveCustomSubscriptionRequest request) {
+        SaveCustomSubscriptionDto dto = SaveCustomSubscriptionDto.from(request);
+        subscriptionService.saveCustomSubscription(memberId, dto);
+
+        return ApiResponse.success(SAVE_CUSTOM_SUBSCRIPTION);
     }
 
     @GetMapping("/my")
