@@ -44,7 +44,7 @@ public class Subscription extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private PaymentMethod paymentMethod;
 
-    @Column(name = "plan_id", nullable = false)
+    @Column(name = "plan_id", nullable = true)
     private Long planId;
 
     @Column(name = "started_at", nullable = true)
