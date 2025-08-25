@@ -42,7 +42,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.addHeader(AUTHORIZATION, "Bearer "+ accessToken);
         response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
-        response.sendRedirect("http://localhost:8080/refresh");
+        response.sendRedirect("http://localhost:5173/subscriptions");
     }
 
 }
