@@ -10,6 +10,7 @@ import com.dnd.sub.domain.product.repository.ProductPlanRepository;
 import com.dnd.sub.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +55,23 @@ public class ProductService {
             .mapToInt(ProductPlan::getPrice)
             .max()
             .orElse(0);
+    }
+
+    public List<GetProductDto> getRandomProductsRecommendation(ProductCategoryType category) {
+        List<Product> products = productRepository.findRandomProductsByCategory(category, PageRequest.of(0, 2));
+
+        return products.stream().map(p -> {
+            List<ProductPlan> productPlans = productPlanRepository.findAllByProductId(p.getId());
+
+            return new GetProductDto(
+                p.getId(),
+                p.getName(),
+                p.getCategory(),
+                p.getImageUrl(),
+                findPlanMinPrice(productPlans),
+                findPlanMaxPrice(productPlans)
+            );
+        }).toList();
     }
 
     public List<GetSelectedProductsInfoDto> getSelectedProductsInfo(List<Long> productIds) {

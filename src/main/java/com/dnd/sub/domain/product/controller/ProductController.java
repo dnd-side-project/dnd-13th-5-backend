@@ -36,6 +36,14 @@ public class ProductController implements ProductControllerDocs {
         return ApiResponse.success(GET_ALL_PRODUCTS, response);
     }
 
+    @GetMapping("/recommendations")
+    public ApiResponse<GetAllProductsResponse> getRandomProductsRecommendation(@RequestParam(required = false) ProductCategoryType category) {
+        List<GetProductDto> products = productService.getRandomProductsRecommendation(category);
+        GetAllProductsResponse response = new GetAllProductsResponse(products);
+
+        return ApiResponse.success(GET_RANDOM_PRODUCTS_RECOMMENDATION, response);
+    }
+
     @GetMapping("/info")
     public ApiResponse<GetSelectedProductsInfoResponse> getSelectedProductsInfo(@RequestParam List<Long> productIds) {
         List<GetSelectedProductsInfoDto> products = productService.getSelectedProductsInfo(productIds);
