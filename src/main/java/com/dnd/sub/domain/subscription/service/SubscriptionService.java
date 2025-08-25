@@ -10,8 +10,10 @@ import com.dnd.sub.domain.paymentmethod.exception.PaymentMethodException;
 import com.dnd.sub.domain.paymentmethod.repository.PaymentMethodRepository;
 import com.dnd.sub.domain.product.entity.Product;
 import com.dnd.sub.domain.product.entity.ProductCategoryType;
+import com.dnd.sub.domain.product.entity.ProductPlan;
 import com.dnd.sub.domain.product.exception.ProductErrorCode;
 import com.dnd.sub.domain.product.exception.ProductException;
+import com.dnd.sub.domain.product.repository.ProductPlanRepository;
 import com.dnd.sub.domain.product.repository.ProductRepository;
 import com.dnd.sub.domain.subscription.controller.SubscriptionSortType;
 import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDto;
@@ -46,6 +48,7 @@ public class SubscriptionService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final PaymentMethodRepository paymentMethodRepository;
+    private final ProductPlanRepository productPlanRepository;
 
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     @Transactional
@@ -127,7 +130,12 @@ public class SubscriptionService {
             .unsubscribeUrl(null)
             .build();
 
-        productRepository.save(product);
+        ProductPlan productPlan = ProductPlan.builder()
+            .product(product)
+            .name(null)
+            .price(dto.price())
+            .benefit(null)
+            .build();
 
         Subscription subscription = Subscription.builder()
             .member(member)
@@ -142,6 +150,8 @@ public class SubscriptionService {
             .memo(dto.memo())
             .build();
 
+        productRepository.save(product);
+        productPlanRepository.save(productPlan);
         subscriptionRepository.save(subscription);
     }
 

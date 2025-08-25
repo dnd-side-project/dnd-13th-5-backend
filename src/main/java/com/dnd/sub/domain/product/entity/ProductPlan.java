@@ -29,7 +29,7 @@ public class ProductPlan extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
 
-    @Column(name = "name", length = 100, nullable = false)
+    @Column(name = "name", length = 100, nullable = true)
     private String name;
 
     @Column(name = "price", nullable = false)
