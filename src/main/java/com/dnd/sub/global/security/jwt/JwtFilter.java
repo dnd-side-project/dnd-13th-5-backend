@@ -34,11 +34,9 @@ public class JwtFilter extends OncePerRequestFilter {
         FilterChain filterChain) throws ServletException, IOException {
 
         String token = parseBearerToken(request);
-        log.info("Extracted token: {}", token);
         if (StringUtils.hasText(token)) {
             try {
                 Long memberId = jwtProvider.extractUserId(token);
-                log.info("Extracted member ID: {}", memberId);
 
                 memberRepository.findById(memberId)
                     .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND));
