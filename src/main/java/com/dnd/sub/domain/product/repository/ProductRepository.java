@@ -44,4 +44,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT s.product FROM Subscription s WHERE s.id = :subscriptionId")
     Optional<Product> findBySubscriptionId(@Param("subscriptionId") Long subscriptionId);
+
+    @Query("SELECT p FROM Product p WHERE p.category = :category ORDER BY function('RAND')")
+    List<Product> findRandomProductsByCategory(@Param("category") ProductCategoryType category, Pageable pageable);
 }
