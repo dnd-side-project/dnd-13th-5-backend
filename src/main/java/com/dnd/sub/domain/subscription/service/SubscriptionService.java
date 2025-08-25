@@ -16,6 +16,7 @@ import com.dnd.sub.domain.product.exception.ProductException;
 import com.dnd.sub.domain.product.repository.ProductPlanRepository;
 import com.dnd.sub.domain.product.repository.ProductRepository;
 import com.dnd.sub.domain.subscription.controller.SubscriptionSortType;
+import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDetailInfoDto;
 import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
 import com.dnd.sub.domain.subscription.dto.SaveCustomSubscriptionDto;
@@ -202,5 +203,30 @@ public class SubscriptionService {
     private Subscription getSubscription(final Long subscriptionId) {
         return subscriptionRepository.findById(subscriptionId)
             .orElseThrow(() -> new SubscriptionException(SUBSCRIPTION_NOT_FOUND));
+    }
+
+    public GetMySubscriptionDetailInfoDto getMySubscriptionDetailInfo(final Long memberId, final Long subscriptionId) {
+        validateMemberSubscription(memberId, subscriptionId);
+
+        final Subscription subscription = getSubscription(subscriptionId);
+        final Product product = getProduct(subscription.getProduct().getId());
+        final ProductPlan productPlan = productPlanRepository.findByProduct(product);
+
+        return new GetMySubscriptionDetailInfoDto(
+            subscriptionId,
+            product.getName(),
+            product.getCategory(),
+            product.getImageUrl(),
+            subscription.getPayCycleUnit(),
+            subscription.getStartedAt(),
+            (int) subscription.getPayCycleUnit().getChronoUnit().between(subscription.getStartedAt(), LocalDate.now()),
+            productPlan.getPrice(),
+            productPlan.getName(),
+            subscription.getPaymentMethod().getId(),
+            subscription.getMemo(),
+            subscription.getParticipantCount(),
+            productPlan.getBenefit(),
+            subscription.isFavorite()
+        );
     }
 }
