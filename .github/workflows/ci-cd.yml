@@ -131,6 +131,19 @@ jobs:
           DB_USERNAME=${{ secrets.DB_USERNAME }}
           DB_PASSWORD=${{ secrets.DB_PASSWORD }}
           DB_URL=${{ secrets.DB_URL }}
+          
+          # jwt environment
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          ACCESS_EXPIRATION=${{ secrets.ACCESS_EXPIRATION }}
+          REFRESH_EXPIRATION=${{ secrets.REFRESH_EXPIRATION }}
+          
+          # kakao OAuth
+          KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}
+          KAKAO_CLIENT_SECRET=${{ secrets.KAKAO_CLIENT_SECRET }}
+          KAKAO_REDIRECT_URL=${{ secrets.KAKAO_REDIRECT_URL }}
+          KAKAO_AUTHORIZATION_URI=${{ secrets.KAKAO_AUTHORIZATION_URI }}
+          KAKAO_TOKEN_URI=${{ secrets.KAKAO_TOKEN_URI }}
+          KAKAO_USER_INFO_URI=${{ secrets.KAKAO_USER_INFO_URI }}
 
           # AWS
           AWS_REGION=${{ secrets.AWS_REGION }}
