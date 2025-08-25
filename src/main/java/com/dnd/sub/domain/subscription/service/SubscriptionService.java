@@ -10,12 +10,15 @@ import com.dnd.sub.domain.paymentmethod.exception.PaymentMethodException;
 import com.dnd.sub.domain.paymentmethod.repository.PaymentMethodRepository;
 import com.dnd.sub.domain.product.entity.Product;
 import com.dnd.sub.domain.product.entity.ProductCategoryType;
+import com.dnd.sub.domain.product.entity.ProductPlan;
 import com.dnd.sub.domain.product.exception.ProductErrorCode;
 import com.dnd.sub.domain.product.exception.ProductException;
+import com.dnd.sub.domain.product.repository.ProductPlanRepository;
 import com.dnd.sub.domain.product.repository.ProductRepository;
 import com.dnd.sub.domain.subscription.controller.SubscriptionSortType;
 import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
+import com.dnd.sub.domain.subscription.dto.SaveCustomSubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.SaveSubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.response.GetPaymentTotalResponse;
 import com.dnd.sub.domain.subscription.entity.Subscription;
@@ -45,6 +48,7 @@ public class SubscriptionService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final PaymentMethodRepository paymentMethodRepository;
+    private final ProductPlanRepository productPlanRepository;
 
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     @Transactional
@@ -104,6 +108,51 @@ public class SubscriptionService {
     private PaymentMethod getPaymentMethod(final Long paymentMethodId) {
         return paymentMethodRepository.findById(paymentMethodId)
             .orElseThrow(() -> new PaymentMethodException(PaymentMethodErrorCode.PAYMENT_METHOD_NOT_FOUND));
+    }
+
+    @Transactional
+    public void saveCustomSubscription(final Long memberId, final SaveCustomSubscriptionDto dto) {
+        final Member member = getMember(memberId);
+        final PaymentMethod paymentMethod = getPaymentMethod(dto.paymentMethodId());
+
+        final LocalDate previousPaymentDay = PaymentCycleUtil.previousPaymentDay(dto.startedAt(), dto.payCycleUnit());
+
+        final LocalDate nextPaymentDay = PaymentCycleUtil.nextPaymentDay(
+            dto.startedAt(),
+            dto.startedAt(),
+            dto.payCycleUnit()
+        );
+
+        Product product = Product.builder()
+            .name(dto.productName())
+            .category(dto.category())
+            .imageUrl(null)
+            .unsubscribeUrl(null)
+            .build();
+
+        ProductPlan productPlan = ProductPlan.builder()
+            .product(product)
+            .name(null)
+            .price(dto.price())
+            .benefit(null)
+            .build();
+
+        Subscription subscription = Subscription.builder()
+            .member(member)
+            .product(product)
+            .paymentMethod(paymentMethod)
+            .planId(null)
+            .startedAt(dto.startedAt())
+            .previousPaymentDay(previousPaymentDay)
+            .nextPaymentDay(nextPaymentDay)
+            .participantCount(dto.participantCount())
+            .payCycleUnit(dto.payCycleUnit())
+            .memo(dto.memo())
+            .build();
+
+        productRepository.save(product);
+        productPlanRepository.save(productPlan);
+        subscriptionRepository.save(subscription);
     }
 
     public List<GetMySubscriptionDto> getMySubscriptions(final Long memberId, final ProductCategoryType category, final SubscriptionSortType sort) {
