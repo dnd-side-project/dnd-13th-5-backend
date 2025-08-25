@@ -12,6 +12,10 @@ import java.time.temporal.ChronoUnit;
 public class PaymentCycleUtil {
 
     public static LocalDate previousPaymentDay(LocalDate startedAt, PayCycleUnitType cycleUnit) {
+        if(startedAt == null) {
+            return null;
+        }
+
         LocalDate now = LocalDate.now();
 
         switch (cycleUnit) {
@@ -48,6 +52,10 @@ public class PaymentCycleUtil {
     }
 
     public static LocalDate nextPaymentDay(LocalDate previousPaymentDay, LocalDate startedAt, PayCycleUnitType cycleUnit) {
+        if(startedAt == null) {
+            return null;
+        }
+
         switch (cycleUnit) {
             case WEEK:
                 return previousPaymentDay.plusWeeks(1);
