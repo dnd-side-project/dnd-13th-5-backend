@@ -34,19 +34,14 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         Authentication authentication
     ) throws IOException, ServletException {
         if (authentication == null || authentication.getPrincipal() == null) {
-            log.error("Authentication principal이 null");
             return;
         }
 
         CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-        log.info("Authentication 성공 memberId: {}", customOAuth2User.getMemberId());
         String accessToken = jwtProvider.generateToken(customOAuth2User.getMemberId());
         String refreshToken = jwtProvider.generateRefreshToken(customOAuth2User.getMemberId());
         ResponseCookie refreshCookie = CookieUtil.createCookie("refresh_token", refreshToken,
             60 * 60 * 24 * 14);
-
-        log.info("access token: {}", accessToken);
-        log.info("refresh token: {}", refreshToken);
 
         refreshTokenService.addRefresh(customOAuth2User.getMemberId(), refreshToken);
 
