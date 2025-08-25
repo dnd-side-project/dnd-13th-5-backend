@@ -29,8 +29,12 @@ public class PaymentMethod {
     @Column(name = "name", length = 10, nullable = false)
     private String name;
 
-    public PaymentMethod(final PaymentMethodType type, final String name) {
+    @Column(name = "image_url", length = 500, nullable = false)
+    private String imageUrl;
+
+    public PaymentMethod(final PaymentMethodType type, final String name, final String imageUrl) {
         this.type = type;
         this.name = name;
+        this.imageUrl = imageUrl;
     }
 }
