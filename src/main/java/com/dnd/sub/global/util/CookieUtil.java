@@ -14,6 +14,7 @@ public class CookieUtil {
             .sameSite("Lax")
             .path("/")
             .httpOnly(true)
+            .secure(false)
             .build();
     }
 
