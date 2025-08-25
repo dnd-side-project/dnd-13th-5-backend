@@ -11,10 +11,10 @@ public class CookieUtil {
     public static ResponseCookie createCookie(String key, String value, int maxAge) {
         return ResponseCookie.from(key, value)
             .maxAge(maxAge)
-            .sameSite("Lax")
+            .sameSite("None")
             .path("/")
             .httpOnly(true)
-            .secure(false)
+            .secure(true)
             .build();
     }
 
