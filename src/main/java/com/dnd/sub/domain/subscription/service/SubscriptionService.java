@@ -206,9 +206,7 @@ public class SubscriptionService {
 
     @Transactional
     public void deleteSubscription(final Long memberId, final Long subscriptionId) {
-        validateMemberSubscription(memberId, subscriptionId);
-
-        Subscription subscription = getSubscription(subscriptionId);
+        Subscription subscription = validateMemberSubscription(memberId, subscriptionId);
         Product product = subscription.getProduct();
 
         subscriptionRepository.delete(subscription);
@@ -220,10 +218,14 @@ public class SubscriptionService {
 
     }
 
-    private void validateMemberSubscription(final Long memberId, final Long subscriptionId) {
-        if(!subscriptionRepository.existsByIdAndMember_Id(subscriptionId, memberId)) {
-            throw new SubscriptionException(MEMBER_SUBSCRIPTION_NOT_FOUND);
-        }
+
+
+    private Subscription validateMemberSubscription(final Long memberId, final Long subscriptionId) {
+//        if(!subscriptionRepository.existsByIdAndMember_Id(subscriptionId, memberId)) {
+//            throw new SubscriptionException(MEMBER_SUBSCRIPTION_NOT_FOUND);
+//        }
+        return subscriptionRepository.findByIdAndMember_Id(subscriptionId, memberId)
+            .orElseThrow(() -> new SubscriptionException(MEMBER_SUBSCRIPTION_NOT_FOUND));
     }
 
     private Subscription getSubscription(final Long subscriptionId) {
