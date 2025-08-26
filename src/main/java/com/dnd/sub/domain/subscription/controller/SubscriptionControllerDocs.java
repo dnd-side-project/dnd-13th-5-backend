@@ -4,10 +4,9 @@ import com.dnd.sub.domain.product.entity.ProductCategoryType;
 import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
 import com.dnd.sub.domain.subscription.dto.SaveSubscriptionDto;
+import com.dnd.sub.domain.subscription.dto.request.SaveCustomSubscriptionRequest;
 import com.dnd.sub.domain.subscription.dto.request.SaveSubscriptionRequest;
-import com.dnd.sub.domain.subscription.dto.response.GetMySubscriptionsResponse;
-import com.dnd.sub.domain.subscription.dto.response.GetPaymentSoonResponse;
-import com.dnd.sub.domain.subscription.dto.response.GetPaymentTotalResponse;
+import com.dnd.sub.domain.subscription.dto.response.*;
 import com.dnd.sub.global.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -15,6 +14,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import static com.dnd.sub.domain.subscription.dto.response.SubscriptionSuccessCode.GET_UNSUBSCRIBE_URL;
 
 
 @Tag(name = "사용자 구독 API", description = "사용자 구독과 관련한 API입니다.")
@@ -41,6 +42,14 @@ public interface SubscriptionControllerDocs {
     );
 
     @Operation(
+        summary = "커스텀 구독 등록",
+        description = "커스텀 구독을 등록 합니다.",
+        security = @SecurityRequirement(name = "Bearer Authentication")
+    )
+    @PostMapping("/custom")
+    public ApiResponse<Void> saveCustomSubscription(@AuthenticationPrincipal Long memberId, @RequestBody SaveCustomSubscriptionRequest request);
+
+    @Operation(
             summary = "즐겨찾는 정기 결제 서비스 전체 조회",
             description = "즐겨찾기한 구독을 조회합니다.",
             security = @SecurityRequirement(name = "Bearer Authentication")
@@ -51,6 +60,14 @@ public interface SubscriptionControllerDocs {
             @RequestParam(required = false) ProductCategoryType category,
             @RequestParam(required = false) SubscriptionSortType sort
     );
+
+    @Operation(
+        summary = "내 구독 상세 정보",
+        description = "내구독 상세 정보를 조회합니다.",
+        security = @SecurityRequirement(name = "Bearer Authentication")
+    )
+    @GetMapping("/{subscriptionId}")
+    public ApiResponse<GetMySubscriptionDetailInfoResponse> getMySubscriptionDetailInfo(@AuthenticationPrincipal Long memberId, @PathVariable Long subscriptionId);
 
     @Operation(
             summary = "결제 임박한 정기 결제 서비스 조회",
@@ -75,4 +92,14 @@ public interface SubscriptionControllerDocs {
     )
     @PatchMapping("/{subscriptionId}/favorite")
     public ApiResponse<Void> updateIsFavorite(@AuthenticationPrincipal Long memberId, @PathVariable Long subscriptionId);
+
+    @Operation(
+        summary = "구독 해지 링크 조회 api",
+        description = "구독 해지 링크를 조회합니다.",
+        security = @SecurityRequirement(name = "Bearer Authentication")
+    )
+
+    @GetMapping("/{subscriptionsId}/unsubscription")
+    public ApiResponse<GetUnsubscribeUrlResponse> getUnsubscribeUrl(@AuthenticationPrincipal Long memberId, @PathVariable Long subscriptionsId);
+
 }
