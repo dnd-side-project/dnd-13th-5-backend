@@ -98,7 +98,6 @@ public interface SubscriptionControllerDocs {
         description = "구독 해지 링크를 조회합니다.",
         security = @SecurityRequirement(name = "Bearer Authentication")
     )
-
     @GetMapping("/{subscriptionsId}/unsubscription")
     public ApiResponse<GetUnsubscribeUrlResponse> getUnsubscribeUrl(@AuthenticationPrincipal Long memberId, @PathVariable Long subscriptionsId);
 

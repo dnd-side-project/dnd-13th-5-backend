@@ -215,10 +215,6 @@ public class SubscriptionService {
             .orElseThrow(() -> new SubscriptionException(SUBSCRIPTION_NOT_FOUND));
     }
 
-    private Product getProductBySubscriptionId(final Long subscriptionId) {
-        return productRepository.findBySubscriptionId(subscriptionId)
-            .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
-
     public GetMySubscriptionDetailInfoDto getMySubscriptionDetailInfo(final Long memberId, final Long subscriptionId) {
         validateMemberSubscription(memberId, subscriptionId);
 
