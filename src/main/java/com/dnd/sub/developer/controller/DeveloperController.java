@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Profile("local")
 public class DeveloperController {
 
     private final JwtProvider jwtProvider;
 
     //local 환경에서 테스트 시에만 사용
-    @Profile("local")
     @GetMapping("/api-test/member/{memberId}")
     public String generateJwtToken(@PathVariable Long memberId) {
         return jwtProvider.generateToken(memberId);
