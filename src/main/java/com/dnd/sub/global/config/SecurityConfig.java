@@ -11,6 +11,7 @@
   import lombok.RequiredArgsConstructor;
   import org.springframework.context.annotation.Bean;
   import org.springframework.context.annotation.Configuration;
+  import org.springframework.http.HttpMethod;
   import org.springframework.security.config.annotation.web.builders.HttpSecurity;
   import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
   import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -55,10 +56,11 @@
                       .logoutSuccessHandler(customLogoutSuccessHandler)
               )
           .authorizeHttpRequests(
-                  a ->
-                      a.requestMatchers("/api/member/**",
-                              "/api/subscriptions/**",
-                              "/api/products/**").authenticated()
+              a ->
+                  a.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                      .requestMatchers("/api/member/**",
+                          "/api/subscriptions/**",
+                          "/api/products/**").authenticated()
               .anyRequest().permitAll() //일단 다 허용
           )
           .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
