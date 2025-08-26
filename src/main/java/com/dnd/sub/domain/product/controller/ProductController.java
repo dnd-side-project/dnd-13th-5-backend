@@ -11,6 +11,7 @@ import com.dnd.sub.domain.product.entity.ProductCategoryType;
 import com.dnd.sub.domain.product.service.ProductService;
 import com.dnd.sub.global.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,14 @@ public class ProductController implements ProductControllerDocs {
         GetAllProductsResponse response = new GetAllProductsResponse(products);
 
         return ApiResponse.success(GET_ALL_PRODUCTS, response);
+    }
+
+    @GetMapping("/recommendations")
+    public ApiResponse<GetAllProductsResponse> getRandomProductsRecommendation(@AuthenticationPrincipal Long memberId, @RequestParam(required = false) ProductCategoryType category) {
+        List<GetProductDto> products = productService.getRandomProductsRecommendation(memberId, category);
+        GetAllProductsResponse response = new GetAllProductsResponse(products);
+
+        return ApiResponse.success(GET_RANDOM_PRODUCTS_RECOMMENDATION, response);
     }
 
     @GetMapping("/info")

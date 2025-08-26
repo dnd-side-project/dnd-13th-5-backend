@@ -1,12 +1,14 @@
 package com.dnd.sub.domain.subscription.controller;
 
 import com.dnd.sub.domain.product.entity.ProductCategoryType;
+import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDetailInfoDto;
 import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
 import com.dnd.sub.domain.subscription.dto.SaveCustomSubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.SaveSubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.request.SaveCustomSubscriptionRequest;
 import com.dnd.sub.domain.subscription.dto.request.SaveSubscriptionRequest;
+import com.dnd.sub.domain.subscription.dto.response.GetMySubscriptionDetailInfoResponse;
 import com.dnd.sub.domain.subscription.dto.response.GetMySubscriptionsResponse;
 import com.dnd.sub.domain.subscription.dto.response.GetPaymentSoonResponse;
 import com.dnd.sub.domain.subscription.dto.response.GetPaymentTotalResponse;
@@ -65,6 +67,14 @@ public class SubscriptionController implements SubscriptionControllerDocs {
         GetMySubscriptionsResponse response = new GetMySubscriptionsResponse(mySubscriptions);
 
         return ApiResponse.success(GET_MY_SUBSCRIPTIONS, response);
+    }
+
+    @GetMapping("/{subscriptionId}")
+    public ApiResponse<GetMySubscriptionDetailInfoResponse> getMySubscriptionDetailInfo(@AuthenticationPrincipal Long memberId, @PathVariable Long subscriptionId) {
+        GetMySubscriptionDetailInfoDto mySubscriptionDetailInfo = subscriptionService.getMySubscriptionDetailInfo(memberId, subscriptionId);
+        GetMySubscriptionDetailInfoResponse response = GetMySubscriptionDetailInfoResponse.from(mySubscriptionDetailInfo);
+
+        return ApiResponse.success(GET_MY_SUBSCRIPTION_DETAIL_INFO, response);
     }
 
     @GetMapping("/my/favorites")
