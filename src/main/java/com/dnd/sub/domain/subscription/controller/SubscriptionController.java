@@ -111,7 +111,7 @@ public class SubscriptionController implements SubscriptionControllerDocs {
     }
 
 
-    @DeleteMapping("/{subscriptionId}")
+    @DeleteMapping("/{subscriptionId")
     public ApiResponse<Void> deleteSubscription(@AuthenticationPrincipal Long memberId, @PathVariable Long subscriptionId) {
         subscriptionService.deleteSubscription(memberId, subscriptionId);
 
