@@ -42,6 +42,22 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     );
     List<Product> findAllByCategory(ProductCategoryType category);
 
+    @Query("""
+    SELECT p
+    FROM Product p
+    WHERE p.category = :category
+      AND p.id NOT IN (
+          SELECT s.product.id
+          FROM Subscription s
+          WHERE s.member.id = :memberId
+      )
+    ORDER BY function('RAND')
+    """)
+    List<Product> findRandomProductsByCategoryExcludingSubscribed(
+        @Param("memberId") Long memberId,
+        @Param("category") ProductCategoryType category,
+        Pageable pageable
+    );
     @Query("SELECT s.product FROM Subscription s WHERE s.id = :subscriptionId")
     Optional<Product> findBySubscriptionId(@Param("subscriptionId") Long subscriptionId);
 
