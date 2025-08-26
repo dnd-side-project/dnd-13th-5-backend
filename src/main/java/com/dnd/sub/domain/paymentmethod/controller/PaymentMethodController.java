@@ -14,7 +14,7 @@ import static com.dnd.sub.domain.paymentmethod.dto.response.PaymentMethodSuccess
 @RequiredArgsConstructor
 @RequestMapping("/api/payment-methods")
 @RestController
-public class PaymentMethodController {
+public class PaymentMethodController implements PaymentMethodControllerDocs{
 
     private final PaymentMethodService paymentMethodService;
 
