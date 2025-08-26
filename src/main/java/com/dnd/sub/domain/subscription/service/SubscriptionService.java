@@ -131,6 +131,8 @@ public class SubscriptionService {
             .unsubscribeUrl(null)
             .build();
 
+        productRepository.save(product);
+
         ProductPlan productPlan = ProductPlan.builder()
             .product(product)
             .name(null)
@@ -138,11 +140,13 @@ public class SubscriptionService {
             .benefit(null)
             .build();
 
+        productPlanRepository.save(productPlan);
+
         Subscription subscription = Subscription.builder()
             .member(member)
             .product(product)
             .paymentMethod(paymentMethod)
-            .planId(null)
+            .planId(productPlan.getId())
             .startedAt(dto.startedAt())
             .previousPaymentDay(previousPaymentDay)
             .nextPaymentDay(nextPaymentDay)
@@ -151,8 +155,6 @@ public class SubscriptionService {
             .memo(dto.memo())
             .build();
 
-        productRepository.save(product);
-        productPlanRepository.save(productPlan);
         subscriptionRepository.save(subscription);
     }
 
