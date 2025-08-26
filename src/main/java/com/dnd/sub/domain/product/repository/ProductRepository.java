@@ -12,6 +12,20 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllByCategory(ProductCategoryType category);
 
-    @Query("SELECT p FROM Product p WHERE p.category = :category ORDER BY function('RAND')")
-    List<Product> findRandomProductsByCategory(@Param("category") ProductCategoryType category, Pageable pageable);
+    @Query("""
+    SELECT p
+    FROM Product p
+    WHERE p.category = :category
+      AND p.id NOT IN (
+          SELECT s.product.id
+          FROM Subscription s
+          WHERE s.member.id = :memberId
+      )
+    ORDER BY function('RAND')
+    """)
+    List<Product> findRandomProductsByCategoryExcludingSubscribed(
+        @Param("memberId") Long memberId,
+        @Param("category") ProductCategoryType category,
+        Pageable pageable
+    );
 }

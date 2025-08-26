@@ -57,8 +57,8 @@ public class ProductService {
             .orElse(0);
     }
 
-    public List<GetProductDto> getRandomProductsRecommendation(ProductCategoryType category) {
-        List<Product> products = productRepository.findRandomProductsByCategory(category, PageRequest.of(0, 2));
+    public List<GetProductDto> getRandomProductsRecommendation(final Long memberId, final ProductCategoryType category) {
+        List<Product> products = productRepository.findRandomProductsByCategoryExcludingSubscribed(memberId, category, PageRequest.of(0, 2));
 
         return products.stream().map(p -> {
             List<ProductPlan> productPlans = productPlanRepository.findAllByProductId(p.getId());
