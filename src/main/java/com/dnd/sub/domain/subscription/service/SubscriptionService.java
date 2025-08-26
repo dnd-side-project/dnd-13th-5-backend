@@ -271,8 +271,14 @@ public class SubscriptionService {
 
         subscription.updateParticipantCount(dto.participantCount());
         subscription.updatePayCycleUnit(dto.payCycleUnit());
-        subscription.updateStartedAt(dto.startedAt());
         subscription.updatePaymentMethod(getPaymentMethod(dto.paymentMethodId()));
+
+        final LocalDate newPreviousPaymentDay = PaymentCycleUtil.previousPaymentDay(dto.startedAt(), dto.payCycleUnit());
+        final LocalDate newNextPaymentDay = PaymentCycleUtil.nextPaymentDay(dto.startedAt(), dto.startedAt(), dto.payCycleUnit());
+
+        subscription.updateStartedAt(dto.startedAt());
+        subscription.updatePreviousPaymentDay(newPreviousPaymentDay);
+        subscription.updateNextPaymentDay(newNextPaymentDay);
 
         if(product.isAdminWritten()) {
             if (dto.planId().isPresent()) {
