@@ -11,7 +11,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findAllByCategory(ProductCategoryType category);
+    @Query("""
+    SELECT p
+    FROM Product p
+    WHERE p.isAdminWritten = true
+      AND (:category IS NULL OR p.category = :category)
+    """)
+    List<Product> findAllByCategoryAndIsAdminWritten(ProductCategoryType category);
 
     @Query("SELECT s.product FROM Subscription s WHERE s.id = :subscriptionId")
     Optional<Product> findBySubscriptionId(@Param("subscriptionId") Long subscriptionId);

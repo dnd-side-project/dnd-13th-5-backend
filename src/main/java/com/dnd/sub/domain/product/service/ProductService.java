@@ -27,7 +27,7 @@ public class ProductService {
     private final ProductPlanRepository productPlanRepository;
 
     public List<GetProductDto> getAllProducts(ProductCategoryType category) {
-        List<Product> products = productRepository.findAllByCategory(category);
+        List<Product> products = productRepository.findAllByCategoryAndIsAdminWritten(category);
 
         return products.stream().map(p -> {
             List<ProductPlan> productPlans = productPlanRepository.findAllByProductId(p.getId());
