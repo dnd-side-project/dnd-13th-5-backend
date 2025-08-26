@@ -40,6 +40,10 @@ public class Product extends BaseEntity {
     @Column(name = "is_admin_written", columnDefinition = "TINYINT(1)", nullable = false)
     private boolean isAdminWritten = false;
 
+    public void updateName(String name) {
+        this.name = name;
+    }
+
     @Builder
     public Product(
         final String name,
