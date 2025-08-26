@@ -150,6 +150,9 @@ jobs:
           AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}
           EOF
+          
+          # front uri
+          FRONT_REDIRECT_URI=${{ secrets.FRONT_REDIRECT_URI }}
 
       - name: Start new server application
         id: start-new-server-application
