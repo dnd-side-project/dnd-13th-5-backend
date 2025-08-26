@@ -39,3 +39,5 @@ jwt:
   secret: ${JWT_SECRET:testestsetstsetstetsetsetstsetsetset}
   access-expiration: ${ACCESS_EXPIRATION:3600000}
   refresh-expiration: ${REFRESH_EXPIRATION:86400000}
+front:
+  redirect-uri: http://localhost:5173/subscriptions

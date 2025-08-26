@@ -31,4 +31,7 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
   access-expiration: ${ACCESS_EXPIRATION}
-  refresh-expiration: ${REFRESH_EXPIRATION}
+  refresh-expiration: ${REFRESH_EXPIRATION
+
+front:
+  redirect-uri:${FRONT_REDIRECT_URI}
