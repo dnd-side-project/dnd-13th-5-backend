@@ -221,9 +221,6 @@ public class SubscriptionService {
 
 
     private Subscription validateMemberSubscription(final Long memberId, final Long subscriptionId) {
-//        if(!subscriptionRepository.existsByIdAndMember_Id(subscriptionId, memberId)) {
-//            throw new SubscriptionException(MEMBER_SUBSCRIPTION_NOT_FOUND);
-//        }
         return subscriptionRepository.findByIdAndMember_Id(subscriptionId, memberId)
             .orElseThrow(() -> new SubscriptionException(MEMBER_SUBSCRIPTION_NOT_FOUND));
     }
