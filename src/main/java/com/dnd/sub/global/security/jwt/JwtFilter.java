@@ -1,5 +1,6 @@
 package com.dnd.sub.global.security.jwt;
 
+import com.dnd.sub.domain.auth.exception.TokenErrorCode;
 import com.dnd.sub.domain.auth.exception.TokenException;
 import com.dnd.sub.domain.member.exception.MemberErrorCode;
 import com.dnd.sub.domain.member.exception.MemberException;
@@ -38,6 +39,9 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 Long memberId = jwtProvider.extractUserId(token);
 
+                if (memberId == null) {
+                    throw new TokenException(TokenErrorCode.INVALID_TOKEN);
+                }
                 memberRepository.findById(memberId)
                     .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND));
 
