@@ -204,10 +204,25 @@ public class SubscriptionService {
         return new GetUnsubscribeUrlResponse(unsubscribeUrl);
     }
 
-    private void validateMemberSubscription(final Long memberId, final Long subscriptionId) {
-        if(!subscriptionRepository.existsByIdAndMember_Id(subscriptionId, memberId)) {
-            throw new SubscriptionException(MEMBER_SUBSCRIPTION_NOT_FOUND);
+    @Transactional
+    public void deleteSubscription(final Long memberId, final Long subscriptionId) {
+        Subscription subscription = validateMemberSubscription(memberId, subscriptionId);
+        Product product = subscription.getProduct();
+
+        subscriptionRepository.delete(subscription);
+
+        if(!product.isAdminWritten()){
+            productPlanRepository.deleteByProductId(product.getId());
+            productRepository.delete(product);
         }
+
+    }
+
+
+
+    private Subscription validateMemberSubscription(final Long memberId, final Long subscriptionId) {
+        return subscriptionRepository.findByIdAndMember_Id(subscriptionId, memberId)
+            .orElseThrow(() -> new SubscriptionException(MEMBER_SUBSCRIPTION_NOT_FOUND));
     }
 
     private Subscription getSubscription(final Long subscriptionId) {
