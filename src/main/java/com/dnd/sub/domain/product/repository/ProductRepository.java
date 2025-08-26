@@ -10,7 +10,13 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findAllByCategory(ProductCategoryType category);
+    @Query("""
+    SELECT p
+    FROM Product p
+    WHERE p.isAdminWritten = true
+      AND (:category IS NULL OR p.category = :category)
+    """)
+    List<Product> findAllByCategoryAndIsAdminWritten(ProductCategoryType category);
 
     @Query("""
     SELECT p
