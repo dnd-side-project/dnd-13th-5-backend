@@ -101,4 +101,11 @@ public interface SubscriptionControllerDocs {
     @GetMapping("/{subscriptionsId}/unsubscription")
     public ApiResponse<GetUnsubscribeUrlResponse> getUnsubscribeUrl(@AuthenticationPrincipal Long memberId, @PathVariable Long subscriptionsId);
 
+    @Operation(
+        summary = "구독 삭제 api",
+        description = "구독을 삭제 합니다.",
+        security = @SecurityRequirement(name = "Bearer Authentication")
+    )
+    @DeleteMapping("/{subscriptionId}")
+    public ApiResponse<Void> deleteSubscription(@AuthenticationPrincipal Long memberId, @PathVariable Long subscriptionId);
 }
