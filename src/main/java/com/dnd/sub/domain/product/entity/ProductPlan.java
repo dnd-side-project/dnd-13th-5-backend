@@ -38,6 +38,10 @@ public class ProductPlan extends BaseEntity {
     @Column(name = "benefit", columnDefinition = "TEXT", length = 500, nullable = true)
     private String benefit;
 
+    public void updatePrice(int price) {
+        this.price = price;
+    }
+
     @Builder
     public ProductPlan(
         final Product product,

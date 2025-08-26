@@ -5,7 +5,6 @@ import com.dnd.sub.domain.member.exception.MemberErrorCode;
 import com.dnd.sub.domain.member.exception.MemberException;
 import com.dnd.sub.domain.member.repository.MemberRepository;
 import com.dnd.sub.domain.paymentmethod.entity.PaymentMethod;
-import com.dnd.sub.domain.paymentmethod.exception.PaymentMethodErrorCode;
 import com.dnd.sub.domain.paymentmethod.exception.PaymentMethodException;
 import com.dnd.sub.domain.paymentmethod.repository.PaymentMethodRepository;
 import com.dnd.sub.domain.product.entity.Product;
@@ -21,6 +20,7 @@ import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
 import com.dnd.sub.domain.subscription.dto.SaveCustomSubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.SaveSubscriptionDto;
+import com.dnd.sub.domain.subscription.dto.UpdateSubscriptionDetailDto;
 import com.dnd.sub.domain.subscription.dto.response.GetPaymentTotalResponse;
 import com.dnd.sub.domain.subscription.dto.response.GetUnsubscribeUrlResponse;
 import com.dnd.sub.domain.subscription.entity.Subscription;
@@ -37,6 +37,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 
+import static com.dnd.sub.domain.paymentmethod.exception.PaymentMethodErrorCode.PAYMENT_METHOD_NOT_FOUND;
 import static com.dnd.sub.domain.subscription.exception.SubscriptionErrorCode.MEMBER_SUBSCRIPTION_NOT_FOUND;
 import static com.dnd.sub.domain.subscription.exception.SubscriptionErrorCode.SUBSCRIPTION_NOT_FOUND;
 
@@ -109,7 +110,7 @@ public class SubscriptionService {
 
     private PaymentMethod getPaymentMethod(final Long paymentMethodId) {
         return paymentMethodRepository.findById(paymentMethodId)
-            .orElseThrow(() -> new PaymentMethodException(PaymentMethodErrorCode.PAYMENT_METHOD_NOT_FOUND));
+            .orElseThrow(() -> new PaymentMethodException(PAYMENT_METHOD_NOT_FOUND));
     }
 
     @Transactional
@@ -258,5 +259,39 @@ public class SubscriptionService {
     private Product getProductBySubscriptionId(final Long subscriptionId) {
         return productRepository.findBySubscriptionId(subscriptionId)
             .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
+    }
+
+    @Transactional
+    public void updateSubscriptionDetail(final Long memberId, final Long subscriptionId, final UpdateSubscriptionDetailDto dto) {
+        validateMemberSubscription(memberId, subscriptionId);
+
+        final Subscription subscription = getSubscription(subscriptionId);
+        final Product product = getProduct(subscription.getProduct().getId());
+        final ProductPlan productPlan = productPlanRepository.findByProduct(product);
+
+        subscription.updateParticipantCount(dto.participantCount());
+        subscription.updatePayCycleUnit(dto.payCycleUnit());
+        subscription.updatePaymentMethod(getPaymentMethod(dto.paymentMethodId()));
+
+        final LocalDate newPreviousPaymentDay = PaymentCycleUtil.previousPaymentDay(dto.startedAt(), dto.payCycleUnit());
+        final LocalDate newNextPaymentDay = PaymentCycleUtil.nextPaymentDay(dto.startedAt(), dto.startedAt(), dto.payCycleUnit());
+
+        subscription.updateStartedAt(dto.startedAt());
+        subscription.updatePreviousPaymentDay(newPreviousPaymentDay);
+        subscription.updateNextPaymentDay(newNextPaymentDay);
+
+        if(product.isAdminWritten()) {
+            if (dto.planId().isPresent()) {
+                subscription.updatePlanId(dto.planId().get());
+            }
+            return;
+        }
+
+        if (dto.productName().isPresent()) {
+            product.updateName(dto.productName().get());
+        }
+        if (dto.price().isPresent()) {
+            productPlan.updatePrice(dto.price().get());
+        }
     }
 }

@@ -81,6 +81,25 @@ public class Subscription extends BaseEntity {
         this.nextPaymentDay = date;
     }
 
+    public void updatePlanId(Long planId) {
+        this.planId = planId;
+    }
+
+    public void updateParticipantCount(int participantCount) {
+        this.participantCount = participantCount;
+    }
+    public void updatePayCycleUnit(PayCycleUnitType payCycleUnit) {
+        this.payCycleUnit = payCycleUnit;
+    }
+
+    public void updateStartedAt(LocalDate startedAt) {
+        this.startedAt = startedAt;
+    }
+
+    public void updatePaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
     @Builder
     public Subscription(
         final Member member,

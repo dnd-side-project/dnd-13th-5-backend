@@ -6,8 +6,10 @@ import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
 import com.dnd.sub.domain.subscription.dto.SaveCustomSubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.SaveSubscriptionDto;
+import com.dnd.sub.domain.subscription.dto.UpdateSubscriptionDetailDto;
 import com.dnd.sub.domain.subscription.dto.request.SaveCustomSubscriptionRequest;
 import com.dnd.sub.domain.subscription.dto.request.SaveSubscriptionRequest;
+import com.dnd.sub.domain.subscription.dto.request.UpdateSubscriptionDetailRequest;
 import com.dnd.sub.domain.subscription.dto.response.GetMySubscriptionDetailInfoResponse;
 import com.dnd.sub.domain.subscription.dto.response.GetMySubscriptionsResponse;
 import com.dnd.sub.domain.subscription.dto.response.GetPaymentSoonResponse;
@@ -110,6 +112,17 @@ public class SubscriptionController implements SubscriptionControllerDocs {
         return ApiResponse.success(GET_UNSUBSCRIBE_URL, response);
     }
 
+    @PatchMapping("/{subscriptionId}")
+    public ApiResponse<Void> updateSubscriptionDetail(
+        @AuthenticationPrincipal Long memberId,
+        @PathVariable Long subscriptionId,
+        @RequestBody UpdateSubscriptionDetailRequest request
+    ) {
+        UpdateSubscriptionDetailDto dto = UpdateSubscriptionDetailDto.from(request);
+        subscriptionService.updateSubscriptionDetail(memberId, subscriptionId, dto);
+
+        return ApiResponse.success(UPDATE_SUBSCRIPTION_DETAIL);
+    }
 
     @DeleteMapping("/{subscriptionId}")
     public ApiResponse<Void> deleteSubscription(@AuthenticationPrincipal Long memberId, @PathVariable Long subscriptionId) {
