@@ -6,8 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("""
@@ -17,6 +20,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
       AND (:category IS NULL OR p.category = :category)
     """)
     List<Product> findAllByCategoryAndIsAdminWritten(ProductCategoryType category);
+
+    @Query("SELECT s.product FROM Subscription s WHERE s.id = :subscriptionId")
+    Optional<Product> findBySubscriptionId(@Param("subscriptionId") Long subscriptionId);
+    
+
 
     @Query("""
     SELECT p
@@ -34,4 +42,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         @Param("category") ProductCategoryType category,
         Pageable pageable
     );
+
+    @Query("SELECT p FROM Product p WHERE p.category = :category ORDER BY function('RAND')")
+    List<Product> findRandomProductsByCategory(@Param("category") ProductCategoryType category, Pageable pageable);
 }

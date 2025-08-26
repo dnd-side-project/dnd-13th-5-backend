@@ -12,6 +12,7 @@ import com.dnd.sub.domain.subscription.dto.response.GetMySubscriptionDetailInfoR
 import com.dnd.sub.domain.subscription.dto.response.GetMySubscriptionsResponse;
 import com.dnd.sub.domain.subscription.dto.response.GetPaymentSoonResponse;
 import com.dnd.sub.domain.subscription.dto.response.GetPaymentTotalResponse;
+import com.dnd.sub.domain.subscription.dto.response.GetUnsubscribeUrlResponse;
 import com.dnd.sub.domain.subscription.service.SubscriptionService;
 import com.dnd.sub.global.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -108,5 +109,12 @@ public class SubscriptionController implements SubscriptionControllerDocs {
         subscriptionService.updateIsFavorite(memberId, subscriptionId);
 
         return ApiResponse.success(UPDATE_IS_FAVORITE);
+    }
+
+    @GetMapping("/{subscriptionsId}/unsubscription")
+    public ApiResponse<GetUnsubscribeUrlResponse> getUnsubscribeUrl(@AuthenticationPrincipal Long memberId, @PathVariable Long subscriptionsId){
+        GetUnsubscribeUrlResponse response = subscriptionService.getUnsubscribeUrl(memberId, subscriptionsId);
+
+        return ApiResponse.success(GET_UNSUBSCRIBE_URL, response);
     }
 }

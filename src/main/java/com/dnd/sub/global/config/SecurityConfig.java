@@ -11,6 +11,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -26,54 +27,59 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
-  private final CustomOAuth2LogoutHandler customOAuth2LogoutHandler;
-  private final CustomOAuth2UserService customOAuth2UserService;
-  private final CustomSuccessHandler customSuccessHandler;
-  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-  private final JwtFilter jwtFilter;
-  private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+    private final CustomOAuth2LogoutHandler customOAuth2LogoutHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomSuccessHandler customSuccessHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtFilter jwtFilter;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomOAuth2LogoutHandler customOAuth2LogoutHandler) throws Exception {
-    http
-        .cors(cors -> cors.configurationSource(configurationSource()))
-        .csrf(AbstractHttpConfigurer::disable)
-        .formLogin(AbstractHttpConfigurer::disable)
-        .httpBasic(AbstractHttpConfigurer::disable)
-        .oauth2Login((oauth2) -> oauth2
-                .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
-                .userService(customOAuth2UserService))
-                .successHandler(customSuccessHandler))
-        .sessionManagement(s -> s.sessionCreationPolicy((SessionCreationPolicy.STATELESS)))
-            .exceptionHandling(exceptions -> exceptions
-                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)  // 여기서 사용!
-            )
-            .logout(logout -> logout
-                    .logoutUrl("/api/auth/logout")
-                    .addLogoutHandler(customOAuth2LogoutHandler)
-                    .deleteCookies("refresh_token")
-                    .logoutSuccessHandler(customLogoutSuccessHandler)
-            )
-        .authorizeHttpRequests(
-                a -> a.anyRequest().permitAll() //일단 다 허용
-        )
-        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomOAuth2LogoutHandler customOAuth2LogoutHandler) throws Exception {
+        http
+          .cors(cors -> cors.configurationSource(configurationSource()))
+          .csrf(AbstractHttpConfigurer::disable)
+          .formLogin(AbstractHttpConfigurer::disable)
+          .httpBasic(AbstractHttpConfigurer::disable)
+          .oauth2Login((oauth2) -> oauth2
+                  .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
+                  .userService(customOAuth2UserService))
+                  .successHandler(customSuccessHandler))
+          .sessionManagement(s -> s.sessionCreationPolicy((SessionCreationPolicy.STATELESS)))
+              .exceptionHandling(exceptions -> exceptions
+                      .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+              )
+              .logout(logout -> logout
+                      .logoutUrl("/api/auth/logout")
+                      .addLogoutHandler(customOAuth2LogoutHandler)
+                      .deleteCookies("refresh_token")
+                      .logoutSuccessHandler(customLogoutSuccessHandler)
+              )
+          .authorizeHttpRequests(
+              a ->
+                  a.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                      .requestMatchers("/api/member/**",
+                          "/api/subscriptions/**",
+                          "/api/products/**").authenticated()
+              .anyRequest().permitAll() //일단 다 허용
+          )
+          .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-    return http.build();
-  }
+      return http.build();
+    }
 
-  @Bean
-  public CorsConfigurationSource configurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(List.of(    "http://localhost:3000",
-        "http://localhost:5173"));
-    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(List.of("*"));
-    configuration.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
-    configuration.setAllowCredentials(true);
+    @Bean
+    public CorsConfigurationSource configurationSource() {
+      CorsConfiguration configuration = new CorsConfiguration();
+      configuration.setAllowedOrigins(List.of(    "http://localhost:3000",
+          "http://localhost:5173"));
+      configuration.setAllowedMethods(List.of("*"));
+      configuration.setAllowedHeaders(List.of("*"));
+      configuration.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
+      configuration.setAllowCredentials(true);
 
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-  }
+      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+      source.registerCorsConfiguration("/**", configuration);
+      return source;
+    }
 }

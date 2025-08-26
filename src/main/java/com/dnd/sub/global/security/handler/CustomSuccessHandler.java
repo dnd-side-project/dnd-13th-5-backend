@@ -3,6 +3,7 @@ package com.dnd.sub.global.security.handler;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import com.dnd.sub.domain.auth.service.RefreshTokenService;
+import com.dnd.sub.global.properties.FrontUriProperties;
 import com.dnd.sub.global.security.custom.CustomOAuth2User;
 import com.dnd.sub.global.security.jwt.JwtProvider;
 import com.dnd.sub.global.util.CookieUtil;
@@ -25,6 +26,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
+    private final FrontUriProperties frontUriProperties;
 
 
     @Override
@@ -48,7 +50,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.addHeader(AUTHORIZATION, "Bearer "+ accessToken);
         response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
-        response.sendRedirect("http://localhost:5173/subscriptions");
+        response.sendRedirect(frontUriProperties.redirectUri());
     }
 
 }

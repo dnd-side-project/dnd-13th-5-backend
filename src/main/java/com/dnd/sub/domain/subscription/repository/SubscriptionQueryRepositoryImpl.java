@@ -99,8 +99,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                 .join(s.member, m)
                 .join(s.product, p)
                 .leftJoin(pp).on(pp.id.eq(s.planId))
-                .where(s.member.id.eq(memberId)
-                        .and(s.startedAt.isNotNull()))
+                .where(s.member.id.eq(memberId))
                 .fetch();
 
         if (tuples.isEmpty()) {
@@ -121,6 +120,9 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
             Subscription sub = tuple.get(s);
             Integer price = tuple.get(pp.price);
 
+            if(sub.getStartedAt() == null){
+                continue;
+            }
             LocalDate prevPayDay = sub.getPreviousPaymentDay();
             LocalDate nextPayDay = sub.getNextPaymentDay();
 

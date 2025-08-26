@@ -15,6 +15,7 @@ public enum SubscriptionSuccessCode implements SuccessCode {
     UPDATE_IS_FAVORITE(HttpStatus.OK.value(), "SS-205", "즐겨찾기 추가/해지 성공"),
     SAVE_CUSTOM_SUBSCRIPTION(HttpStatus.CREATED.value(), "SS-206", "커스텀 구독 등록 성공"),
     GET_MY_SUBSCRIPTION_DETAIL_INFO(HttpStatus.OK.value(), "SS-207", "내 구독 상세 정보 조회 성공"),
+    GET_UNSUBSCRIBE_URL(HttpStatus.OK.value(), "SS-208", "해지 링크 조회 성공"),
     GET_PAYMENT_TOTAL(HttpStatus.OK.value(), "SS-211", "월간 결제 요약 조회 성공"),
     ;
 

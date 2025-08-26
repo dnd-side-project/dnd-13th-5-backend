@@ -22,6 +22,7 @@ import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
 import com.dnd.sub.domain.subscription.dto.SaveCustomSubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.SaveSubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.response.GetPaymentTotalResponse;
+import com.dnd.sub.domain.subscription.dto.response.GetUnsubscribeUrlResponse;
 import com.dnd.sub.domain.subscription.entity.Subscription;
 import com.dnd.sub.domain.subscription.exception.SubscriptionException;
 import com.dnd.sub.domain.subscription.repository.SubscriptionRepository;
@@ -196,6 +197,13 @@ public class SubscriptionService {
         subscription.updateIsFavorite();
     }
 
+    public GetUnsubscribeUrlResponse getUnsubscribeUrl(final Long memberId, final Long subscriptionId) {
+        validateMemberSubscription(memberId, subscriptionId);
+
+        String unsubscribeUrl = getProductBySubscriptionId(subscriptionId).getUnsubscribeUrl();
+        return new GetUnsubscribeUrlResponse(unsubscribeUrl);
+    }
+
     private void validateMemberSubscription(final Long memberId, final Long subscriptionId) {
         if(!subscriptionRepository.existsByIdAndMember_Id(subscriptionId, memberId)) {
             throw new SubscriptionException(MEMBER_SUBSCRIPTION_NOT_FOUND);
@@ -230,5 +238,10 @@ public class SubscriptionService {
             productPlan.getBenefit(),
             subscription.isFavorite()
         );
+    }
+
+    private Product getProductBySubscriptionId(final Long subscriptionId) {
+        return productRepository.findBySubscriptionId(subscriptionId)
+            .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
     }
 }
