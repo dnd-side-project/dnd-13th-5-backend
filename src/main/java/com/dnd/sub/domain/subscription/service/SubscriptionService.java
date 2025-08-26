@@ -194,7 +194,9 @@ public class SubscriptionService {
         subscription.updateIsFavorite();
     }
 
-    public GetUnsubscribeUrlResponse getUnsubscribeUrl(final Long subscriptionId) {
+    public GetUnsubscribeUrlResponse getUnsubscribeUrl(final Long memberId, final Long subscriptionId) {
+        validateMemberSubscription(memberId, subscriptionId);
+
         String unsubscribeUrl = getProductBySubscriptionId(subscriptionId).getUnsubscribeUrl();
         return new GetUnsubscribeUrlResponse(unsubscribeUrl);
     }

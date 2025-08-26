@@ -103,7 +103,7 @@ public class SubscriptionController implements SubscriptionControllerDocs {
 
     @GetMapping("/{subscriptionsId}/unsubscription")
     public ApiResponse<GetUnsubscribeUrlResponse> getUnsubscribeUrl(@AuthenticationPrincipal Long memberId, @PathVariable Long subscriptionsId){
-        GetUnsubscribeUrlResponse response = subscriptionService.getUnsubscribeUrl(subscriptionsId);
+        GetUnsubscribeUrlResponse response = subscriptionService.getUnsubscribeUrl(memberId, subscriptionsId);
 
         return ApiResponse.success(GET_UNSUBSCRIBE_URL, response);
     }
