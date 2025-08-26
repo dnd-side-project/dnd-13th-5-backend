@@ -14,6 +14,7 @@ import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
     private final MemberRepository memberRepository;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 
     @Override
@@ -51,6 +53,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (TokenException e) {
                 SecurityContextHolder.clearContext();
+                request.setAttribute("tokenException", e);
+                jwtAuthenticationEntryPoint.commence(request, response, new InsufficientAuthenticationException("Jwt 에러", e));
             } catch (MemberException e) {
                 SecurityContextHolder.clearContext();
             }
