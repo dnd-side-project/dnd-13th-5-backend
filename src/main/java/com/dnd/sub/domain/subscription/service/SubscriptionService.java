@@ -243,4 +243,9 @@ public class SubscriptionService {
             subscription.isFavorite()
         );
     }
+
+    private Product getProductBySubscriptionId(final Long subscriptionId) {
+        return productRepository.findBySubscriptionId(subscriptionId)
+            .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
+    }
 }
