@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,4 +41,11 @@ public interface MemberControllerDocs {
     ApiResponse<MemberInfoResponse> updateNotificationStatus(
         @AuthenticationPrincipal Long memberId);
 
+    @Operation(
+        summary = "회원 탈퇴",
+        description = "회원 탈퇴를 진행합니다.",
+        security = @SecurityRequirement(name = "Bearer Authentication")
+    )
+    @DeleteMapping("/withdraw")
+    public ApiResponse<Void> withdraw(@AuthenticationPrincipal Long memberId);
 }
