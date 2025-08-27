@@ -1,5 +1,6 @@
 package com.dnd.sub.domain.member.controller;
 
+import com.dnd.sub.domain.member.dto.request.UpdateMemberNotificationRequest;
 import com.dnd.sub.domain.member.dto.request.UpdateMemberRequest;
 import com.dnd.sub.domain.member.dto.response.MemberInfoResponse;
 import com.dnd.sub.domain.member.dto.response.MemberSuccessCode;
@@ -39,7 +40,7 @@ public interface MemberControllerDocs {
     )
     @PatchMapping("/my/notification")
     ApiResponse<MemberInfoResponse> updateNotificationStatus(
-        @AuthenticationPrincipal Long memberId);
+        @AuthenticationPrincipal Long memberId, @RequestBody UpdateMemberNotificationRequest request);
 
     @Operation(
         summary = "회원 탈퇴",

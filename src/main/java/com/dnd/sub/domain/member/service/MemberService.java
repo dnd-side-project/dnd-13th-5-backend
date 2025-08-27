@@ -1,6 +1,7 @@
 package com.dnd.sub.domain.member.service;
 
 import com.dnd.sub.domain.auth.repository.RefreshTokenRepository;
+import com.dnd.sub.domain.member.dto.request.UpdateMemberNotificationRequest;
 import com.dnd.sub.domain.member.dto.request.UpdateMemberRequest;
 import com.dnd.sub.domain.member.dto.response.MemberInfoResponse;
 import com.dnd.sub.domain.member.entity.Member;
@@ -42,9 +43,9 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberInfoResponse updateNotificationStatus(final Long memberId) {
+    public MemberInfoResponse updateNotificationStatus(final Long memberId, final UpdateMemberNotificationRequest request) {
         Member member = findById(memberId);
-        member.updateIsNotificationOn();
+        member.updateIsNotificationOn(request.isNotificationOn());
         return new MemberInfoResponse(member.getEmail(), member.getName(),
             member.isNotificationOn());
     }

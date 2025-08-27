@@ -34,8 +34,8 @@ public class Member extends BaseEntity {
     @Column(columnDefinition = "TINYINT(1)")
     private boolean isNotificationOn = true;
 
-    public void updateIsNotificationOn() {
-      this.isNotificationOn = !this.isNotificationOn;
+    public void updateIsNotificationOn(boolean notificationOn) {
+      this.isNotificationOn = notificationOn;
   }
 
     public void updateEmail(String email) {
