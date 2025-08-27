@@ -12,6 +12,8 @@ import com.dnd.sub.domain.product.entity.ProductCategoryType;
 import com.dnd.sub.domain.product.entity.ProductPlan;
 import com.dnd.sub.domain.product.exception.ProductErrorCode;
 import com.dnd.sub.domain.product.exception.ProductException;
+import com.dnd.sub.domain.product.exception.ProductPlanErrorCode;
+import com.dnd.sub.domain.product.exception.ProductPlanException;
 import com.dnd.sub.domain.product.repository.ProductPlanRepository;
 import com.dnd.sub.domain.product.repository.ProductRepository;
 import com.dnd.sub.domain.subscription.controller.SubscriptionSortType;
@@ -255,7 +257,7 @@ public class SubscriptionService {
 
         final Subscription subscription = getSubscription(subscriptionId);
         final Product product = getProduct(subscription.getProduct().getId());
-        final ProductPlan productPlan = productPlanRepository.findByProduct(product);
+        final ProductPlan productPlan = getProductPlanBySubscription(subscription);
 
         return new GetMySubscriptionDetailInfoDto(
             subscriptionId,
@@ -312,5 +314,10 @@ public class SubscriptionService {
         if (dto.price().isPresent()) {
             productPlan.updatePrice(dto.price().get());
         }
+    }
+
+    private ProductPlan getProductPlanBySubscription(final Subscription subscription) {
+        return productPlanRepository.findById(subscription.getPlanId())
+            .orElseThrow(() -> new ProductPlanException(ProductPlanErrorCode.PRODUCT_PLAN_NOT_FOUND));
     }
 }
