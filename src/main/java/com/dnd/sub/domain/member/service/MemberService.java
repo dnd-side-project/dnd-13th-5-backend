@@ -1,5 +1,7 @@
 package com.dnd.sub.domain.member.service;
 
+import com.dnd.sub.domain.auth.repository.RefreshTokenRepository;
+import com.dnd.sub.domain.member.dto.request.UpdateMemberNotificationRequest;
 import com.dnd.sub.domain.member.dto.request.UpdateMemberRequest;
 import com.dnd.sub.domain.member.dto.response.MemberInfoResponse;
 import com.dnd.sub.domain.member.entity.Member;
@@ -17,6 +19,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final SubscriptionService subscriptionService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional(readOnly = true)
     public Member findById(final Long id) {
@@ -40,9 +43,9 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberInfoResponse updateNotificationStatus(final Long memberId) {
+    public MemberInfoResponse updateNotificationStatus(final Long memberId, final UpdateMemberNotificationRequest request) {
         Member member = findById(memberId);
-        member.updateIsNotificationOn();
+        member.updateIsNotificationOn(request.isNotificationOn());
         return new MemberInfoResponse(member.getEmail(), member.getName(),
             member.isNotificationOn());
     }
@@ -52,6 +55,7 @@ public class MemberService {
         Member member = findById(memberId);
 
         deleteAllMemberSubscriptions(memberId);
+        deleteRefreshToken(memberId);
         deleteMemberInfo(memberId);
     }
 
@@ -61,5 +65,9 @@ public class MemberService {
 
     private void deleteMemberInfo(final Long memberId) {
         memberRepository.deleteById(memberId);
+    }
+
+    private void deleteRefreshToken(final Long memberId) {
+        refreshTokenRepository.deleteByMember_id(memberId);
     }
 }

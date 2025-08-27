@@ -1,5 +1,6 @@
 package com.dnd.sub.domain.member.controller;
 
+import com.dnd.sub.domain.member.dto.request.UpdateMemberNotificationRequest;
 import com.dnd.sub.domain.member.dto.request.UpdateMemberRequest;
 import com.dnd.sub.domain.member.dto.response.MemberInfoResponse;
 import com.dnd.sub.domain.member.dto.response.MemberSuccessCode;
@@ -31,9 +32,8 @@ public class MemberController implements MemberControllerDocs {
     }
 
     @PatchMapping("/my/notification")
-    public ApiResponse<MemberInfoResponse> updateNotificationStatus(
-        @AuthenticationPrincipal Long memberId) {
-        MemberInfoResponse response = memberService.updateNotificationStatus(memberId);
+    public ApiResponse<MemberInfoResponse> updateNotificationStatus(@AuthenticationPrincipal Long memberId, @RequestBody UpdateMemberNotificationRequest request) {
+        MemberInfoResponse response = memberService.updateNotificationStatus(memberId, request);
         return ApiResponse.success(MemberSuccessCode.MEMBER_NOTI_UPDATE, response);
     }
 
