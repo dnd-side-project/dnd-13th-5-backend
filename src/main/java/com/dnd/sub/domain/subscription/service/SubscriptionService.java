@@ -269,6 +269,8 @@ public class SubscriptionService {
             computeCycles(subscription),
             productPlan.getPrice(),
             productPlan.getName(),
+            subscription.getPlanId(),
+            !product.isAdminWritten(),
             subscription.getPaymentMethod().getId(),
             subscription.getMemo(),
             subscription.getParticipantCount(),
@@ -300,6 +302,7 @@ public class SubscriptionService {
         subscription.updateStartedAt(dto.startedAt());
         subscription.updatePreviousPaymentDay(newPreviousPaymentDay);
         subscription.updateNextPaymentDay(newNextPaymentDay);
+        subscription.updateMemo(dto.memo());
 
         if(product.isAdminWritten()) {
             if (dto.planId().isPresent()) {

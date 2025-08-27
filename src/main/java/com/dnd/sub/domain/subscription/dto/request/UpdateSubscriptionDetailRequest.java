@@ -13,6 +13,7 @@ public record UpdateSubscriptionDetailRequest(
     int participantCount,
     PayCycleUnitType payCycleUnit,
     LocalDate startedAt,
-    Long paymentMethodId
+    Long paymentMethodId,
+    String memo
 ) {
 }
