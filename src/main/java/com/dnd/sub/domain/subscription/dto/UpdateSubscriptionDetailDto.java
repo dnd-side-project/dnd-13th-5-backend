@@ -13,7 +13,8 @@ public record UpdateSubscriptionDetailDto(
     int participantCount,
     PayCycleUnitType payCycleUnit,
     LocalDate startedAt,
-    Long paymentMethodId
+    Long paymentMethodId,
+    String memo
 ) {
 
     public static UpdateSubscriptionDetailDto from(UpdateSubscriptionDetailRequest request) {
@@ -24,7 +25,8 @@ public record UpdateSubscriptionDetailDto(
             request.participantCount(),
             request.payCycleUnit(),
             request.startedAt(),
-            request.paymentMethodId()
+            request.paymentMethodId(),
+            request.memo()
         );
     }
 }

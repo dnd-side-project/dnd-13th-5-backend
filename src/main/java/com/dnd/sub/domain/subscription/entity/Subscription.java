@@ -100,6 +100,8 @@ public class Subscription extends BaseEntity {
         this.paymentMethod = paymentMethod;
     }
 
+    private void updateMemo(String memo) { this.memo = memo; }
+
     @Builder
     public Subscription(
         final Member member,

@@ -300,6 +300,7 @@ public class SubscriptionService {
         subscription.updateStartedAt(dto.startedAt());
         subscription.updatePreviousPaymentDay(newPreviousPaymentDay);
         subscription.updateNextPaymentDay(newNextPaymentDay);
+        subscription.updateMemo(dto.memo());
 
         if(product.isAdminWritten()) {
             if (dto.planId().isPresent()) {
