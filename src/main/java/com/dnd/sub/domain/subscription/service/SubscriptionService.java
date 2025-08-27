@@ -269,6 +269,8 @@ public class SubscriptionService {
             computeCycles(subscription),
             productPlan.getPrice(),
             productPlan.getName(),
+            subscription.getPlanId(),
+            !product.isAdminWritten(),
             subscription.getPaymentMethod().getId(),
             subscription.getMemo(),
             subscription.getParticipantCount(),

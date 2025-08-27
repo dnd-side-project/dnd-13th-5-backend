@@ -15,6 +15,8 @@ public record GetMySubscriptionDetailInfoDto(
     int totalPaymentCount,
     int price,
     String planName,
+    Long planId,
+    boolean isCustom,
     Long paymentMethodId,
     String memo,
     int participantCount,
