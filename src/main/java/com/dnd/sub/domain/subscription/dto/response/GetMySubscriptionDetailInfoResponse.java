@@ -36,7 +36,7 @@ public record GetMySubscriptionDetailInfoResponse(
             dto.totalPaymentCount(),
             dto.price(),
             dto.planName(),
-            dto.planId(),
+            dto.productId(),
             dto.isCustom(),
             dto.paymentMethodId(),
             dto.memo(),
