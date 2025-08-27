@@ -140,9 +140,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                         nextPayDay.isAfter(today);
             }
 
-            boolean isPrevPay = !prevPayDay.isBefore(startDay) &&
-                !prevPayDay.isAfter(endDay) &&
-                !prevPayDay.isAfter(today);
+            boolean isPrevPay = isPrevThisMonth && !prevPayDay.isAfter(today);
 
             if (isPrevThisMonth || isNextThisMonth) {
                 totalAmount += price;
