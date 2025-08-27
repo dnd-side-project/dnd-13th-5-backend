@@ -56,6 +56,10 @@ public class PaymentCycleUtil {
             return null;
         }
 
+        if(startedAt.isAfter(LocalDate.now())) {
+            return startedAt;
+        }
+
         switch (cycleUnit) {
             case WEEK:
                 return previousPaymentDay.plusWeeks(1);
