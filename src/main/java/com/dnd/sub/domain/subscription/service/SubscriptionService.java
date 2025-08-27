@@ -290,7 +290,7 @@ public class SubscriptionService {
 
         final Subscription subscription = getSubscription(subscriptionId);
         final Product product = getProduct(subscription.getProduct().getId());
-        final ProductPlan productPlan = productPlanRepository.findByProduct(product);
+        final ProductPlan productPlan = getProductPlanBySubscription(subscription);
 
         subscription.updateParticipantCount(dto.participantCount());
         subscription.updatePayCycleUnit(dto.payCycleUnit());
