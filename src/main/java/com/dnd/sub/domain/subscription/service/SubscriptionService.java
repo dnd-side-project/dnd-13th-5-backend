@@ -219,6 +219,25 @@ public class SubscriptionService {
 
     }
 
+    @Transactional
+    public void deleteAllSubscriptions(final Long memberId) {
+        List<Subscription> subscriptions = subscriptionRepository.findByMember_Id(memberId);
+
+        if(subscriptions.isEmpty()){
+            return;
+        }
+
+        for (Subscription subscription : subscriptions) {
+            Product product = subscription.getProduct();
+
+            subscriptionRepository.delete(subscription);
+
+            if(!product.isAdminWritten()){
+                productPlanRepository.deleteByProductId(product.getId());
+                productRepository.delete(product);
+            }
+        }
+    }
 
 
     private Subscription validateMemberSubscription(final Long memberId, final Long subscriptionId) {

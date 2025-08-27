@@ -8,11 +8,7 @@ import com.dnd.sub.global.dto.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,6 +35,13 @@ public class MemberController implements MemberControllerDocs {
         @AuthenticationPrincipal Long memberId) {
         MemberInfoResponse response = memberService.updateNotificationStatus(memberId);
         return ApiResponse.success(MemberSuccessCode.MEMBER_NOTI_UPDATE, response);
+    }
+
+    @DeleteMapping("/withdraw")
+    public ApiResponse<Void> withdraw(@AuthenticationPrincipal Long memberId) {
+        memberService.deleteMember(memberId);
+
+        return ApiResponse.success(MemberSuccessCode.MEMBER_WITHDRAW_OK);
     }
     
 }
