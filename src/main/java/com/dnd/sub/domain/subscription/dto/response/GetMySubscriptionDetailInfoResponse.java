@@ -16,7 +16,7 @@ public record GetMySubscriptionDetailInfoResponse(
     int totalPaymentCount,
     int price,
     String planName,
-    Long planId,
+    Long productId,
     boolean isCustom,
     Long paymentMethodId,
     String memo,
