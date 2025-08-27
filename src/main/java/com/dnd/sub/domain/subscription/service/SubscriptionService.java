@@ -266,7 +266,7 @@ public class SubscriptionService {
             product.getImageUrl(),
             subscription.getPayCycleUnit(),
             subscription.getStartedAt(),
-            (int) subscription.getPayCycleUnit().getChronoUnit().between(subscription.getStartedAt(), LocalDate.now()),
+            computeCycles(subscription),
             productPlan.getPrice(),
             productPlan.getName(),
             subscription.getPaymentMethod().getId(),
@@ -319,5 +319,12 @@ public class SubscriptionService {
     private ProductPlan getProductPlanBySubscription(final Subscription subscription) {
         return productPlanRepository.findById(subscription.getPlanId())
             .orElseThrow(() -> new ProductPlanException(ProductPlanErrorCode.PRODUCT_PLAN_NOT_FOUND));
+    }
+
+    private int computeCycles(Subscription subscription) {
+        if(subscription.getPayCycleUnit() == null || subscription.getStartedAt() == null){
+            return 0;
+        }
+        return (int) subscription.getPayCycleUnit().getChronoUnit().between(subscription.getStartedAt(), LocalDate.now());
     }
 }
