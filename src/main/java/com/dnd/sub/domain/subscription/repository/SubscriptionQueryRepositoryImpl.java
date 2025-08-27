@@ -130,8 +130,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
             boolean isPrevThisMonth = false;
             if (prevPayDay != null) {
                 isPrevThisMonth = !prevPayDay.isBefore(startDay) &&
-                        !prevPayDay.isAfter(endDay) &&
-                        !prevPayDay.isAfter(today);
+                    !prevPayDay.isAfter(endDay);
             }
             // 다음 결제일이 이번달인 경우
             boolean isNextThisMonth = false;
@@ -141,11 +140,15 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                         nextPayDay.isAfter(today);
             }
 
+            boolean isPrevPay = !prevPayDay.isBefore(startDay) &&
+                !prevPayDay.isAfter(endDay) &&
+                !prevPayDay.isAfter(today);
+
             if (isPrevThisMonth || isNextThisMonth) {
                 totalAmount += price;
             }
 
-            if (isPrevThisMonth) {
+            if (isPrevPay) {
                 usedAmount += price;
             }
 
