@@ -14,4 +14,6 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     List<Subscription> findByNextPaymentDayBefore(LocalDate today);
 
     Optional<Subscription> findByIdAndMember_Id(Long subscriptionId, Long memberId);
+
+    List<Subscription> findByMember_Id(Long memberId);
 }
