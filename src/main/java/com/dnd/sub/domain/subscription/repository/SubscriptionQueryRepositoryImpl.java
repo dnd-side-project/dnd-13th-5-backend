@@ -77,11 +77,12 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
             Subscription sub = t.get(s);
             Product prod = t.get(p);
             int price = t.get(pp.price);
+            int personalPrice = price / sub.getParticipantCount();
 
             return new GetPaymentSoonDto(
                     sub.getId(),
                     prod.getName(),
-                    price,
+                    personalPrice,
                     sub.getNextPaymentDay()
             );
         }).toList();
@@ -123,6 +124,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
             if(sub.getStartedAt() == null){
                 continue;
             }
+            int personalPrice = price / sub.getParticipantCount();
             LocalDate prevPayDay = sub.getPreviousPaymentDay();
             LocalDate nextPayDay = sub.getNextPaymentDay();
 
@@ -143,15 +145,15 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
             boolean isPrevPay = isPrevThisMonth && !prevPayDay.isAfter(today);
 
             if (isPrevThisMonth || isNextThisMonth) {
-                totalAmount += price;
+                totalAmount += personalPrice;
             }
 
             if (isPrevPay) {
-                usedAmount += price;
+                usedAmount += personalPrice;
             }
 
             if (isNextThisMonth) {
-                remainingAmount += price;
+                remainingAmount += personalPrice;
             }
         }
 
@@ -187,13 +189,14 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
             String planName = t.get(pp.name);
             int price = t.get(pp.price);
 
+            int personalPrice = price / sub.getParticipantCount();
             return new GetMySubscriptionDto(
                 sub.getId(),
                 prod.getName(),
                 prod.getCategory(),
                 sub.getPayCycleUnit(),
                 planName,
-                price,
+                personalPrice,
                 sub.isFavorite(),
                 prod.getImageUrl(),
                 sub.getStartedAt()
