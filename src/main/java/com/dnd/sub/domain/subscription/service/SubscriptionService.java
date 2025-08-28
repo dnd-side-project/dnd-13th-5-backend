@@ -328,6 +328,9 @@ public class SubscriptionService {
         if(subscription.getPayCycleUnit() == null || subscription.getStartedAt() == null){
             return 0;
         }
+        if(!subscription.getStartedAt().isAfter(LocalDate.now())){
+            return (int) subscription.getPayCycleUnit().getChronoUnit().between(subscription.getStartedAt(), LocalDate.now()) + 1;
+        }
         return (int) subscription.getPayCycleUnit().getChronoUnit().between(subscription.getStartedAt(), LocalDate.now());
     }
 }
