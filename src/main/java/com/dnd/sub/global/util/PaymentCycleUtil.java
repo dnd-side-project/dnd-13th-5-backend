@@ -12,43 +12,19 @@ import java.time.temporal.ChronoUnit;
 public class PaymentCycleUtil {
 
     public static LocalDate previousPaymentDay(LocalDate startedAt, PayCycleUnitType cycleUnit) {
-        if(startedAt == null) {
+        if (startedAt == null) {
             return null;
         }
 
         LocalDate now = LocalDate.now();
-
-        switch (cycleUnit) {
-            case WEEK:
-                if (startedAt.isAfter(now.minusWeeks(1))) {
-                    return startedAt;
-                }
-
-                final long weeks = ChronoUnit.WEEKS.between(startedAt, now);
-
-                return startedAt.plusWeeks(weeks);
-
-            case MONTH:
-                if (startedAt.isAfter(now.minusMonths(1))) {
-                    return startedAt;
-                }
-
-                final long months = ChronoUnit.MONTHS.between(startedAt, now);
-
-                return addMonths(startedAt.plusMonths(months), startedAt, -1);
-
-            case YEAR:
-                if (startedAt.isAfter(now.minusYears(1))) {
-                    return startedAt;
-                }
-
-                final long years = ChronoUnit.YEARS.between(startedAt, now);
-
-                return addYears(startedAt.plusYears(years), startedAt, -1);
-
-            default:
-                throw new PayCycleException(PayCycleErrorCode.CYCLE_TYPE_ERROR);
+        if (startedAt.isAfter(now)) {
+            return null;
         }
+
+        if (startedAt.equals(now)) {
+            return startedAt;
+        }
+        return calculatePreviousPaymentDay(startedAt, now, cycleUnit);
     }
 
     public static LocalDate nextPaymentDay(LocalDate previousPaymentDay, LocalDate startedAt, PayCycleUnitType cycleUnit) {
@@ -56,21 +32,70 @@ public class PaymentCycleUtil {
             return null;
         }
 
-        if(startedAt.isAfter(LocalDate.now())) {
+        LocalDate now = LocalDate.now();
+
+        if(startedAt.isAfter(now)) {
             return startedAt;
         }
 
+        if (previousPaymentDay == null) {
+            return calculateNextPaymentDay(startedAt, cycleUnit);
+        }
+
+        return calculateNextPaymentDay(previousPaymentDay, cycleUnit);
+    }
+
+    private static LocalDate calculatePreviousPaymentDay(LocalDate startedAt, LocalDate now, PayCycleUnitType cycleUnit) {
+        LocalDate day = startedAt;
+
         switch (cycleUnit) {
             case WEEK:
-                return previousPaymentDay.plusWeeks(1);
+                while (day.plusWeeks(1).isBefore(now) || day.plusWeeks(1).equals(now)) {
+                    day = day.plusWeeks(1);
+                }
+                break;
+
             case MONTH:
-                return addMonths(previousPaymentDay, startedAt, 1);
+                while (true) {
+                    LocalDate nextMonth = addMonths(day, startedAt, 1);
+                    if (nextMonth.isAfter(now)) {
+                        break;
+                    }
+                    day = nextMonth;
+                }
+                break;
+
             case YEAR:
-                return addYears(previousPaymentDay, startedAt, 1);
+                while (true) {
+                    LocalDate nextYear = addYears(day, startedAt, 1);
+                    if (nextYear.isAfter(now)) {
+                        break;
+                    }
+                    day = nextYear;
+                }
+                break;
+
+            default:
+                throw new PayCycleException(PayCycleErrorCode.CYCLE_TYPE_ERROR);
+        }
+
+        return day;
+    }
+
+
+    private static LocalDate calculateNextPaymentDay(LocalDate date, PayCycleUnitType cycleUnit) {
+        switch (cycleUnit) {
+            case WEEK:
+                return date.plusWeeks(1);
+            case MONTH:
+                return addMonths(date, date, 1);
+            case YEAR:
+                return addYears(date, date, 1);
             default:
                 throw new PayCycleException(PayCycleErrorCode.CYCLE_TYPE_ERROR);
         }
     }
+
 
     //말일 조정 떄문에 plusMonths 못씀 말일 조정하는 함수
     private static LocalDate addMonths(LocalDate previousPaymentDay, LocalDate startedAt, int months) {

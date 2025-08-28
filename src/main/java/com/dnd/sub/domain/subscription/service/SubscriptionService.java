@@ -79,7 +79,7 @@ public class SubscriptionService {
         final LocalDate previousPaymentDay = PaymentCycleUtil.previousPaymentDay(dto.startedAt(), dto.payCycleUnit());
 
         final LocalDate nextPaymentDay = PaymentCycleUtil.nextPaymentDay(
-            dto.startedAt(),
+            previousPaymentDay,
             dto.startedAt(),
             dto.payCycleUnit()
         );
@@ -123,7 +123,7 @@ public class SubscriptionService {
         final LocalDate previousPaymentDay = PaymentCycleUtil.previousPaymentDay(dto.startedAt(), dto.payCycleUnit());
 
         final LocalDate nextPaymentDay = PaymentCycleUtil.nextPaymentDay(
-            dto.startedAt(),
+            previousPaymentDay,
             dto.startedAt(),
             dto.payCycleUnit()
         );
@@ -297,7 +297,7 @@ public class SubscriptionService {
         subscription.updatePaymentMethod(getPaymentMethod(dto.paymentMethodId()));
 
         final LocalDate newPreviousPaymentDay = PaymentCycleUtil.previousPaymentDay(dto.startedAt(), dto.payCycleUnit());
-        final LocalDate newNextPaymentDay = PaymentCycleUtil.nextPaymentDay(dto.startedAt(), dto.startedAt(), dto.payCycleUnit());
+        final LocalDate newNextPaymentDay = PaymentCycleUtil.nextPaymentDay(newPreviousPaymentDay, dto.startedAt(), dto.payCycleUnit());
 
         subscription.updateStartedAt(dto.startedAt());
         subscription.updatePreviousPaymentDay(newPreviousPaymentDay);
