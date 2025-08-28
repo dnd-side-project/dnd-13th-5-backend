@@ -39,10 +39,10 @@ public class PaymentCycleUtil {
         }
 
         if (previousPaymentDay == null) {
-            return calculateNextPaymentDay(startedAt, cycleUnit);
+            return null;
         }
 
-        return calculateNextPaymentDay(previousPaymentDay, cycleUnit);
+        return calculateNextPaymentDay(previousPaymentDay, startedAt, cycleUnit);
     }
 
     private static LocalDate calculatePreviousPaymentDay(LocalDate startedAt, LocalDate now, PayCycleUnitType cycleUnit) {
@@ -83,14 +83,14 @@ public class PaymentCycleUtil {
     }
 
 
-    private static LocalDate calculateNextPaymentDay(LocalDate date, PayCycleUnitType cycleUnit) {
+    private static LocalDate calculateNextPaymentDay(LocalDate previousDate, LocalDate startedAt, PayCycleUnitType cycleUnit) {
         switch (cycleUnit) {
             case WEEK:
-                return date.plusWeeks(1);
+                return previousDate.plusWeeks(1);
             case MONTH:
-                return addMonths(date, date, 1);
+                return addMonths(previousDate, startedAt, 1);
             case YEAR:
-                return addYears(date, date, 1);
+                return addYears(previousDate, startedAt, 1);
             default:
                 throw new PayCycleException(PayCycleErrorCode.CYCLE_TYPE_ERROR);
         }
