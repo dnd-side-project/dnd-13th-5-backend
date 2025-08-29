@@ -9,6 +9,7 @@ import com.dnd.sub.domain.subscription.controller.SubscriptionSortType;
 import com.dnd.sub.domain.subscription.dto.GetMySubscriptionDto;
 import com.dnd.sub.domain.subscription.dto.GetPaymentSoonDto;
 import com.dnd.sub.domain.subscription.dto.response.GetPaymentTotalResponse;
+import com.dnd.sub.domain.subscription.entity.PayCycleUnitType;
 import com.dnd.sub.domain.subscription.entity.QSubscription;
 import com.dnd.sub.domain.subscription.entity.Subscription;
 import com.querydsl.core.BooleanBuilder;
@@ -121,54 +122,87 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
             Subscription sub = tuple.get(s);
             Integer price = tuple.get(pp.price);
 
-            if(sub.getStartedAt() == null){
+            if (sub.getStartedAt() == null) {
                 continue;
             }
             int personalPrice = price / sub.getParticipantCount();
-            LocalDate prevPayDay = sub.getPreviousPaymentDay();
-            LocalDate nextPayDay = sub.getNextPaymentDay();
+            PayCycleUnitType cycleUnit = sub.getPayCycleUnit();
 
-            // 이전 결제일이 이번달인 경우
-            boolean isPrevThisMonth = false;
-            if (prevPayDay != null) {
-                isPrevThisMonth = !prevPayDay.isBefore(startDay) &&
-                    !prevPayDay.isAfter(endDay);
-            }
-            // 다음 결제일이 이번달인 경우
-            boolean isNextThisMonth = false;
-            if (nextPayDay != null) {
-                isNextThisMonth = !nextPayDay.isBefore(startDay) &&
+            if (cycleUnit == PayCycleUnitType.WEEK) {
+                LocalDate prevPayDay = sub.getPreviousPaymentDay();
+
+                if (prevPayDay != null) {
+                    LocalDate currentPaymentDate = prevPayDay;
+
+                    // 과거 방향으로 결제한 금액
+                    while (!currentPaymentDate.isBefore(startDay)) {
+                        if (!currentPaymentDate.isAfter(endDay) && !currentPaymentDate.isAfter(today)) {
+                            totalAmount += personalPrice;
+                            usedAmount += personalPrice;
+                        }
+                        currentPaymentDate = currentPaymentDate.minusWeeks(1);
+                    }
+
+                    // 미래 방향으로 다음 결제한 금액
+                    LocalDate nextPayDay = sub.getNextPaymentDay();
+                    if (nextPayDay != null) {
+                        currentPaymentDate = nextPayDay;
+                        while (!currentPaymentDate.isAfter(endDay)) {
+                            if (!currentPaymentDate.isBefore(startDay) && currentPaymentDate.isAfter(today)) {
+                                totalAmount += personalPrice;
+                                remainingAmount += personalPrice;
+                            }
+                            currentPaymentDate = currentPaymentDate.plusWeeks(1);
+                        }
+                    }
+                }
+            } else {
+                LocalDate prevPayDay = sub.getPreviousPaymentDay();
+                LocalDate nextPayDay = sub.getNextPaymentDay();
+
+                // 이전 결제일이 이번달인 경우
+                boolean isPrevThisMonth = false;
+                if (prevPayDay != null) {
+                    isPrevThisMonth = !prevPayDay.isBefore(startDay) &&
+                        !prevPayDay.isAfter(endDay);
+                }
+                // 다음 결제일이 이번달인 경우
+                boolean isNextThisMonth = false;
+                if (nextPayDay != null) {
+                    isNextThisMonth = !nextPayDay.isBefore(startDay) &&
                         !nextPayDay.isAfter(endDay) &&
                         nextPayDay.isAfter(today);
-            }
+                }
 
-            boolean isPrevPay = isPrevThisMonth && !prevPayDay.isAfter(today);
+                boolean isPrevPay = isPrevThisMonth && !prevPayDay.isAfter(today);
 
-            if (isPrevThisMonth || isNextThisMonth) {
-                totalAmount += personalPrice;
-            }
+                if (isPrevThisMonth || isNextThisMonth) {
+                    totalAmount += personalPrice;
+                }
 
-            if (isPrevPay) {
-                usedAmount += personalPrice;
-            }
+                if (isPrevPay) {
+                    usedAmount += personalPrice;
+                }
 
-            if (isNextThisMonth) {
-                remainingAmount += personalPrice;
+                if (isNextThisMonth) {
+                    remainingAmount += personalPrice;
+                }
             }
         }
 
-        int progressPercentage = 0;
-        if (totalAmount > 0) {
-            progressPercentage = (100 * usedAmount) / totalAmount;
-        }
+            int progressPercentage = 0;
+            if (totalAmount > 0) {
+                progressPercentage = (100 * usedAmount) / totalAmount;
+            }
 
-        return new GetPaymentTotalResponse(
+            return new GetPaymentTotalResponse(
                 tuples.get(0).get(m.name),
                 totalAmount,
                 remainingAmount,
                 progressPercentage,
                 subCount
-        );
+            );
+
     }
 
     private List<GetMySubscriptionDto> findSubscriptions(BooleanBuilder builder,
