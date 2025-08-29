@@ -132,31 +132,32 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                 LocalDate prevPayDay = sub.getPreviousPaymentDay();
 
                 if (prevPayDay != null) {
-                    LocalDate currentPaymentDate = prevPayDay;
+                    LocalDate currentPaymentDay = prevPayDay;
 
                     // 과거 방향으로 결제한 금액
-                    while (!currentPaymentDate.isBefore(startDay)) {
-                        if (!currentPaymentDate.isAfter(endDay) && !currentPaymentDate.isAfter(today)) {
+                    while (!currentPaymentDay.isBefore(startDay)) {
+                        if (!currentPaymentDay.isAfter(endDay) && !currentPaymentDay.isAfter(today)) {
                             totalAmount += personalPrice;
                             usedAmount += personalPrice;
                         }
-                        currentPaymentDate = currentPaymentDate.minusWeeks(1);
+                        currentPaymentDay = currentPaymentDay.minusWeeks(1);
                     }
 
                     // 미래 방향으로 다음 결제한 금액
                     LocalDate nextPayDay = sub.getNextPaymentDay();
                     if (nextPayDay != null) {
-                        currentPaymentDate = nextPayDay;
-                        while (!currentPaymentDate.isAfter(endDay)) {
-                            if (!currentPaymentDate.isBefore(startDay) && currentPaymentDate.isAfter(today)) {
+                        currentPaymentDay = nextPayDay;
+                        while (!currentPaymentDay.isAfter(endDay)) {
+                            if (!currentPaymentDay.isBefore(startDay) && currentPaymentDay.isAfter(today)) {
                                 totalAmount += personalPrice;
                                 remainingAmount += personalPrice;
                             }
-                            currentPaymentDate = currentPaymentDate.plusWeeks(1);
+                            currentPaymentDay = currentPaymentDay.plusWeeks(1);
                         }
                     }
                 }
-            } else {
+            }
+            else {
                 LocalDate prevPayDay = sub.getPreviousPaymentDay();
                 LocalDate nextPayDay = sub.getNextPaymentDay();
 
