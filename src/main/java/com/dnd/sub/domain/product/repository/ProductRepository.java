@@ -30,6 +30,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     SELECT p
     FROM Product p
     WHERE p.category = :category
+      AND p.isAdminWritten = true
       AND p.id NOT IN (
           SELECT s.product.id
           FROM Subscription s
