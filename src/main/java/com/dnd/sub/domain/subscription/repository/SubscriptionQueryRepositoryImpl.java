@@ -143,7 +143,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                         currentPaymentDay = currentPaymentDay.minusWeeks(1);
                     }
 
-                    // 미래 방향으로 다음 결제한 금액
+                    // 미래 방향으로 결제할 금액
                     LocalDate nextPayDay = sub.getNextPaymentDay();
                     if (nextPayDay != null) {
                         currentPaymentDay = nextPayDay;
