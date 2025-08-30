@@ -13,6 +13,7 @@ public record GetMySubscriptionDto(
     String planName,
     int price,
     boolean isFavorites,
+    boolean isCustom,
     String imageUrl,
     LocalDate startedAt
 ) {

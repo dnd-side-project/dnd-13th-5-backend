@@ -67,6 +67,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                 .join(s.product, p)
                 .leftJoin(pp).on(pp.id.eq(s.planId))
                 .where(s.member.id.eq(memberId)
+                    .and(pp.id.eq(s.planId))
                         .and(s.nextPaymentDay.isNotNull())
                         .and(s.nextPaymentDay.goe(LocalDate.now()))
                         .and(s.nextPaymentDay.loe(LocalDate.now().plusDays(7))))
@@ -233,6 +234,7 @@ public class SubscriptionQueryRepositoryImpl implements SubscriptionQueryReposit
                 planName,
                 personalPrice,
                 sub.isFavorite(),
+                !prod.isAdminWritten(),
                 prod.getImageUrl(),
                 sub.getStartedAt()
             );
