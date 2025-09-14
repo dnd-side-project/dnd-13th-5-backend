@@ -8,7 +8,6 @@ public record GetSelectedProductsInfoDto(
     String imageUrl,
     List<ProductPlans> plans
 ) {
-
     public record ProductPlans(
         Long planId,
         String planName,
