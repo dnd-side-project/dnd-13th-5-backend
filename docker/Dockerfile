@@ -3,7 +3,6 @@ WORKDIR /workspace/app
 
 # JAR 파일을 레이어별로 추출
 COPY build/libs/*SNAPSHOT.jar app.jar
-RUN java -Djarmode=layertools -jar app.jar extract
 
 FROM openjdk:21-jdk
 WORKDIR /dnd_13th_5team_dev

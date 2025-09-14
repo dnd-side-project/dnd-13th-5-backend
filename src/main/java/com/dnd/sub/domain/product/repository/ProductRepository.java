@@ -25,7 +25,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findBySubscriptionId(@Param("subscriptionId") Long subscriptionId);
     
 
-
     @Query("""
     SELECT p
     FROM Product p
