@@ -1,0 +1,20 @@
+language: ko
+
+reviews:
+  auto_review:
+    enabled: true
+    base_branches:
+      - develop
+    auto_incremental_review: true
+  poem: false
+
+  profile: 'chill'
+
+  path_filters:
+    - "!build/**"
+    - "!.gradle/**"
+    - "!.idea/**"
+    - "!**/resources/**"
+    - "!src/test/**"
+    - "!**/generated/**"
+
