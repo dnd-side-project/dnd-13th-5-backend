@@ -71,9 +71,10 @@ dependencies {
 }
 
 bootJar {
-    layered()
+    layered {
+        enabled = true
+    }
 }
-
 tasks.named('test') {
     useJUnitPlatform()
 }
