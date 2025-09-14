@@ -10,4 +10,13 @@ reviews:
 
   profile: 'chill'
 
+  path_filters:
+    - "!build/**"
+    - "!.gradle/**"
+    - "!.idea/**"
+    - "!**/resources/**"
+    - "!src/test/**"
+    - "!**/generated/**"
+
+
 
