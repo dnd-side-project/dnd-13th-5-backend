@@ -40,7 +40,6 @@ public class MemberController implements MemberControllerDocs {
     @DeleteMapping("/withdraw")
     public ApiResponse<Void> withdraw(@AuthenticationPrincipal Long memberId) {
         memberService.deleteMember(memberId);
-
         return ApiResponse.success(MemberSuccessCode.MEMBER_WITHDRAW_OK);
     }
     
