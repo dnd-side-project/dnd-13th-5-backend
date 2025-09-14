@@ -14,4 +14,4 @@ COPY --from=builder workspace/app/snapshot-dependencies/ ./
 COPY --from=builder workspace/app/application/ ./
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/dnd_13th_5team_dev.jar"]
+ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
