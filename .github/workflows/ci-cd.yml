@@ -104,6 +104,7 @@ jobs:
           push: true
           tags: ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
 
+
       - name: Set image build result
         if: always()
         id: image-build-result
