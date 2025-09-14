@@ -1,12 +1,12 @@
 ARG TARGETPLATFORM
-FROM --platform=${TARGETPLATFORM:-linux/amd64} openjdk:21-jdk as builder
+FROM --platform=${TARGETPLATFORM:-linux/arm64} openjdk:21-jdk as builder
 WORKDIR /workspace/app
 
 # JAR 파일을 레이어별로 추출
 COPY build/libs/*SNAPSHOT.jar app.jar
 RUN java -Djarmode=layertools -jar app.jar extract
 
-FROM --platform=${TARGETPLATFORM:-linux/amd64} openjdk:21-jdk
+FROM --platform=${TARGETPLATFORM:-linux/arm64} openjdk:21-jdk
 WORKDIR /dnd_13th_5team_dev
 
 COPY --from=builder /workspace/app/spring-boot-loader/ ./
