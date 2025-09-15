@@ -19,8 +19,8 @@
 
 ## Team
 * Design
-  * [**김예진**]
-  * [**박진이**]
+  * **김예진**
+  * **박진이**
 * Front-End
   * [**정성연**](https://github.com/yeonnybus)
   * [**이소연**](https://github.com/eesoyeon)
